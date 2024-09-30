@@ -2,8 +2,6 @@
 일정을 `등록/조회/수정/삭제` 할 수 있는 웹페이지.
 
 ### 📖요구사항
-<details><summary><b>요구사항 분석(펼치기/접기)</b></summary>
-
 1. 사용자 관리
     - 사용자 등록
         - `이름`, `이메일`, `작성자명`, `비밀번호`을 입력받아 사용자를 생성한다.
@@ -31,8 +29,6 @@
     - 일정 삭제
         - `선택한 일정`을 삭제한다.
         - 삭제할땐 `비밀번호`를 함께 입력해야 한다.
-
-</details>
 
 ### 🗂️프로젝트 구조 및 설명
 <details><summary><b>프로젝트 구조 및 설명(펼치기/접기)</b></summary>
@@ -119,7 +115,7 @@
         <td>/api.sparta.com/users/{userId}</td>
         <td><pre lang="json">{
     "user-Id": "hong",
-    "password": 1q2w3e4r#,
+    "password": "1q2w3e4r#",
     "name": "김길동",
     "email": "dong@gmail.com",
 }</pre></td>
@@ -216,7 +212,7 @@
 </details>
 
 ### 📋ERD
-
+<img src="images/erd.png">
 
 ### 🖥️개발환경
 - `Window 11`
