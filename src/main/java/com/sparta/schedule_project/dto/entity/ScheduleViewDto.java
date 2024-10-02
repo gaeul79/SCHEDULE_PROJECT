@@ -1,16 +1,23 @@
 package com.sparta.schedule_project.dto.entity;
 
+import com.sparta.schedule_project.dto.ScheduleRequestDto;
 import lombok.Data;
-
-import java.time.LocalDate;
 
 @Data
 public class ScheduleViewDto extends ScheduleDto {
     private String name;
 
-    private LocalDate startDate;
-    private LocalDate endDate;
-
-    private int startRowNum;
-    private int endRowNum;
+    public static ScheduleViewDto from(ScheduleRequestDto requestDto) {
+        ScheduleViewDto scheduleDto = new ScheduleViewDto();
+        scheduleDto.setId(requestDto.getId());
+        scheduleDto.setUserId(requestDto.getUserId());
+        scheduleDto.setName(requestDto.getName());
+        scheduleDto.setTitle(requestDto.getTitle());
+        scheduleDto.setContent(requestDto.getContent());
+        scheduleDto.setStartUpdateDate(requestDto.getStartUpdateDate());
+        scheduleDto.setEndUpdateDate(requestDto.getEndUpdateDate());
+        scheduleDto.setStartRowNum(requestDto.getStartRowNum());
+        scheduleDto.setEndRowNum(requestDto.getEndRowNum());
+        return scheduleDto;
+    }
 }

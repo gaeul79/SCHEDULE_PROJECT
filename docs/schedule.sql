@@ -5,7 +5,7 @@ create table User
     email varchar(100) not null comment '이메일',
     name varchar(100) not null comment '닉네임',
     createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP comment '생성 날짜',
-    updateDate TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '수정 날짜'
+    updateDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '수정 날짜'
 );
 
 create table Schedule
@@ -15,7 +15,7 @@ create table Schedule
     title varchar(100) comment '제목',
     content varchar(100) comment '내용',
     createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP comment '생성 날짜',
-    updateDate TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '수정 날짜',
+    updateDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '수정 날짜',
     CONSTRAINT foreign key (user_id) references User(user_id) ON DELETE CASCADE
 );
 
@@ -42,3 +42,5 @@ drop table User;
 
 truncate Schedule;
 delete from User where user_id='hong';
+
+SELECT id, user_id, name, title, content, createDate, updateDate FROM ScheduleView WHERE name like '%홍길동%' and updateDate between '2000-10-16' and '2024-10-20'

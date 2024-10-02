@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Repository
 public class UserRepository {
-    private final String TablelName = "User";
+    private final String USER_TABLE_NAME = "User";
     private final JdbcTemplate jdbcTemplate;
 
     public UserRepository(JdbcTemplate jdbcTemplate) {
@@ -66,7 +66,7 @@ public class UserRepository {
     private String makeInsertQuery(UserDto userDto) {
         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO ");
-        sql.append(TablelName);
+        sql.append(USER_TABLE_NAME);
         sql.append(" (");
 
         StringBuilder sqlValues = new StringBuilder(" VALUES (");
@@ -103,7 +103,7 @@ public class UserRepository {
         sql.append("user_id");
         sql.append(", password");
         sql.append(" FROM ");
-        sql.append(TablelName);
+        sql.append(USER_TABLE_NAME);
         sql.append(makeWhere(userDto));
         return sql.toString();
     }
@@ -118,7 +118,7 @@ public class UserRepository {
         sql.append(", createDate");
         sql.append(", updateDate");
         sql.append(" FROM ");
-        sql.append(TablelName);
+        sql.append(USER_TABLE_NAME);
         sql.append(makeWhere(userDto));
         return sql.toString();
     }
@@ -126,29 +126,36 @@ public class UserRepository {
     private String makeUpdateQuery(UserDto userDto) {
         StringBuilder sql = new StringBuilder();
         sql.append("UPDATE ");
-        sql.append(TablelName);
+        sql.append(USER_TABLE_NAME);
 
-        StringBuilder setValues = new StringBuilder(" SET ");
+        StringBuilder setValues = new StringBuilder();
         Field[] fields = userDto.getClass().getDeclaredFields();
+
         for (Field field : fields) {
             String fieldName = field.getName();
 
             if (fieldName.equals("password") && userDto.getPassword() != null) {
-                if (setValues.length() > 5)
+                if (setValues.isEmpty())
+                    setValues.append(" SET ");
+                else
                     setValues.append(", ");
 
                 setValues.append("password='").append(userDto.getPassword()).append("'");
             }
 
             if (fieldName.equals("email") && userDto.getEmail() != null) {
-                if (setValues.length() > 5)
+                if (setValues.isEmpty())
+                    setValues.append(" SET ");
+                else
                     setValues.append(", ");
 
                 setValues.append("email='").append(userDto.getEmail()).append("'");
             }
 
             if (fieldName.equals("name") && userDto.getName() != null) {
-                if (setValues.length() > 5)
+                if (setValues.isEmpty())
+                    setValues.append(" SET ");
+                else
                     setValues.append(", ");
 
                 setValues.append("name='").append(userDto.getName()).append("'");
@@ -166,41 +173,48 @@ public class UserRepository {
     private String makeDeleteQuery(UserDto userDto) {
         StringBuilder sql = new StringBuilder();
         sql.append("DELETE FROM ");
-        sql.append(TablelName);
+        sql.append(USER_TABLE_NAME);
         sql.append(makeWhere(userDto));
         return sql.toString();
     }
 
     private String makeWhere(UserDto userDto) {
         StringBuilder sql = new StringBuilder();
-        sql.append(" WHERE ");
-
         Field[] fields = userDto.getClass().getDeclaredFields();
+
         for (Field field : fields) {
             String fieldName = field.getName();
             if (fieldName.equals("userId") && userDto.getUserId() != null) {
-                if(sql.length() > 7)
+                if (sql.isEmpty())
+                    sql.append(" WHERE ");
+                else
                     sql.append(" and ");
 
                 sql.append("user_id='").append(userDto.getUserId()).append("'");
             }
 
             if (fieldName.equals("password") && userDto.getPassword() != null) {
-                if(sql.length() > 7)
+                if (sql.isEmpty())
+                    sql.append(" WHERE ");
+                else
                     sql.append(" and ");
 
                 sql.append("password='").append(userDto.getPassword()).append("'");
             }
 
             if (fieldName.equals("email") && userDto.getEmail() != null) {
-                if(sql.length() > 7)
+                if (sql.isEmpty())
+                    sql.append(" WHERE ");
+                else
                     sql.append(" and ");
 
                 sql.append("email='").append(userDto.getEmail()).append("'");
             }
 
             if (fieldName.equals("name") && userDto.getName() != null) {
-                if(sql.length() > 7)
+                if (sql.isEmpty())
+                    sql.append(" WHERE ");
+                else
                     sql.append(" and ");
 
                 sql.append("name='").append(userDto.getName()).append("'");

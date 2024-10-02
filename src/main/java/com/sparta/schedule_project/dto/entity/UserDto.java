@@ -18,15 +18,6 @@ public class UserDto {
 
     }
 
-    public UserDto(String userId, String password, String name, String email, LocalDate createDate, LocalDate updateDate) {
-        this.userId = userId;
-        this.password = password;
-        this.name = name;
-        this.email = email;
-        this.createDate = createDate;
-        this.updateDate = updateDate;
-    }
-
     public static UserDto from(UserRequestDto user) {
         UserDto userDto = new UserDto();
         userDto.userId = user.getUserId();

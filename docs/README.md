@@ -47,6 +47,7 @@
 | │        │   ├── `ScheduleResponseDto.java`| 일정 정보를 받을 때 사용하는 dto |
 | │        │   ├── `UserRequesthto.java`| 사용자 정보를 요청할 때 사용하는 dto |
 | │        │   ├── `UserResponseDto.java`| 사용자 정보를 받을 때 사용하는 dto |
+| │        │   ├── `StatusDto.java`| HTTP상태에 대한 응답을 제공하는 dto |
 | │        │   └── <span style=background-color:#786E12AA;font-weight:bold;>entity</span>| DB와 매핑되는 엔티티 클래스들을 모아놓은 폴더 |
 | │        │       ├── `ScheduleDto.java`| 일정 entity |
 | │        │       ├── `ScheduleViewDto.java`| 일정 view entity |
@@ -199,7 +200,7 @@
         <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
         <td>/api.sparta.com/schedules</td>
         <td><pre lang="json">{
-    "user-id" : "1",
+    "userId" : "hong",
     "title": "제목제목제목",
     "content": "내용내용내용"
 }</pre></td>
@@ -215,15 +216,15 @@
         <td>/api.sparta.com/schedules</td>
         <td><pre lang="json">{
     "name": "홍길동",
-    "startCreateDateTime" : "2022-10-16",
-    "endCreateDateTime" : "2022-10-20",
-    "startRowNum": "10"
+    "startUpdateDate" : "2000-10-16",
+    "endUpdateDate" : "2024-10-20",
+    "startRowNum": "10",
     "endRowNum": "15"
 }</pre></td>
         <td><pre lang="json">{
     schedule: [{
-        "id": "1",
-        "user-id": 1, 
+        "id": 1,
+        "userId": "hong", 
         "name": "홍길동",
         "title" : "제목제목제목",
         "content" : "내용내용내용",
@@ -242,7 +243,7 @@
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
         <td>/api.sparta.com/schedules{scheduleId}</td>
         <td><pre lang="json">{
-    "id": "1"
+    "id": "1",
     "title" : "제목제목제목",
     "content" : "수정수정수정"
 }</pre></td>
@@ -257,7 +258,7 @@
         <td><span style=background-color:#CE3636AA;font-weight:bold;>DELETE</span></td>
         <td>/api.sparta.com/schedules{scheduleId}</td>
         <td><pre lang="json">{
-    "id" : "1",
+    "id" : "1"
 }</pre></td>
         <td><pre lang="json">{
     "message": "delete schedule success",

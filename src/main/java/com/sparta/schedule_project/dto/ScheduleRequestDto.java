@@ -6,9 +6,14 @@ import java.time.LocalDate;
 
 @Getter
 public class ScheduleRequestDto {
+    private String id;
+    private String userId;
     private String name;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private String title;
+    private String content;
+
+    private LocalDate startUpdateDate;
+    private LocalDate endUpdateDate;
 
     private int startRowNum;
     private int endRowNum;

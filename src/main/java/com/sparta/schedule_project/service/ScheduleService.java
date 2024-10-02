@@ -2,12 +2,13 @@ package com.sparta.schedule_project.service;
 
 import com.sparta.schedule_project.dto.ScheduleRequestDto;
 import com.sparta.schedule_project.dto.ScheduleResponseDto;
+import com.sparta.schedule_project.dto.StatusDto;
 import com.sparta.schedule_project.dto.entity.ScheduleDto;
 import com.sparta.schedule_project.dto.entity.ScheduleViewDto;
+import com.sparta.schedule_project.dto.entity.UserDto;
 import com.sparta.schedule_project.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,31 +19,45 @@ public class ScheduleService {
         this.scheduleRepository = scheduleRepository;
     }
 
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto scheduleRequestDto) {
-        ScheduleDto schedule = new ScheduleDto();
-        ScheduleDto resultSchedule = scheduleRepository.createSchedule(schedule);
-        ScheduleResponseDto response = new ScheduleResponseDto();
-        return response;
+    public StatusDto createSchedule(ScheduleRequestDto scheduleRequestDto) {
+        try {
+            ScheduleDto scheduleDto = ScheduleDto.from(scheduleRequestDto);
+            scheduleRepository.createSchedule(scheduleDto);
+            return new StatusDto(200, "Success");
+        } catch (Exception ex) {
+            return new StatusDto(999, "Failed");
+        }
     }
 
     public ScheduleResponseDto searchSchedule(ScheduleRequestDto scheduleRequestDto) {
-        ScheduleDto schedule = new ScheduleDto();
-        List<ScheduleViewDto> schedules = scheduleRepository.searchScheduleView(schedule);
-        ScheduleResponseDto response = new ScheduleResponseDto();
-        return response;
+        try {
+            ScheduleViewDto scheduleViewDto = ScheduleViewDto.from(scheduleRequestDto);
+            List<ScheduleViewDto> schedules = scheduleRepository.searchSchedules(scheduleViewDto);
+            StatusDto statusDto = new StatusDto(200, "Success");
+            return ScheduleResponseDto.from(schedules, statusDto);
+        } catch (Exception ex) {
+            StatusDto statusDto = new StatusDto(999, "Failed");
+            return ScheduleResponseDto.from(null, statusDto);
+        }
     }
 
-    public ScheduleResponseDto updateSchedule(ScheduleRequestDto scheduleRequestDto) {
-        ScheduleDto scheduleDto = new ScheduleDto();
-        scheduleRepository.updateSchedule(scheduleDto);
-        ScheduleResponseDto responseDto = new ScheduleResponseDto();
-        return responseDto;
+    public StatusDto updateSchedule(ScheduleRequestDto scheduleRequestDto) {
+        try {
+            ScheduleDto scheduleDto = ScheduleDto.from(scheduleRequestDto);
+            scheduleRepository.updateSchedule(scheduleDto);
+            return new StatusDto(200, "Success");
+        } catch (Exception ex) {
+            return new StatusDto(999, "Failed");
+        }
     }
 
-    public ScheduleResponseDto deleteSchedule(ScheduleRequestDto scheduleRequestDto) {
-        ScheduleDto scheduleDto = new ScheduleDto();
-        scheduleRepository.deleteSchedule(scheduleDto);
-        ScheduleResponseDto responseDto = new ScheduleResponseDto();
-        return responseDto;
+    public StatusDto deleteSchedule(ScheduleRequestDto scheduleRequestDto) {
+        try {
+            ScheduleDto scheduleDto = ScheduleDto.from(scheduleRequestDto);
+            scheduleRepository.deleteSchedule(scheduleDto);
+            return new StatusDto(200, "Success");
+        } catch (Exception ex) {
+            return new StatusDto(999, "Failed");
+        }
     }
 }
