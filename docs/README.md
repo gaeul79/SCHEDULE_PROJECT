@@ -37,6 +37,30 @@
 |---|---|
 | <span style=background-color:#786E12AA;font-weight:bold;>src</span> | 일정 관리 프로젝트 관련 패키지와 소스 코드를 모아놓은 폴더 |
 | ├── <span style=background-color:#786E12AA;font-weight:bold;>main</span> |  |
+| │   └── <span style=background-color:#786E12AA;font-weight:bold;>java.com.sparta.schedule_project</span> | 일정 관리 프로젝트 |
+| │        ├── `ScheduleProjectApplication.java` | 시작 함수가 있는 class |
+| │        ├── <span style=background-color:#786E12AA;font-weight:bold;>controller</span> | 사용자 요청을 처리하기 위한 컨트롤러를 모아놓은 폴더 |
+| │        │   ├── `ScheduleController.java` | 일정 관련 요청을 처리하는 컨트롤러 class |
+| │        │   └── `UserController.java` | 사용자 관련 요청을 처리하는 컨트롤러 class |
+| │        ├── <span style=background-color:#786E12AA;font-weight:bold;>dto</span> | 데이터를 주고받기 위한 객체를 모아놓은 폴더 |
+| │        │   ├── `ScheduleRequesthto.java`| 일정 정보를 요청할 때 사용하는 dto |
+| │        │   ├── `ScheduleResponseDto.java`| 일정 정보를 받을 때 사용하는 dto |
+| │        │   ├── `UserRequesthto.java`| 사용자 정보를 요청할 때 사용하는 dto |
+| │        │   ├── `UserResponseDto.java`| 사용자 정보를 받을 때 사용하는 dto |
+| │        │   └── <span style=background-color:#786E12AA;font-weight:bold;>entity</span>| DB와 매핑되는 엔티티 클래스들을 모아놓은 폴더 |
+| │        │       ├── `ScheduleDto.java`| 일정 entity |
+| │        │       └── `UserDto.java`| 사용자 entity |
+| │        ├── <span style=background-color:#786E12AA;font-weight:bold;>repository</span> | DB와 상호작용하는 레포지토리를 모아놓은 폴더 |
+| │        │    ├── `ScheduleRepository.java`| 일정을 저장하고 조회하는 기능을 제공하는 레포지토리 class |
+| │        │    └── `UserRepository.java`| 사용자를 저장하고 조회하는 기능을 제공하는 레포지토리 class |
+| │        └── <span style=background-color:#786E12AA;font-weight:bold;>service</span> | 비즈니스 로직을 처리하는 서비스들을 모아놓은 폴더 |
+| │             ├── `ScheduleService.java`| 일정 관련 비즈니스 로직을 처리하는 class |
+| │             └── `UserService.java`| 사용자 관련 비즈니스 로직을 처리하는 class |
+| └── <span style=background-color:#786E12AA;font-weight:bold;>docs</span> | 일정 관리 프로젝트와 관련된 문서들을 모아놓은 폴더 |
+| ├── `README.md` | 일정 관리 프로젝트에 대한 설명을 담은 파일 |
+| └── `schedule.sql` | 일정 관리 프로젝트에서 사용되는 쿼리를 모은 파일 |
+<!-- | <span style=background-color:#786E12AA;font-weight:bold;>src</span> | 일정 관리 프로젝트 관련 패키지와 소스 코드를 모아놓은 폴더 |
+| ├── <span style=background-color:#786E12AA;font-weight:bold;>main</span> |  |
 | │    ├── <span style=background-color:#786E12AA;font-weight:bold;>java.com.sparta.schedule_project</span> | 일정 관리 프로젝트 |
 | │   │    ├── `ScheduleProjectApplication.java` | 시작 함수가 있는 class |
 | │   │    ├── <span style=background-color:#786E12AA;font-weight:bold;>controller</span> | 사용자 요청을 처리하기 위한 컨트롤러를 모아놓은 폴더 |
@@ -62,8 +86,7 @@
 | │       └── `UserInfo.html`| 사용자를 등록/수정하는 화면 |
 | └── <span style=background-color:#786E12AA;font-weight:bold;>docs</span> | 일정 관리 프로젝트와 관련된 문서들을 모아놓은 폴더 |
 | ├── `README.md` | 일정 관리 프로젝트에 대한 설명을 담은 파일 |
-| └── `schedule.sql` | 일정 관리 프로젝트에서 사용되는 쿼리를 모은 파일 |
-
+| └── `schedule.sql` | 일정 관리 프로젝트에서 사용되는 쿼리를 모은 파일 | -->
 </details>
 
 ### 📑API 명세서
@@ -78,7 +101,7 @@
         <th>상태코드</th>
     </tr>
     <tr>
-        <td><b>사용자 등록</b></td>
+        <td><b>회원 가입</b></td>
         <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
         <td>/api.sparta.com/users</td>
         <td><pre lang="json">{
@@ -95,23 +118,51 @@
     </tr>
     <tr>
         <td><b>로그인</b></td>
-        <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
-        <td>/api.sparta.com/users</td>
+        <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
+        <td>/api.sparta.com/login</td>
         <td><pre lang="json">{
     "user_Id" : "hong",
     "password" : "1q2w3e4r#"
 }</pre></td>
         <td><pre lang="json">{
-    "user-Id": "hong",
-    "password": "1q2w3e4r#",
-    "email": "hong@gmail.com",
-    "name": "홍길동",
-}
-{
     "message": "login success",
     "status": 200
 }</pre></td>
         <td><code>200</code>: 로그인 성공</td>
+    </tr>
+    <tr>
+        <td><b>로그 아웃</b></td>
+        <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
+        <td>/api.sparta.com/logout</td>
+        <td><pre lang="json">{
+    "user_Id" : "hong"
+}</pre></td>
+        <td><pre lang="json">{
+    "message": "logout success",
+    "status": 200
+}</pre></td>
+        <td><code>200</code>: 로그아웃 성공</td>
+    </tr>
+    <tr>
+        <td><b>사용자 정보 조회</b></td>
+        <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
+        <td>/api.sparta.com/users</td>
+        <td><pre lang="json">{
+    "user_Id" : "hong"
+}</pre></td>
+        <td><pre lang="json">{
+    user: {
+        "user-Id": "hong",
+        "password": "1q2w3e4r#",
+        "email": "hong@gmail.com",
+        "name": "홍길동",
+    }
+    status: {
+        "message": "search user success",
+        "status": 200
+    }
+}</pre></td>
+        <td><code>200</code>: 사용자 정보 조회 성공</td>
     </tr>
     <tr>
         <td><b>사용자 수정</b></td>
@@ -149,8 +200,7 @@
         <td><pre lang="json">{
     "user-id" : "1",
     "title": "제목제목제목",
-    "content": "내용내용내용",
-    "createDate": "2022-10-16"
+    "content": "내용내용내용"
 }</pre></td>
         <td><pre lang="json">{
     "message": "create schedule success",
@@ -170,17 +220,19 @@
     "endRowNum": "15"
 }</pre></td>
         <td><pre lang="json">{
-    "id": "1",
-    "user-id": 1, 
-    "name": "홍길동",
-    "title" : "제목제목제목",
-    "content" : "내용내용내용",
-    "createDate": "2022-10-16",
-    "updateDate": "2022-10-20"
-}
-{
-    "message": "create schedule success",
-    "status": 200
+    schedule: [{
+        "id": "1",
+        "user-id": 1, 
+        "name": "홍길동",
+        "title" : "제목제목제목",
+        "content" : "내용내용내용",
+        "createDate": "2022-10-16",
+        "updateDate": "2022-10-20"
+    }, ...]
+    status: {
+        "message": "create schedule success",
+        "status": 200
+    }
 }</pre></td>
         <td><code>200</code>: 일정 정상조회</td>
     </tr>
@@ -230,5 +282,5 @@
     - `Github Desktop`
 
 ### 🧑‍💻사용언어
-- `Java`
-- `javascript`
+- 비즈니스 로직: `Java`, `javascript`
+- 화면: `HTML`

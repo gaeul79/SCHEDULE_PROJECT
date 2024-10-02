@@ -1,12 +1,13 @@
-package com.sparta.schedule_project.dto;
+package com.sparta.schedule_project.dto.entity;
 
-import lombok.Getter;
+import lombok.Data;
 
 import java.time.LocalDate;
 
-@Getter
-public class ScheduleRequestDto {
+@Data
+public class ScheduleViewDto extends ScheduleDto {
     private String name;
+
     private LocalDate startDate;
     private LocalDate endDate;
 
