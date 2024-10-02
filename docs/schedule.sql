@@ -25,6 +25,7 @@ create view ScheduleView as
     from User as u join schedule as s on u.user_id = s.user_id
 );
 
+
 insert into User(user_id, password, email, name) values('hong', '1q2w3e4r', 'hong@gmail.com', '홍길동');
 insert into Schedule(user_id, title, content) values('hong', '제목제목제목', '내용내용내용');
 
@@ -39,5 +40,5 @@ where id=1;
 drop table Schedule;
 drop table User;
 
-delete from Schedule;
-delete from User;
+truncate Schedule;
+delete from User where user_id='hong';

@@ -49,6 +49,7 @@
 | │        │   ├── `UserResponseDto.java`| 사용자 정보를 받을 때 사용하는 dto |
 | │        │   └── <span style=background-color:#786E12AA;font-weight:bold;>entity</span>| DB와 매핑되는 엔티티 클래스들을 모아놓은 폴더 |
 | │        │       ├── `ScheduleDto.java`| 일정 entity |
+| │        │       ├── `ScheduleViewDto.java`| 일정 view entity |
 | │        │       └── `UserDto.java`| 사용자 entity |
 | │        ├── <span style=background-color:#786E12AA;font-weight:bold;>repository</span> | DB와 상호작용하는 레포지토리를 모아놓은 폴더 |
 | │        │    ├── `ScheduleRepository.java`| 일정을 저장하고 조회하는 기능을 제공하는 레포지토리 class |
@@ -105,7 +106,7 @@
         <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
         <td>/api.sparta.com/users</td>
         <td><pre lang="json">{
-    "user-Id": "hong"        
+    "userId": "hong",        
     "password": "1q2w3e4r#",
     "email": "hong@gmail.com",
     "name": "홍길동"
@@ -121,7 +122,7 @@
         <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
         <td>/api.sparta.com/login</td>
         <td><pre lang="json">{
-    "user_Id" : "hong",
+    "userId" : "hong",
     "password" : "1q2w3e4r#"
 }</pre></td>
         <td><pre lang="json">{
@@ -135,7 +136,7 @@
         <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
         <td>/api.sparta.com/logout</td>
         <td><pre lang="json">{
-    "user_Id" : "hong"
+    "userId" : "hong"
 }</pre></td>
         <td><pre lang="json">{
     "message": "logout success",
@@ -148,11 +149,11 @@
         <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
         <td>/api.sparta.com/users</td>
         <td><pre lang="json">{
-    "user_Id" : "hong"
+    "userId" : "hong"
 }</pre></td>
         <td><pre lang="json">{
     user: {
-        "user-Id": "hong",
+        "userId": "hong",
         "password": "1q2w3e4r#",
         "email": "hong@gmail.com",
         "name": "홍길동",
@@ -169,10 +170,10 @@
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
         <td>/api.sparta.com/users/{userId}</td>
         <td><pre lang="json">{
-    "user-Id": "hong",
+    "userId": "hong",
     "password": "1q2w3e4r#",
     "name": "김길동",
-    "email": "dong@gmail.com",
+    "email": "dong@gmail.com"
 }</pre></td>
         <td><pre lang="json">{
     "message": "update user success",
@@ -185,7 +186,7 @@
         <td><span style=background-color:#CE3636AA;font-weight:bold;>DELETE</span></td>
         <td>/api.sparta.com/users/{userId}</td>
         <td><pre lang="json">{
-    "user-Id": 1
+    "userId": "hong"
 }</pre></td>
         <td><pre lang="json">{
     "message": "delete user success",

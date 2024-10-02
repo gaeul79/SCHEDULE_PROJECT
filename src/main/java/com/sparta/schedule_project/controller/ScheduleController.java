@@ -6,7 +6,7 @@ import com.sparta.schedule_project.service.ScheduleService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api.sparta.com")
 public class ScheduleController {
     private ScheduleService scheduleService;
 

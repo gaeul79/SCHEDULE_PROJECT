@@ -8,5 +8,5 @@ import java.util.List;
 @Getter
 public class ScheduleResponseDto {
     private List<ScheduleViewDto> schedule;
-    private Status status;
+    private StatusDto statusDto;
 }

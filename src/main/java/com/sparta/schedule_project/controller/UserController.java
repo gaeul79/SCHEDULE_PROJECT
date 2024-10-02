@@ -1,5 +1,6 @@
 package com.sparta.schedule_project.controller;
 
+import com.sparta.schedule_project.dto.StatusDto;
 import com.sparta.schedule_project.dto.UserRequestDto;
 import com.sparta.schedule_project.dto.UserResponseDto;
 import com.sparta.schedule_project.service.UserService;
@@ -15,32 +16,32 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public UserResponseDto login(@RequestBody UserRequestDto userRequestDto) {
-        return userService.searchUser(userRequestDto);
+    public StatusDto login(@RequestBody UserRequestDto userRequestDto) {
+        return userService.login(userRequestDto);
     }
 
     @PostMapping("/logout")
-    public UserResponseDto logout() {
+    public StatusDto logout() {
         return userService.logout();
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/users")
+    public StatusDto createUser(@RequestBody UserRequestDto userRequestDto) {
+        return userService.createUser(userRequestDto);
+    }
+
+    @GetMapping("/users")
     public UserResponseDto getUserInfo(@RequestBody UserRequestDto userRequestDto) {
         return userService.searchUser(userRequestDto);
     }
 
-    @PostMapping("/users")
-    public UserResponseDto createUser(@RequestBody UserRequestDto userRequestDto) {
-        return userService.createUser(userRequestDto);
-    }
-
     @PutMapping("/users/{userId}")
-    public UserResponseDto updateUser(@RequestBody UserRequestDto userRequestDto) {
+    public StatusDto updateUser(@RequestBody UserRequestDto userRequestDto) {
         return userService.updateUser(userRequestDto);
     }
 
     @DeleteMapping("/users/{userId}")
-    public void deleteUser(@RequestBody UserRequestDto userRequestDto) {
-        userService.deleteUser(userRequestDto);
+    public StatusDto deleteUser(@RequestBody UserRequestDto userRequestDto) {
+        return userService.deleteUser(userRequestDto);
     }
 }

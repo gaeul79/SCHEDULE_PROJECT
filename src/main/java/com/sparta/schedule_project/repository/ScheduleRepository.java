@@ -30,4 +30,21 @@ public class ScheduleRepository {
     public void deleteSchedule(ScheduleDto scheduleDto) {
 
     }
+
+    //    public List<UserDto> searchUsers(UserDto userDto) {
+//        String query = makeSearchQuery(userDto);
+//        return jdbcTemplate.query(query, new RowMapper<UserDto>() {
+//            @Override
+//            public UserDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+//                // SQL 의 결과로 받아온 Memo 데이터들을 MemoResponseDto 타입으로 변환해줄 메서드
+//                String userId = rs.getString("user_id");
+//                String password = rs.getString("password");
+//                String email = rs.getString("email");
+//                String name = rs.getString("name");
+//                LocalDate createDate = rs.getDate("createDate").toLocalDate();
+//                LocalDate updateDate = rs.getDate("updateDate").toLocalDate();
+//                return new UserDto(userId, password, email, name, createDate, updateDate);
+//            }
+//        });
+//    }
 }

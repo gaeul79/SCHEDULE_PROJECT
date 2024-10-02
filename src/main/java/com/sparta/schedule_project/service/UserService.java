@@ -1,5 +1,6 @@
 package com.sparta.schedule_project.service;
 
+import com.sparta.schedule_project.dto.StatusDto;
 import com.sparta.schedule_project.dto.UserRequestDto;
 import com.sparta.schedule_project.dto.UserResponseDto;
 import com.sparta.schedule_project.dto.entity.UserDto;
@@ -14,36 +15,64 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserResponseDto logout() {
-        UserResponseDto response = new UserResponseDto();
-        return response;
+    public StatusDto login(UserRequestDto requestUserDto) {
+        try {
+            UserDto user = UserDto.from(requestUserDto);
+            UserDto resultUser = userRepository.findById(user);
+            // 비밀번호나 그런거 검사..
+            return new StatusDto(200, "Success");
+        } catch (Exception ex) {
+            return new StatusDto(999, "Failed");
+        }
     }
 
-    public UserResponseDto createUser(UserRequestDto requestUserDto) {
-        UserDto user = new UserDto();
-        UserDto resultUser = userRepository.createUser(user);
-        UserResponseDto response = new UserResponseDto();
-        return response;
+    public StatusDto logout() {
+        try {
+            return new StatusDto(200, "Success");
+        } catch (Exception ex) {
+            return new StatusDto(999, "Failed");
+        }
+    }
+
+    public StatusDto createUser(UserRequestDto requestUserDto) {
+        try {
+            UserDto user = UserDto.from(requestUserDto);
+            userRepository.createUser(user);
+            return new StatusDto(200, "Success");
+        } catch (Exception ex) {
+            return new StatusDto(999, "Failed");
+        }
     }
 
     public UserResponseDto searchUser(UserRequestDto requestUserDto) {
-        UserDto user = new UserDto();
-        UserDto resultUser = userRepository.searchUser(user);
-        UserResponseDto response = new UserResponseDto();
-        return response;
+        try {
+            UserDto user = UserDto.from(requestUserDto);
+            UserDto resultUser = userRepository.searchUser(user);
+            StatusDto statusDto = new StatusDto(200, "Success");
+            return UserResponseDto.from(resultUser, statusDto);
+        } catch (Exception ex) {
+            StatusDto statusDto = new StatusDto(999, "Failed");
+            return UserResponseDto.from(null, statusDto);
+        }
     }
 
-    public UserResponseDto updateUser(UserRequestDto requestUserDto) {
-        UserDto user = new UserDto();
-        userRepository.updateUser(user);
-        UserResponseDto response = new UserResponseDto();
-        return response;
+    public StatusDto updateUser(UserRequestDto requestUserDto) {
+        try {
+            UserDto user = UserDto.from(requestUserDto);
+            userRepository.updateUser(user);
+            return new StatusDto(200, "Success");
+        } catch (Exception ex) {
+            return new StatusDto(999, "Failed");
+        }
     }
 
-    public UserResponseDto deleteUser(UserRequestDto requestUserDto) {
-        UserDto user = new UserDto();
-        userRepository.deleteUser(user);
-        UserResponseDto response = new UserResponseDto();
-        return response;
+    public StatusDto deleteUser(UserRequestDto requestUserDto) {
+        try {
+            UserDto user = UserDto.from(requestUserDto);
+            userRepository.deleteUser(user);
+            return new StatusDto(200, "Success");
+        } catch (Exception ex) {
+            return new StatusDto(999, "Failed");
+        }
     }
 }
