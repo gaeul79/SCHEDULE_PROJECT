@@ -5,6 +5,12 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * 일정 정보를 담는 DTO 클래스
+ *
+ * @author 김현정
+ * @since 2024-10-03
+ */
 @Data
 public class ScheduleDto {
     private String id;
@@ -20,6 +26,14 @@ public class ScheduleDto {
     private Integer page;
     private Integer size;
 
+    /**
+     * ScheduleRequestDto 객체로부터 일정 정보를 복사하여 ScheduleDto 객체를 생성합니다.
+     *
+     * @param requestDto 일정 정보가 담긴 ScheduleRequestDto 객체
+     * @return 생성된 ScheduleDto 객체
+     * @author 김현정
+     * @since 2024-10-03
+     */
     public static ScheduleDto from(ScheduleRequestDto requestDto) {
         ScheduleDto scheduleDto = new ScheduleDto();
         scheduleDto.setId(requestDto.getId());

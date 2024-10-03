@@ -4,7 +4,6 @@ import com.sparta.schedule_project.dto.entity.UserDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import javax.naming.Name;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 
@@ -25,7 +24,7 @@ public class UserRepository {
     public UserDto findById(UserDto userDto) {
         String query = makeFindByIdQuery(userDto);
         return jdbcTemplate.query(query, resultSet -> {
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 UserDto user = new UserDto();
                 user.setUserId(resultSet.getString("user_id"));
                 user.setPassword(resultSet.getString("password"));
@@ -39,7 +38,7 @@ public class UserRepository {
     public UserDto searchUser(UserDto userDto) {
         String query = makeSearchQuery(userDto);
         return jdbcTemplate.query(query, resultSet -> {
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 UserDto user = new UserDto();
                 user.setUserId(resultSet.getString("user_id"));
                 user.setPassword(resultSet.getString("password"));

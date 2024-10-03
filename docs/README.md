@@ -43,11 +43,11 @@
 | │        │   ├── `ScheduleController.java` | 일정 관련 요청을 처리하는 컨트롤러 class |
 | │        │   └── `UserController.java` | 사용자 관련 요청을 처리하는 컨트롤러 class |
 | │        ├── <span style=background-color:#786E12AA;font-weight:bold;>dto</span> | 데이터를 주고받기 위한 객체를 모아놓은 폴더 |
-| │        │   ├── `ScheduleRequesthto.java`| 일정 정보를 요청할 때 사용하는 dto |
-| │        │   ├── `ScheduleResponseDto.java`| 일정 정보를 받을 때 사용하는 dto |
-| │        │   ├── `UserRequesthto.java`| 사용자 정보를 요청할 때 사용하는 dto |
-| │        │   ├── `UserResponseDto.java`| 사용자 정보를 받을 때 사용하는 dto |
-| │        │   ├── `StatusDto.java`| HTTP상태에 대한 응답을 제공하는 dto |
+| │        │   ├── `ScheduleRequesthDto.java`| 일정 정보를 요청할 때 사용하는 dto |
+| │        │   ├── `ScheduleResponseDto.java`| 서버로부터 일정 정보를 받을 때 사용하는 dto |
+| │        │   ├── `UserRequestDto.java`| 사용자 정보를 요청할 때 사용하는 dto |
+| │        │   ├── `UserResponseDto.java`| 서버로부터 사용자 정보를 받을 때 사용하는 dto |
+| │        │   ├── `ResponseStatusDto.java`| API응답 상태에 대한 정보를 제공하는 dto |
 | │        │   └── <span style=background-color:#786E12AA;font-weight:bold;>entity</span>| DB와 매핑되는 엔티티 클래스들을 모아놓은 폴더 |
 | │        │       ├── `ScheduleDto.java`| 일정 entity |
 | │        │       ├── `ScheduleViewDto.java`| 일정 view entity |

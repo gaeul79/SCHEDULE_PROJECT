@@ -1,11 +1,17 @@
 package com.sparta.schedule_project.dto;
 
-import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.dto.entity.ScheduleViewDto;
+import com.sparta.schedule_project.exception.ResponseCode;
 import lombok.Data;
 
 import java.util.List;
 
+/**
+ * 서버로부터 일정 정보를 받을 때 사용하는 DTO 클래스
+ *
+ * @author 김현정
+ * @since 2024-10-03
+ */
 @Data
 public class ScheduleResponseDto {
     private List<ScheduleViewDto> schedule;
