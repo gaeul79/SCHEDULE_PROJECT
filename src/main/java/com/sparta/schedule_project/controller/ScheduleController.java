@@ -4,6 +4,8 @@ import com.sparta.schedule_project.dto.ResponseStatusDto;
 import com.sparta.schedule_project.dto.ScheduleRequestDto;
 import com.sparta.schedule_project.dto.ScheduleResponseDto;
 import com.sparta.schedule_project.service.ScheduleService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -35,8 +37,8 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @PostMapping("/schedules")
-    public ResponseStatusDto createSchedules(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.createSchedule(scheduleRequestDto);
+    public ResponseEntity<ResponseStatusDto> createSchedules(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+        return new ResponseEntity<>(scheduleService.createSchedule(scheduleRequestDto), HttpStatus.OK);
     }
 
     /**
@@ -48,8 +50,8 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @GetMapping("/schedules")
-    public ScheduleResponseDto searchSchedules(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.searchSchedule(scheduleRequestDto);
+    public ResponseEntity<ScheduleResponseDto> searchSchedules(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+        return new ResponseEntity<>(scheduleService.searchSchedule(scheduleRequestDto), HttpStatus.OK);
     }
 
     /**
@@ -61,8 +63,8 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @PutMapping("/schedules/{scheduleId}")
-    public ResponseStatusDto updateSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.updateSchedule(scheduleRequestDto);
+    public ResponseEntity<ResponseStatusDto> updateSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+        return new ResponseEntity<>(scheduleService.updateSchedule(scheduleRequestDto), HttpStatus.OK);
     }
 
     /**
@@ -74,7 +76,7 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @DeleteMapping("/schedules/{scheduleId}")
-    public ResponseStatusDto deleteSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return scheduleService.deleteSchedule(scheduleRequestDto);
+    public ResponseEntity<ResponseStatusDto> deleteSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+        return new ResponseEntity<>(scheduleService.deleteSchedule(scheduleRequestDto), HttpStatus.OK);
     }
 }

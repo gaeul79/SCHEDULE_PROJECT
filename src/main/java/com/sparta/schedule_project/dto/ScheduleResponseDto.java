@@ -16,6 +16,7 @@ import java.util.List;
 public class ScheduleResponseDto {
     private List<ScheduleViewDto> schedule;
     private ResponseStatusDto responseStatusDto;
+    private int totalPage;
 
     public static ScheduleResponseDto from(List<ScheduleViewDto> schedules, ResponseCode responseCode) {
         ScheduleResponseDto responseScheduleDto = new ScheduleResponseDto();
