@@ -1,15 +1,16 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.exception.ResponseCode;
+import com.sparta.schedule_project.dto.ResponseStatusDto;
 import com.sparta.schedule_project.dto.ScheduleRequestDto;
 import com.sparta.schedule_project.dto.ScheduleResponseDto;
-import com.sparta.schedule_project.dto.ResponseStatusDto;
 import com.sparta.schedule_project.dto.entity.ScheduleDto;
 import com.sparta.schedule_project.dto.entity.ScheduleViewDto;
+import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 일정 관리 서비스 클래스
@@ -61,8 +62,16 @@ public class ScheduleService {
     public ScheduleResponseDto searchSchedule(ScheduleRequestDto scheduleRequestDto) {
         try {
             ScheduleViewDto scheduleViewDto = ScheduleViewDto.from(scheduleRequestDto);
-            List<ScheduleViewDto> schedules = scheduleRepository.searchSchedules(scheduleViewDto);
-            return ScheduleResponseDto.from(schedules, ResponseCode.SUCCESS_SEARCH_SCHEDULE);
+            Integer totalCount = scheduleRepository.searchScheduleCount(scheduleViewDto);
+            List<ScheduleViewDto> schedules = Optional.of(totalCount).orElse(0) > 0 ?
+                    scheduleRepository.searchSchedules(scheduleViewDto) : null;
+
+            ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto();
+            scheduleResponseDto.setTotalCount(totalCount);
+            scheduleResponseDto.setSchedule(schedules);
+            scheduleResponseDto.setResponseStatusDto(ResponseCode.SUCCESS_SEARCH_SCHEDULE);
+
+            return scheduleResponseDto;
         } catch (Exception ex) {
             return ScheduleResponseDto.from(null,
                     ResponseCode.SUCCESS_SEARCH_SCHEDULE,

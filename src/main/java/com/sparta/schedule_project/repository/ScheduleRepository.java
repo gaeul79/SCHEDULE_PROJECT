@@ -75,6 +75,19 @@ public class ScheduleRepository {
     }
 
     /**
+     * 일정 조회 결과의 개수를 반환
+     *
+     * @param scheduleViewDto 조회 조건
+     * @return 조회된 일정 개수
+     * @author 김현정
+     * @since 2024-10-03
+     */
+    public Integer searchScheduleCount(ScheduleViewDto scheduleViewDto) {
+        String query = makeCountQuery(scheduleViewDto);
+        return jdbcTemplate.queryForObject(query, Integer.class);
+    }
+
+    /**
      * 일정 수정
      *
      * @param scheduleDto 수정된 일정 정보
@@ -231,13 +244,30 @@ public class ScheduleRepository {
         StringBuilder sql = new StringBuilder();
         if (scheduleDto.getPage() != null && scheduleDto.getSize() != null) {
             sql.append(" LIMIT ");
-            sql.append(scheduleDto.getPage());
-            sql.append(" OFFSET ");
             sql.append(scheduleDto.getSize());
+            sql.append(" OFFSET ");
+            sql.append((scheduleDto.getPage() - 1) * scheduleDto.getSize());
         }
         return sql.toString();
     }
 
+    /**
+     * 일정 조회 결과의 개수를 계산하기 위한 SQL 쿼리를 생성합니다.
+     *
+     * @param scheduleDto 조회 조건
+     * @return 생성된 SQL 쿼리
+     * @author 김현정
+     * @since 2024-10-03
+     */
+    private String makeCountQuery(ScheduleViewDto scheduleDto) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT ");
+        sql.append("COUNT(*)");
+        sql.append(" FROM ");
+        sql.append(SCHEDULE_VIEW_NAME);
+        sql.append(makeWhere(scheduleDto));
+        return sql.toString();
+    }
 
     /**
      * WHERE 조건을 생성합니다.

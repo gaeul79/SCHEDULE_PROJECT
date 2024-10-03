@@ -2,7 +2,6 @@ package com.sparta.schedule_project.dto;
 
 import com.sparta.schedule_project.dto.entity.ScheduleViewDto;
 import com.sparta.schedule_project.exception.ResponseCode;
-import lombok.Data;
 
 import java.util.List;
 
@@ -12,11 +11,38 @@ import java.util.List;
  * @author 김현정
  * @since 2024-10-03
  */
-@Data
 public class ScheduleResponseDto {
     private List<ScheduleViewDto> schedule;
     private ResponseStatusDto responseStatusDto;
-    private int totalPage;
+    private int totalCount;
+
+    public List<ScheduleViewDto> getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(List<ScheduleViewDto> schedule) {
+        this.schedule = schedule;
+    }
+
+    public ResponseStatusDto getResponseStatusDto() {
+        return responseStatusDto;
+    }
+
+    public void setResponseStatusDto(ResponseStatusDto responseStatusDto) {
+        this.responseStatusDto = responseStatusDto;
+    }
+
+    public void setResponseStatusDto(ResponseCode responseCode) {
+        this.responseStatusDto = new ResponseStatusDto(responseCode);
+    }
+
+    public int getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
+    }
 
     public static ScheduleResponseDto from(List<ScheduleViewDto> schedules, ResponseCode responseCode) {
         ScheduleResponseDto responseScheduleDto = new ScheduleResponseDto();

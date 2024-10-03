@@ -209,7 +209,8 @@
     status: {
         "message": "create schedule success",
         "status": 200
-    }
+    },
+    "totalPage": 1
 }</pre></td>
         <td><code>200</code>: 일정 정상조회</td>
     </tr>

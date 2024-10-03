@@ -39,11 +39,3 @@ where id=1;
 
 drop table Schedule;
 drop table User;
-
-truncate Schedule;
-delete from User where user_id='hong';
-
-select *
-from ScheduleView
-where user_id = 'hong'
-limit 1 offset 3
