@@ -7,20 +7,48 @@ import org.springframework.stereotype.Repository;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 
+/**
+ * User 데이터를 관리하는 레포지토리 클래스입니다.
+ * JdbcTemplate을 이용하여 데이터베이스와 연결됩니다.
+ * @author 김현정
+ * @since 2024-10-03
+ */
 @Repository
 public class UserRepository {
     private final String USER_TABLE_NAME = "User";
     private final JdbcTemplate jdbcTemplate;
 
+    /**
+     * JdbcTemplate 객체를 의존성 주입 방식으로 받아옵니다.
+     *
+     * @param jdbcTemplate JdbcTemplate 객체
+     * @author 김현정
+     * @since 2024-10-03
+     */
     public UserRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * 회원가입을 위한 유저 정보를 저장합니다.
+     *
+     * @param userDto 저장할 유저 정보
+     * @author 김현정
+     * @since 2024-10-03
+     */
     public void createUser(UserDto userDto) {
         String query = makeInsertQuery(userDto);
         jdbcTemplate.update(query);
     }
 
+    /**
+     * 아이디로 유저 정보를 조회합니다.
+     *
+     * @param userDto 조회 조건 (아이디)
+     * @return 조회된 유저 정보 (UserDto)
+     * @author 김현정
+     * @since 2024-10-03
+     */
     public UserDto findById(UserDto userDto) {
         String query = makeFindByIdQuery(userDto);
         return jdbcTemplate.query(query, resultSet -> {
@@ -35,6 +63,14 @@ public class UserRepository {
         });
     }
 
+    /**
+     * 조건에 맞는 유저 정보를 조회합니다.
+     *
+     * @param userDto 조회 조건
+     * @return 조회된 유저 정보 (UserDto)
+     * @author 김현정
+     * @since 2024-10-03
+     */
     public UserDto searchUser(UserDto userDto) {
         String query = makeSearchQuery(userDto);
         return jdbcTemplate.query(query, resultSet -> {
@@ -53,16 +89,38 @@ public class UserRepository {
         });
     }
 
-    public void updateUser(UserDto requestUserDto) {
-        String query = makeUpdateQuery(requestUserDto);
+    /**
+     * 유저 정보를 수정합니다.
+     *
+     * @param userDto 수정할 유저 정보
+     * @author 김현정
+     * @since 2024-10-03
+     */
+    public void updateUser(UserDto userDto) {
+        String query = makeUpdateQuery(userDto);
         jdbcTemplate.update(query);
     }
 
+    /**
+     * 사용자를 데이터베이스에서 삭제합니다.
+     *
+     * @param userDto 삭제할 사용자 정보
+     * @author 김현정
+     * @since 2024-10-03
+     */
     public void deleteUser(UserDto userDto) {
         String query = makeDeleteQuery(userDto);
         jdbcTemplate.update(query);
     }
 
+    /**
+     * 사용자 등록을 위한 SQL 쿼리 생성
+     *
+     * @param userDto 사용자 정보
+     * @return 생성된 SQL 쿼리
+     * @author 김현정
+     * @since 2024-10-03
+     */
     private String makeInsertQuery(UserDto userDto) {
         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO ");
@@ -97,6 +155,14 @@ public class UserRepository {
         return sql.toString();
     }
 
+    /**
+     * id와 일치하는 사용자 조회를 위한 SQL 쿼리를 생성합니다.
+     *
+     * @param userDto 조회 조건
+     * @return 생성된 SQL 쿼리
+     * @author 김현정
+     * @since 2024-10-03
+     */
     private String makeFindByIdQuery(UserDto userDto) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT ");
@@ -104,10 +170,18 @@ public class UserRepository {
         sql.append(", password");
         sql.append(" FROM ");
         sql.append(USER_TABLE_NAME);
-        sql.append(makeWhere(userDto));
+        sql.append(makeWhere(userDto.getUserId()));
         return sql.toString();
     }
 
+    /**
+     * 사용자 조회를 위한 SQL 쿼리를 생성합니다.
+     *
+     * @param userDto 조회 조건
+     * @return 생성된 SQL 쿼리
+     * @author 김현정
+     * @since 2024-10-03
+     */
     private String makeSearchQuery(UserDto userDto) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT ");
@@ -123,6 +197,14 @@ public class UserRepository {
         return sql.toString();
     }
 
+    /**
+     * 사용자 수정을 위한 SQL 쿼리 생성
+     *
+     * @param userDto 수정된 사용자 정보
+     * @return 생성된 SQL 쿼리
+     * @author 김현정
+     * @since 2024-10-03
+     */
     private String makeUpdateQuery(UserDto userDto) {
         StringBuilder sql = new StringBuilder();
         sql.append("UPDATE ");
@@ -170,6 +252,14 @@ public class UserRepository {
         return sql.toString();
     }
 
+    /**
+     * 사용자 삭제를 위한 SQL 쿼리 생성
+     *
+     * @param userDto 삭제할 사용자 정보
+     * @return 생성된 SQL 쿼리
+     * @author 김현정
+     * @since 2024-10-03
+     */
     private String makeDeleteQuery(UserDto userDto) {
         StringBuilder sql = new StringBuilder();
         sql.append("DELETE FROM ");
@@ -178,6 +268,29 @@ public class UserRepository {
         return sql.toString();
     }
 
+    /**
+     * WHERE 조건을 생성합니다.
+     *
+     * @param id 사용자 아이디
+     * @return 생성된 WHERE 조건 문자열
+     * @author 김현정
+     * @since 2024-10-03
+     */
+    private String makeWhere(String id) {
+        StringBuilder sql = new StringBuilder();
+        sql.append(" WHERE ");
+        sql.append("user_id='").append(id).append("'");
+        return sql.toString();
+    }
+
+    /**
+     * WHERE 조건을 생성합니다.
+     *
+     * @param userDto 조회 조건
+     * @return 생성된 WHERE 조건 문자열
+     * @author 김현정
+     * @since 2024-10-03
+     */
     private String makeWhere(UserDto userDto) {
         StringBuilder sql = new StringBuilder();
 

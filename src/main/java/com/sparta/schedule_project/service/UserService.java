@@ -43,7 +43,7 @@ public class UserService {
         try {
             UserDto user = UserDto.from(requestUserDto);
             UserDto resultUser = userRepository.findById(user);
-            checkUser(user, resultUser);
+            checkLoginUser(user, resultUser);
             return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
         } catch (ResponseException ex) {
             return new ResponseStatusDto(ex.getResponseCode());
@@ -59,11 +59,11 @@ public class UserService {
      * @author 김현정 (수정 필요)
      * @since 2024-10-03
      */
-    public void checkUser(UserDto inputUser, UserDto resultUser) throws ResponseException {
+    public void checkLoginUser(UserDto inputUser, UserDto resultUser) throws ResponseException {
         if(resultUser == null)
             throw new ResponseException(ResponseCode.USER_NAME_NOT_FOUND);
         else if(!inputUser.getPassword().equals(resultUser.getPassword()))
-            throw new ResponseException(ResponseCode.USER_NAME_NOT_FOUND);
+            throw new ResponseException(ResponseCode.USER_PASSWORD_NOT_FOUND);
     }
 
     /**
@@ -92,11 +92,26 @@ public class UserService {
     public ResponseStatusDto createUser(UserRequestDto userRequestDto) {
         try {
             UserDto user = UserDto.from(userRequestDto);
+            checkCreateUser(user);
             userRepository.createUser(user);
             return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
+        } catch (ResponseException ex) {
+            return new ResponseStatusDto(ex.getResponseCode());
         } catch (Exception ex) {
-            return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
+            return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR);
         }
+    }
+
+    /**
+     * 사용자 생성 시 올바른 정보를 입력하였는지 검사합니다.
+     *
+     * @param user 생성하려는 사용자 정보
+     * @throws ResponseException 아이디가 중복될 경우 발생
+     */
+    public void checkCreateUser(UserDto user) throws ResponseException {
+        UserDto resultUser = userRepository.findById(user);
+        if(resultUser != null) // 중복 아이디인지 확인
+            throw new ResponseException(ResponseCode.USER_NAME_DUPLICATED);
     }
 
     /**
