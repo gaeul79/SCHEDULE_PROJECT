@@ -4,6 +4,7 @@ import com.sparta.schedule_project.dto.entity.UserDto;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.naming.Name;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 
@@ -180,45 +181,41 @@ public class UserRepository {
 
     private String makeWhere(UserDto userDto) {
         StringBuilder sql = new StringBuilder();
-        Field[] fields = userDto.getClass().getDeclaredFields();
 
-        for (Field field : fields) {
-            String fieldName = field.getName();
-            if (fieldName.equals("userId") && userDto.getUserId() != null) {
-                if (sql.isEmpty())
-                    sql.append(" WHERE ");
-                else
-                    sql.append(" and ");
+        if (userDto.getUserId() != null) {
+            if (sql.isEmpty())
+                sql.append(" WHERE ");
+            else
+                sql.append(" and ");
 
-                sql.append("user_id='").append(userDto.getUserId()).append("'");
-            }
+            sql.append("user_id='").append(userDto.getUserId()).append("'");
+        }
 
-            if (fieldName.equals("password") && userDto.getPassword() != null) {
-                if (sql.isEmpty())
-                    sql.append(" WHERE ");
-                else
-                    sql.append(" and ");
+        if (userDto.getPassword() != null) {
+            if (sql.isEmpty())
+                sql.append(" WHERE ");
+            else
+                sql.append(" and ");
 
-                sql.append("password='").append(userDto.getPassword()).append("'");
-            }
+            sql.append("password='").append(userDto.getPassword()).append("'");
+        }
 
-            if (fieldName.equals("email") && userDto.getEmail() != null) {
-                if (sql.isEmpty())
-                    sql.append(" WHERE ");
-                else
-                    sql.append(" and ");
+        if (userDto.getEmail() != null) {
+            if (sql.isEmpty())
+                sql.append(" WHERE ");
+            else
+                sql.append(" and ");
 
-                sql.append("email='").append(userDto.getEmail()).append("'");
-            }
+            sql.append("email='").append(userDto.getEmail()).append("'");
+        }
 
-            if (fieldName.equals("name") && userDto.getName() != null) {
-                if (sql.isEmpty())
-                    sql.append(" WHERE ");
-                else
-                    sql.append(" and ");
+        if (userDto.getName() != null) {
+            if (sql.isEmpty())
+                sql.append(" WHERE ");
+            else
+                sql.append(" and ");
 
-                sql.append("name='").append(userDto.getName()).append("'");
-            }
+            sql.append("name='").append(userDto.getName()).append("'");
         }
 
         return sql.toString();

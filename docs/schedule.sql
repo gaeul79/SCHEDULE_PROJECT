@@ -43,4 +43,7 @@ drop table User;
 truncate Schedule;
 delete from User where user_id='hong';
 
-SELECT id, user_id, name, title, content, createDate, updateDate FROM ScheduleView WHERE name like '%홍길동%' and updateDate between '2000-10-16' and '2024-10-20'
+select *
+from ScheduleView
+where user_id = 'hong'
+limit 1 offset 3

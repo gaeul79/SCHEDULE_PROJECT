@@ -138,63 +138,69 @@ public class ScheduleRepository {
         sql.append(" FROM ");
         sql.append(SCHEDULE_VIEW_NAME);
         sql.append(makeWhere(scheduleDto));
+        sql.append(" ORDER BY updateDate DESC");
+        sql.append(makePaging(scheduleDto));
+        return sql.toString();
+    }
+
+    private String makePaging(ScheduleDto scheduleDto) {
+        StringBuilder sql = new StringBuilder();
+        if(scheduleDto.getPage() != null && scheduleDto.getSize() != null) {
+            sql.append(" LIMIT ");
+            sql.append(scheduleDto.getPage());
+            sql.append(" OFFSET ");
+            sql.append(scheduleDto.getSize());
+        }
         return sql.toString();
     }
 
     private String makeWhere(ScheduleDto scheduleDto) {
         StringBuilder sql = new StringBuilder();
 
-        Field[] fields = scheduleDto.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            String fieldName = field.getName();
+        if (scheduleDto.getId() != null) {
+            if (sql.isEmpty())
+                sql.append(" WHERE ");
+            else
+                sql.append("  and  ");
 
-            if (fieldName.equals("id") && scheduleDto.getId() != null) {
-                if (sql.isEmpty())
-                    sql.append(" WHERE ");
-                else
-                    sql.append("  and  ");
+            sql.append("id='").append(scheduleDto.getId()).append("'");
+        }
 
-                sql.append("id='").append(scheduleDto.getId()).append("'");
-            }
+        if (scheduleDto.getUserId() != null) {
+            if (sql.isEmpty())
+                sql.append(" WHERE ");
+            else
+                sql.append("  and  ");
 
-            if (fieldName.equals("userId") && scheduleDto.getUserId() != null) {
-                if (sql.isEmpty())
-                    sql.append(" WHERE ");
-                else
-                    sql.append("  and  ");
+            sql.append("user_id='").append(scheduleDto.getUserId()).append("'");
+        }
 
-                sql.append("user_id='").append(scheduleDto.getUserId()).append("'");
-            }
+        if (scheduleDto.getTitle() != null) {
+            if (sql.isEmpty())
+                sql.append(" WHERE ");
+            else
+                sql.append("  and  ");
 
-            if (fieldName.equals("title") && scheduleDto.getTitle() != null) {
-                if (sql.isEmpty())
-                    sql.append(" WHERE ");
-                else
-                    sql.append("  and  ");
+            sql.append("title like '%").append(scheduleDto.getTitle()).append("%'");
+        }
 
-                sql.append("title like '%").append(scheduleDto.getTitle()).append("%'");
-            }
+        if (scheduleDto.getContent() != null) {
+            if (sql.isEmpty())
+                sql.append(" WHERE ");
+            else
+                sql.append("  and  ");
 
-            if (fieldName.equals("content") && scheduleDto.getContent() != null) {
-                if (sql.isEmpty())
-                    sql.append(" WHERE ");
-                else
-                    sql.append("  and  ");
+            sql.append("content like '%").append(scheduleDto.getContent()).append("%'");
+        }
 
-                sql.append("content like '%").append(scheduleDto.getContent()).append("%'");
-            }
+        if(scheduleDto.getStartUpdateDate() != null && scheduleDto.getEndUpdateDate() != null) {
+            if (sql.isEmpty())
+                sql.append(" WHERE ");
+            else
+                sql.append("  and  ");
 
-            if(fieldName.equals("startDate")) {
-                if(scheduleDto.getStartUpdateDate() != null && scheduleDto.getEndUpdateDate() != null) {
-                    if (sql.isEmpty())
-                        sql.append(" WHERE ");
-                    else
-                        sql.append("  and  ");
-
-                    sql.append("updateDate between '").append(scheduleDto.getStartUpdateDate()).append("'");
-                    sql.append(" and '").append(scheduleDto.getEndUpdateDate()).append("'");
-                }
-            }
+            sql.append("updateDate between '").append(scheduleDto.getStartUpdateDate()).append("'");
+            sql.append(" and '").append(scheduleDto.getEndUpdateDate()).append("'");
         }
 
         return sql.toString();
@@ -202,71 +208,60 @@ public class ScheduleRepository {
 
     private String makeWhere(ScheduleViewDto scheduleDto) {
         StringBuilder sql = new StringBuilder();
-        Field[] fields = scheduleDto.getClass().getDeclaredFields();
-        Field[] superFields = scheduleDto.getClass().getSuperclass().getDeclaredFields();
 
-        for (Field field : fields) {
-            String fieldName = field.getName();
-            if (fieldName.equals("name") && scheduleDto.getName() != null) {
-                if (sql.length() > 7)
-                    sql.append(" and ");
-                else
-                    sql.append(" WHERE ");
+        if (scheduleDto.getName() != null) {
+            if (sql.length() > 7)
+                sql.append(" and ");
+            else
+                sql.append(" WHERE ");
 
-                sql.append("name like '%").append(scheduleDto.getName()).append("%'");
-            }
+            sql.append("name like '%").append(scheduleDto.getName()).append("%'");
         }
 
-        for (Field superField : superFields) {
-            String fieldName = superField.getName();
+        if (scheduleDto.getId() != null) {
+            if (sql.length() > 7)
+                sql.append(" and ");
+            else
+                sql.append(" WHERE ");
 
-            if (fieldName.equals("id") && scheduleDto.getId() != null) {
-                if (sql.length() > 7)
-                    sql.append(" and ");
-                else
-                    sql.append(" WHERE ");
+            sql.append("id='").append(scheduleDto.getId()).append("'");
+        }
 
-                sql.append("id='").append(scheduleDto.getId()).append("'");
-            }
+        if (scheduleDto.getUserId() != null) {
+            if (sql.length() > 7)
+                sql.append(" and ");
+            else
+                sql.append(" WHERE ");
 
-            if (fieldName.equals("userId") && scheduleDto.getUserId() != null) {
-                if (sql.length() > 7)
-                    sql.append(" and ");
-                else
-                    sql.append(" WHERE ");
+            sql.append("user_id='").append(scheduleDto.getUserId()).append("'");
+        }
 
-                sql.append("user_id='").append(scheduleDto.getUserId()).append("'");
-            }
+        if (scheduleDto.getTitle() != null) {
+            if (sql.length() > 7)
+                sql.append(" and ");
+            else
+                sql.append(" WHERE ");
 
-            if (fieldName.equals("title") && scheduleDto.getTitle() != null) {
-                if (sql.length() > 7)
-                    sql.append(" and ");
-                else
-                    sql.append(" WHERE ");
+            sql.append("title like '%").append(scheduleDto.getTitle()).append("%'");
+        }
 
-                sql.append("title like '%").append(scheduleDto.getTitle()).append("%'");
-            }
+        if (scheduleDto.getContent() != null) {
+            if (sql.length() > 7)
+                sql.append(" and ");
+            else
+                sql.append(" WHERE ");
 
-            if (fieldName.equals("content") && scheduleDto.getContent() != null) {
-                if (sql.length() > 7)
-                    sql.append(" and ");
-                else
-                    sql.append(" WHERE ");
+            sql.append("content like '%").append(scheduleDto.getContent()).append("%'");
+        }
 
-                sql.append("content like '%").append(scheduleDto.getContent()).append("%'");
-            }
+        if(scheduleDto.getStartUpdateDate() != null && scheduleDto.getEndUpdateDate() != null) {
+            if (sql.length() > 7)
+                sql.append(" and ");
+            else
+                sql.append(" WHERE ");
 
-            if(fieldName.equals("startUpdateDate")) {
-                if(scheduleDto.getStartUpdateDate() != null && scheduleDto.getEndUpdateDate() != null) {
-                    if (sql.length() > 7)
-                        sql.append(" and ");
-                    else
-                        sql.append(" WHERE ");
-
-                    sql.append("updateDate between '").append(scheduleDto.getStartUpdateDate()).append("'");
-                    sql.append(" and '").append(scheduleDto.getEndUpdateDate()).append("'");
-                }
-            }
+            sql.append("updateDate between '").append(scheduleDto.getStartUpdateDate()).append("'");
+            sql.append(" and '").append(scheduleDto.getEndUpdateDate()).append("'");
         }
 
         return sql.toString();

@@ -15,6 +15,6 @@ public class ScheduleRequestDto {
     private LocalDate startUpdateDate;
     private LocalDate endUpdateDate;
 
-    private int startRowNum;
-    private int endRowNum;
+    private int page;
+    private int size;
 }

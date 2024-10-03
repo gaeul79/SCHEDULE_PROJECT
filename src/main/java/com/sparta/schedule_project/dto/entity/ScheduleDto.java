@@ -17,8 +17,8 @@ public class ScheduleDto {
     private LocalDate startUpdateDate;
     private LocalDate endUpdateDate;
 
-    private int startRowNum;
-    private int endRowNum;
+    private Integer page;
+    private Integer size;
 
     public static ScheduleDto from(ScheduleRequestDto requestDto) {
         ScheduleDto scheduleDto = new ScheduleDto();

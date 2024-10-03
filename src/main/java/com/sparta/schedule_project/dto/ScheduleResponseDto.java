@@ -1,21 +1,29 @@
 package com.sparta.schedule_project.dto;
 
+import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.dto.entity.ScheduleViewDto;
-import com.sparta.schedule_project.dto.entity.UserDto;
 import lombok.Data;
-import lombok.Getter;
 
 import java.util.List;
 
 @Data
 public class ScheduleResponseDto {
     private List<ScheduleViewDto> schedule;
-    private StatusDto statusDto;
+    private ResponseStatusDto responseStatusDto;
 
-    public static ScheduleResponseDto from(List<ScheduleViewDto> schedules, StatusDto statusDto) {
-        ScheduleResponseDto responseDto = new ScheduleResponseDto();
-        responseDto.setSchedule(schedules);
-        responseDto.setStatusDto(statusDto);
-        return responseDto;
+    public static ScheduleResponseDto from(List<ScheduleViewDto> schedules, ResponseCode responseCode) {
+        ScheduleResponseDto responseScheduleDto = new ScheduleResponseDto();
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode);
+        responseScheduleDto.setSchedule(schedules);
+        responseScheduleDto.setResponseStatusDto(responseStatusDto);
+        return responseScheduleDto;
+    }
+
+    public static ScheduleResponseDto from(List<ScheduleViewDto> schedules, ResponseCode responseCode, String message) {
+        ScheduleResponseDto responseScheduleDto = new ScheduleResponseDto();
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode, message);
+        responseScheduleDto.setSchedule(schedules);
+        responseScheduleDto.setResponseStatusDto(responseStatusDto);
+        return responseScheduleDto;
     }
 }

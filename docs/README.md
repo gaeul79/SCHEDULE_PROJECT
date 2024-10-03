@@ -52,6 +52,9 @@
 | │        │       ├── `ScheduleDto.java`| 일정 entity |
 | │        │       ├── `ScheduleViewDto.java`| 일정 view entity |
 | │        │       └── `UserDto.java`| 사용자 entity |
+| │        ├── <span style=background-color:#786E12AA;font-weight:bold;>exception</span> | 사용자 요청을 처리하기 위한 컨트롤러를 모아놓은 폴더 |
+| │        │   ├── `ResponseCode.java` | API 응답 시 사용되는 상태 코드와 메시지를 정의하는 enum |
+| │        │   └── `ResponseException.java` |  API 응답 시 발생하는 예외를 나타내는 class |
 | │        ├── <span style=background-color:#786E12AA;font-weight:bold;>repository</span> | DB와 상호작용하는 레포지토리를 모아놓은 폴더 |
 | │        │    ├── `ScheduleRepository.java`| 일정을 저장하고 조회하는 기능을 제공하는 레포지토리 class |
 | │        │    └── `UserRepository.java`| 사용자를 저장하고 조회하는 기능을 제공하는 레포지토리 class |
@@ -61,34 +64,6 @@
 | └── <span style=background-color:#786E12AA;font-weight:bold;>docs</span> | 일정 관리 프로젝트와 관련된 문서들을 모아놓은 폴더 |
 | ├── `README.md` | 일정 관리 프로젝트에 대한 설명을 담은 파일 |
 | └── `schedule.sql` | 일정 관리 프로젝트에서 사용되는 쿼리를 모은 파일 |
-<!-- | <span style=background-color:#786E12AA;font-weight:bold;>src</span> | 일정 관리 프로젝트 관련 패키지와 소스 코드를 모아놓은 폴더 |
-| ├── <span style=background-color:#786E12AA;font-weight:bold;>main</span> |  |
-| │    ├── <span style=background-color:#786E12AA;font-weight:bold;>java.com.sparta.schedule_project</span> | 일정 관리 프로젝트 |
-| │   │    ├── `ScheduleProjectApplication.java` | 시작 함수가 있는 class |
-| │   │    ├── <span style=background-color:#786E12AA;font-weight:bold;>controller</span> | 사용자 요청을 처리하기 위한 컨트롤러를 모아놓은 폴더 |
-| │   │    │   ├── `ScheduleController.java` | 일정 관련 요청을 처리하는 컨트롤러 class |
-| │   │    │   └── `UserController.java` | 사용자 관련 요청을 처리하는 컨트롤러 class |
-| │   │    ├── <span style=background-color:#786E12AA;font-weight:bold;>dto</span> | 데이터를 주고받기 위한 객체를 모아놓은 폴더 |
-| │   │    │   ├── `ScheduleRequesthto.java`| 일정 정보를 요청할 때 사용하는 dto |
-| │   │    │   ├── `ScheduleResponseDto.java`| 일정 정보를 받을 때 사용하는 dto |
-| │   │    │   ├── `UserRequesthto.java`| 사용자 정보를 요청할 때 사용하는 dto |
-| │   │    │   ├── `UserResponseDto.java`| 사용자 정보를 받을 때 사용하는 dto |
-| │   │    │   └── <span style=background-color:#786E12AA;font-weight:bold;>entity</span>| DB와 매핑되는 엔티티 클래스들을 모아놓은 폴더 |
-| │   │    │       ├── `ScheduleDto.java`| 일정 entity |
-| │   │    │       └── `UserDto.java`| 사용자 entity |
-| │   │    ├── <span style=background-color:#786E12AA;font-weight:bold;>repository</span> | DB와 상호작용하는 레포지토리를 모아놓은 폴더 |
-| │   │    │    ├── `ScheduleRepository.java`| 일정을 저장하고 조회하는 기능을 제공하는 레포지토리 class |
-| │   │    │    └── `UserRepository.java`| 사용자를 저장하고 조회하는 기능을 제공하는 레포지토리 class |
-| │   │    └── <span style=background-color:#786E12AA;font-weight:bold;>service</span> | 비즈니스 로직을 처리하는 서비스들을 모아놓은 폴더 |
-| │   │         ├── `ScheduleService.java`| 일정 관련 비즈니스 로직을 처리하는 class |
-| │   │         └── `UserService.java`| 사용자 관련 비즈니스 로직을 처리하는 class |
-| │   └── <span style=background-color:#786E12AA;font-weight:bold;>resources.static</span> | 화면들을 모아놓은 폴더 |
-| │       ├── `DetailSchedule.html`| 일정을 상세하게 보여주는 화면 |
-| │       ├── `Index.html`| 일정 관리메인 화면 |
-| │       └── `UserInfo.html`| 사용자를 등록/수정하는 화면 |
-| └── <span style=background-color:#786E12AA;font-weight:bold;>docs</span> | 일정 관리 프로젝트와 관련된 문서들을 모아놓은 폴더 |
-| ├── `README.md` | 일정 관리 프로젝트에 대한 설명을 담은 파일 |
-| └── `schedule.sql` | 일정 관리 프로젝트에서 사용되는 쿼리를 모은 파일 | -->
 </details>
 
 ### 📑API 명세서
@@ -158,7 +133,7 @@
         "password": "1q2w3e4r#",
         "email": "hong@gmail.com",
         "name": "홍길동",
-    }
+    },
     status: {
         "message": "search user success",
         "status": 200
@@ -218,8 +193,8 @@
     "name": "홍길동",
     "startUpdateDate" : "2000-10-16",
     "endUpdateDate" : "2024-10-20",
-    "startRowNum": "10",
-    "endRowNum": "15"
+    "page": 1,
+    "size": 5
 }</pre></td>
         <td><pre lang="json">{
     schedule: [{
@@ -230,7 +205,7 @@
         "content" : "내용내용내용",
         "createDate": "2022-10-16",
         "updateDate": "2022-10-20"
-    }, ...]
+    }, ...],
     status: {
         "message": "create schedule success",
         "status": 200
@@ -284,5 +259,4 @@
     - `Github Desktop`
 
 ### 🧑‍💻사용언어
-- 비즈니스 로직: `Java`, `javascript`
-- 화면: `HTML`
+- `Java`

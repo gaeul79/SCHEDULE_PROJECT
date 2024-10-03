@@ -20,10 +20,10 @@ public class UserDto {
 
     public static UserDto from(UserRequestDto user) {
         UserDto userDto = new UserDto();
-        userDto.userId = user.getUserId();
-        userDto.password = user.getPassword();
-        userDto.name = user.getName();
-        userDto.email = user.getEmail();
+        userDto.setUserId(user.getUserId());
+        userDto.setPassword(user.getPassword());
+        userDto.setName(user.getName());
+        userDto.setEmail(user.getEmail());
         return userDto;
     }
 }

@@ -16,8 +16,8 @@ public class ScheduleViewDto extends ScheduleDto {
         scheduleDto.setContent(requestDto.getContent());
         scheduleDto.setStartUpdateDate(requestDto.getStartUpdateDate());
         scheduleDto.setEndUpdateDate(requestDto.getEndUpdateDate());
-        scheduleDto.setStartRowNum(requestDto.getStartRowNum());
-        scheduleDto.setEndRowNum(requestDto.getEndRowNum());
+        scheduleDto.setPage(requestDto.getPage());
+        scheduleDto.setSize(requestDto.getSize());
         return scheduleDto;
     }
 }

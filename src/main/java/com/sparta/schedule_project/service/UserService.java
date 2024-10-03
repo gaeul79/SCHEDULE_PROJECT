@@ -1,9 +1,11 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.dto.StatusDto;
+import com.sparta.schedule_project.exception.ResponseCode;
+import com.sparta.schedule_project.dto.ResponseStatusDto;
 import com.sparta.schedule_project.dto.UserRequestDto;
 import com.sparta.schedule_project.dto.UserResponseDto;
 import com.sparta.schedule_project.dto.entity.UserDto;
+import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,32 +17,39 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public StatusDto login(UserRequestDto requestUserDto) {
+    public ResponseStatusDto login(UserRequestDto requestUserDto) {
         try {
             UserDto user = UserDto.from(requestUserDto);
             UserDto resultUser = userRepository.findById(user);
-            // 비밀번호나 그런거 검사..
-            return new StatusDto(200, "Success");
-        } catch (Exception ex) {
-            return new StatusDto(999, "Failed");
+            checkUser(user, resultUser);
+            return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
+        } catch (ResponseException ex) {
+            return new ResponseStatusDto(ex.getResponseCode());
         }
     }
 
-    public StatusDto logout() {
+    public void checkUser(UserDto inputUser, UserDto resultUser) throws ResponseException {
+        if(resultUser == null)
+            throw new ResponseException(ResponseCode.USER_NAME_NOT_FOUND);
+        else if(!inputUser.getPassword().equals(resultUser.getPassword()))
+            throw new ResponseException(ResponseCode.USER_NAME_NOT_FOUND);
+    }
+
+    public ResponseStatusDto logout() {
         try {
-            return new StatusDto(200, "Success");
+            return new ResponseStatusDto(ResponseCode.SUCCESS_LOGOUT);
         } catch (Exception ex) {
-            return new StatusDto(999, "Failed");
+            return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
         }
     }
 
-    public StatusDto createUser(UserRequestDto requestUserDto) {
+    public ResponseStatusDto createUser(UserRequestDto requestUserDto) {
         try {
             UserDto user = UserDto.from(requestUserDto);
             userRepository.createUser(user);
-            return new StatusDto(200, "Success");
+            return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
         } catch (Exception ex) {
-            return new StatusDto(999, "Failed");
+            return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
         }
     }
 
@@ -48,31 +57,29 @@ public class UserService {
         try {
             UserDto user = UserDto.from(requestUserDto);
             UserDto resultUser = userRepository.searchUser(user);
-            StatusDto statusDto = new StatusDto(200, "Success");
-            return UserResponseDto.from(resultUser, statusDto);
+            return UserResponseDto.from(resultUser, ResponseCode.SUCCESS_SEARCH_USER);
         } catch (Exception ex) {
-            StatusDto statusDto = new StatusDto(999, "Failed");
-            return UserResponseDto.from(null, statusDto);
+            return UserResponseDto.from(null, ResponseCode.UNKNOWN_ERROR, ex.getMessage());
         }
     }
 
-    public StatusDto updateUser(UserRequestDto requestUserDto) {
+    public ResponseStatusDto updateUser(UserRequestDto requestUserDto) {
         try {
             UserDto user = UserDto.from(requestUserDto);
             userRepository.updateUser(user);
-            return new StatusDto(200, "Success");
+            return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
         } catch (Exception ex) {
-            return new StatusDto(999, "Failed");
+            return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
         }
     }
 
-    public StatusDto deleteUser(UserRequestDto requestUserDto) {
+    public ResponseStatusDto deleteUser(UserRequestDto requestUserDto) {
         try {
             UserDto user = UserDto.from(requestUserDto);
             userRepository.deleteUser(user);
-            return new StatusDto(200, "Success");
+            return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
         } catch (Exception ex) {
-            return new StatusDto(999, "Failed");
+            return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
         }
     }
 }
