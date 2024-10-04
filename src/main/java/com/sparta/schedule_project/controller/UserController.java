@@ -4,7 +4,6 @@ import com.sparta.schedule_project.dto.ResponseStatusDto;
 import com.sparta.schedule_project.dto.UserRequestDto;
 import com.sparta.schedule_project.dto.UserResponseDto;
 import com.sparta.schedule_project.service.UserService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

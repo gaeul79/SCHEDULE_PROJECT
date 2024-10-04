@@ -1,8 +1,8 @@
 package com.sparta.schedule_project.dto.entity;
 
 import com.sparta.schedule_project.dto.ScheduleRequestDto;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
@@ -12,9 +12,12 @@ import java.time.LocalDate;
  * @author 김현정
  * @since 2024-10-03
  */
-@Data
-//@NoArgsConstructor
+@Getter
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ScheduleDto {
+    @Setter
     private String id;
     private String userId;
     private String title;
@@ -28,22 +31,12 @@ public class ScheduleDto {
     private Integer page;
     private Integer size;
 
-    /**
-     * ScheduleRequestDto 객체로부터 일정 정보를 복사하여 ScheduleDto 객체를 생성합니다.
-     *
-     * @param requestDto 일정 정보가 담긴 ScheduleRequestDto 객체
-     * @return 생성된 ScheduleDto 객체
-     * @author 김현정
-     * @since 2024-10-03
-     */
-    public static ScheduleDto from(ScheduleRequestDto requestDto) {
-        ScheduleDto scheduleDto = new ScheduleDto();
-        scheduleDto.setId(requestDto.getId());
-        scheduleDto.setUserId(requestDto.getUserId());
-        scheduleDto.setTitle(requestDto.getTitle());
-        scheduleDto.setContent(requestDto.getContent());
-        scheduleDto.setStartUpdateDate(requestDto.getStartUpdateDate());
-        scheduleDto.setEndUpdateDate(requestDto.getEndUpdateDate());
-        return scheduleDto;
+    public ScheduleDto(ScheduleRequestDto requestDto) {
+        this.id = requestDto.getId();
+        this.userId = requestDto.getUserId();
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.startUpdateDate = requestDto.getStartUpdateDate();
+        this.endUpdateDate = requestDto.getEndUpdateDate();
     }
 }

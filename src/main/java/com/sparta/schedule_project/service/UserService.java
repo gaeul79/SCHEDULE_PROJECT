@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * 사용자 관리 서비스 클래스
  * UserRepository 이용하여 사용자를 관리합니다.
  *
- * @author 김현정 (수정 필요)
+ * @author 김현정
  * @since 2024-10-03
  */
 @Service

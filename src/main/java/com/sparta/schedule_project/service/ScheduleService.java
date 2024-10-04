@@ -27,7 +27,7 @@ public class ScheduleService {
      * ScheduleRepository 객체를 의존성 주입 방식으로 받아옵니다.
      *
      * @param scheduleRepository 일정 레포지토리
-     * @author 김현정 (수정 필요)
+     * @author 김현정
      * @since 2024-10-03
      */
     public ScheduleService(ScheduleRepository scheduleRepository) {
@@ -39,12 +39,13 @@ public class ScheduleService {
      *
      * @param scheduleRequestDto 일정 등록 요청 정보
      * @return 생성 결과 (ResponseStatusDto)
-     * @author 김현정 (수정 필요)
+     * @author 김현정
      * @since 2024-10-03
      */
     public ResponseStatusDto createSchedule(ScheduleRequestDto scheduleRequestDto) {
         try {
-            ScheduleDto scheduleDto = ScheduleDto.from(scheduleRequestDto);
+//            ScheduleDto scheduleDto = ScheduleDto.from(scheduleRequestDto);
+            ScheduleDto scheduleDto = new ScheduleDto(scheduleRequestDto);
             scheduleRepository.createSchedule(scheduleDto);
             return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
         } catch (Exception ex) {
@@ -57,7 +58,7 @@ public class ScheduleService {
      *
      * @param scheduleRequestDto 일정 조회 요청 정보
      * @return 조회 결과 (ScheduleResponseDto)
-     * @author 김현정 (수정 필요)
+     * @author 김현정
      * @since 2024-10-03
      */
     public ScheduleResponseDto searchSchedule(ScheduleRequestDto scheduleRequestDto) {
@@ -85,13 +86,13 @@ public class ScheduleService {
      *
      * @param scheduleRequestDto 일정 수정 요청 정보
      * @return 수정 결과 (ResponseStatusDto)
-     * @author 김현정 (수정 필요)
+     * @author 김현정
      * @since 2024-10-03
      */
     public ResponseStatusDto updateSchedule(ScheduleRequestDto scheduleRequestDto) {
         try {
             checkAccess(scheduleRequestDto);
-            ScheduleDto scheduleDto = ScheduleDto.from(scheduleRequestDto);
+            ScheduleDto scheduleDto = new ScheduleDto(scheduleRequestDto);
             scheduleRepository.updateSchedule(scheduleDto);
             return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE);
         } catch (ResponseException ex) {
@@ -106,13 +107,13 @@ public class ScheduleService {
      *
      * @param scheduleRequestDto 일정 삭제 요청 정보
      * @return 삭제 결과 (ResponseStatusDto)
-     * @author 김현정 (수정 필요)
+     * @author 김현정
      * @since 2024-10-03
      */
     public ResponseStatusDto deleteSchedule(ScheduleRequestDto scheduleRequestDto) {
         try {
             checkAccess(scheduleRequestDto);
-            ScheduleDto scheduleDto = ScheduleDto.from(scheduleRequestDto);
+            ScheduleDto scheduleDto = new ScheduleDto(scheduleRequestDto);
             scheduleRepository.deleteSchedule(scheduleDto);
             return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE);
         } catch (ResponseException ex) {
@@ -122,6 +123,14 @@ public class ScheduleService {
         }
     }
 
+    /**
+     * 일정 수정 요청에 대한 권한을 검사합니다.
+     *
+     * @param scheduleRequestDto 일정 수정 요청 DTO
+     * @throws ResponseException 권한이 없는 경우 예외를 발생시킵니다.
+     * @author 김현정
+     * @since 2024-10-04
+     */
     private void checkAccess(ScheduleRequestDto scheduleRequestDto) throws ResponseException {
         if(!scheduleRequestDto.getLoginUserId().equals(scheduleRequestDto.getUserId()))
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);

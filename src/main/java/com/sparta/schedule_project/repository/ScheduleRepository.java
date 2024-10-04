@@ -61,14 +61,15 @@ public class ScheduleRepository {
         return jdbcTemplate.query(query, new RowMapper<ScheduleViewDto>() {
             @Override
             public ScheduleViewDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-                ScheduleViewDto scheduleViewDto = new ScheduleViewDto();
-                scheduleViewDto.setId(rs.getString("id"));
-                scheduleViewDto.setUserId(rs.getString("user_id"));
-                scheduleViewDto.setName(rs.getString("name"));
-                scheduleViewDto.setTitle(rs.getString("title"));
-                scheduleViewDto.setContent(rs.getString("content"));
-                scheduleViewDto.setCreateDate(rs.getDate("createDate").toLocalDate());
-                scheduleViewDto.setUpdateDate(rs.getDate("updateDate").toLocalDate());
+                ScheduleViewDto scheduleViewDto = ScheduleViewDto.builder()
+                        .id(rs.getString("id"))
+                        .userId(rs.getString("user_id"))
+                        .name(rs.getString("name"))
+                        .title(rs.getString("title"))
+                        .content(rs.getString("content"))
+                        .createDate(rs.getDate("createDate").toLocalDate())
+                        .updateDate(rs.getDate("updateDate").toLocalDate())
+                        .build();
                 return scheduleViewDto;
             }
         });
