@@ -2,6 +2,7 @@ package com.sparta.schedule_project.dto.entity;
 
 import com.sparta.schedule_project.dto.ScheduleRequestDto;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -12,6 +13,7 @@ import java.time.LocalDate;
  * @since 2024-10-03
  */
 @Data
+//@NoArgsConstructor
 public class ScheduleDto {
     private String id;
     private String userId;

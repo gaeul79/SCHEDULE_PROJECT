@@ -12,6 +12,7 @@ import java.time.LocalDate;
  * @since 2024-10-03
  */
 @Data
+//@NoArgsConstructor
 public class UserDto {
     private String userId;
     private String password;

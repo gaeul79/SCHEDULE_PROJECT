@@ -4,6 +4,7 @@ import com.sparta.schedule_project.dto.ResponseStatusDto;
 import com.sparta.schedule_project.dto.ScheduleRequestDto;
 import com.sparta.schedule_project.dto.ScheduleResponseDto;
 import com.sparta.schedule_project.service.ScheduleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +16,10 @@ import org.springframework.web.bind.annotation.*;
  * @since 2024-10-03
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api.sparta.com")
 public class ScheduleController {
-    private ScheduleService scheduleService;
-
-    /**
-     * ScheduleService 객체를 의존성 주입 방식으로 받아옵니다.
-     *
-     * @param scheduleService 일정 관리 서비스
-     */
-    public ScheduleController(ScheduleService scheduleService) {
-        this.scheduleService = scheduleService;
-    }
+    private final ScheduleService scheduleService;
 
     /**
      * 일정 등록 API
@@ -38,7 +31,7 @@ public class ScheduleController {
      */
     @PostMapping("/schedules")
     public ResponseEntity<ResponseStatusDto> createSchedules(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return new ResponseEntity<>(scheduleService.createSchedule(scheduleRequestDto), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.createSchedule(scheduleRequestDto));
     }
 
     /**
@@ -51,7 +44,7 @@ public class ScheduleController {
      */
     @GetMapping("/schedules")
     public ResponseEntity<ScheduleResponseDto> searchSchedules(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return new ResponseEntity<>(scheduleService.searchSchedule(scheduleRequestDto), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.searchSchedule(scheduleRequestDto));
     }
 
     /**
@@ -64,7 +57,7 @@ public class ScheduleController {
      */
     @PutMapping("/schedules/{scheduleId}")
     public ResponseEntity<ResponseStatusDto> updateSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return new ResponseEntity<>(scheduleService.updateSchedule(scheduleRequestDto), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.updateSchedule(scheduleRequestDto));
     }
 
     /**
@@ -77,6 +70,6 @@ public class ScheduleController {
      */
     @DeleteMapping("/schedules/{scheduleId}")
     public ResponseEntity<ResponseStatusDto> deleteSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return new ResponseEntity<>(scheduleService.deleteSchedule(scheduleRequestDto), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.deleteSchedule(scheduleRequestDto));
     }
 }

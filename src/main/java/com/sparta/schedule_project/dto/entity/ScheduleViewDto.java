@@ -10,6 +10,7 @@ import lombok.Data;
  * @since 2024-10-03
  */
 @Data
+//@NoArgsConstructor
 public class ScheduleViewDto extends ScheduleDto {
     private String name;
 

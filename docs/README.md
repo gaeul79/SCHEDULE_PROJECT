@@ -219,7 +219,9 @@
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
         <td>/api.sparta.com/schedules{scheduleId}</td>
         <td><pre lang="json">{
+    "loginUserId": "hong",        
     "id": "1",
+    "userId": "hong",
     "title" : "제목제목제목",
     "content" : "수정수정수정"
 }</pre></td>
@@ -234,7 +236,9 @@
         <td><span style=background-color:#CE3636AA;font-weight:bold;>DELETE</span></td>
         <td>/api.sparta.com/schedules{scheduleId}</td>
         <td><pre lang="json">{
-    "id" : "1"
+    "loginUserId": "hong", 
+    "id" : "1",
+    "userId": "hong"
 }</pre></td>
         <td><pre lang="json">{
     "message": "delete schedule success",

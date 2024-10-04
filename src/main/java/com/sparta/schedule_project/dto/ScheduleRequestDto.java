@@ -12,6 +12,8 @@ import java.time.LocalDate;
  */
 @Getter
 public class ScheduleRequestDto {
+    private String loginUserId;
+
     private String id;
     private String userId;
     private String name;

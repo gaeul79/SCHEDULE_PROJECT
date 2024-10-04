@@ -6,6 +6,7 @@ import com.sparta.schedule_project.dto.ScheduleResponseDto;
 import com.sparta.schedule_project.dto.entity.ScheduleDto;
 import com.sparta.schedule_project.dto.entity.ScheduleViewDto;
 import com.sparta.schedule_project.exception.ResponseCode;
+import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
@@ -74,7 +75,7 @@ public class ScheduleService {
             return scheduleResponseDto;
         } catch (Exception ex) {
             return ScheduleResponseDto.from(null,
-                    ResponseCode.SUCCESS_SEARCH_SCHEDULE,
+                    ResponseCode.UNKNOWN_ERROR,
                     ex.getMessage());
         }
     }
@@ -89,9 +90,12 @@ public class ScheduleService {
      */
     public ResponseStatusDto updateSchedule(ScheduleRequestDto scheduleRequestDto) {
         try {
+            checkAccess(scheduleRequestDto);
             ScheduleDto scheduleDto = ScheduleDto.from(scheduleRequestDto);
             scheduleRepository.updateSchedule(scheduleDto);
             return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE);
+        } catch (ResponseException ex) {
+            return new ResponseStatusDto(ex.getResponseCode());
         } catch (Exception ex) {
             return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
         }
@@ -107,11 +111,19 @@ public class ScheduleService {
      */
     public ResponseStatusDto deleteSchedule(ScheduleRequestDto scheduleRequestDto) {
         try {
+            checkAccess(scheduleRequestDto);
             ScheduleDto scheduleDto = ScheduleDto.from(scheduleRequestDto);
             scheduleRepository.deleteSchedule(scheduleDto);
             return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE);
+        } catch (ResponseException ex) {
+            return new ResponseStatusDto(ex.getResponseCode());
         } catch (Exception ex) {
             return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
         }
+    }
+
+    private void checkAccess(ScheduleRequestDto scheduleRequestDto) throws ResponseException {
+        if(!scheduleRequestDto.getLoginUserId().equals(scheduleRequestDto.getUserId()))
+            throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }

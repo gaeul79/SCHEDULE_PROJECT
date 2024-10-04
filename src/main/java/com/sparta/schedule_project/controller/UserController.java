@@ -4,6 +4,8 @@ import com.sparta.schedule_project.dto.ResponseStatusDto;
 import com.sparta.schedule_project.dto.UserRequestDto;
 import com.sparta.schedule_project.dto.UserResponseDto;
 import com.sparta.schedule_project.service.UserService;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,20 +17,10 @@ import org.springframework.web.bind.annotation.*;
  * @since 2024-10-03
  */
 @RestController
+@RequiredArgsConstructor // UserService 객체를 의존성 주입 방식으로 받아오는 코드 생략 가능
 @RequestMapping("/api.sparta.com")
 public class UserController {
-    private UserService userService;
-
-    /**
-     * UserService 객체를 의존성 주입 방식으로 받아옵니다.
-     *
-     * @param userService 회원 관리 서비스
-     * @author 김현정
-     * @since 2023-10-03
-     */
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService;
 
     /**
      * 로그인 API
@@ -40,7 +32,7 @@ public class UserController {
      */
     @PostMapping("/login")
     public ResponseEntity<ResponseStatusDto> login(@RequestBody UserRequestDto userRequestDto) {
-        return new ResponseEntity<>(userService.login(userRequestDto), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.login(userRequestDto));
     }
 
     /**
@@ -52,7 +44,7 @@ public class UserController {
      */
     @PostMapping("/logout")
     public ResponseEntity<ResponseStatusDto> logout() {
-        return new ResponseEntity<>(userService.logout(), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.logout());
     }
 
     /**
@@ -65,7 +57,7 @@ public class UserController {
      */
     @PostMapping("/users")
     public ResponseEntity<ResponseStatusDto> createUser(@RequestBody UserRequestDto userRequestDto) {
-        return new ResponseEntity<>(userService.createUser(userRequestDto), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userRequestDto));
     }
 
     /**
@@ -78,7 +70,7 @@ public class UserController {
      */
     @GetMapping("/users")
     public ResponseEntity<UserResponseDto> getUserInfo(@RequestBody UserRequestDto userRequestDto) {
-        return new ResponseEntity<>(userService.searchUser(userRequestDto), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.searchUser(userRequestDto));
     }
 
     /**
@@ -91,7 +83,7 @@ public class UserController {
      */
     @PutMapping("/users/{userId}")
     public ResponseEntity<ResponseStatusDto> updateUser(@RequestBody UserRequestDto userRequestDto) {
-        return new ResponseEntity<>(userService.updateUser(userRequestDto), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(userRequestDto));
     }
 
     /**
@@ -104,6 +96,6 @@ public class UserController {
      */
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<ResponseStatusDto> deleteUser(@RequestBody UserRequestDto userRequestDto) {
-        return new ResponseEntity<>(userService.deleteUser(userRequestDto), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUser(userRequestDto));
     }
 }

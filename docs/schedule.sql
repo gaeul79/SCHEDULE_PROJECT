@@ -11,7 +11,7 @@ create table User
 create table Schedule
 (
     id int AUTO_INCREMENT PRIMARY KEY comment '번호',
-    user_id varchar(100) comment '아이디',
+    user_id varchar(100) not null comment '아이디',
     title varchar(100) comment '제목',
     content varchar(100) comment '내용',
     createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP comment '생성 날짜',
