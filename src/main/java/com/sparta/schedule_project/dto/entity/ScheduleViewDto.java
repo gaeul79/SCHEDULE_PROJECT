@@ -21,16 +21,4 @@ public class ScheduleViewDto extends ScheduleDto {
         super(requestDto);
         this.name = requestDto.getName();
     }
-
-    /**
-     * ScheduleRequestDto 객체로부터 일정 정보를 복사하여 ScheduleViewDto 객체를 생성
-     *
-     * @param requestDto 일정 정보가 담긴 ScheduleRequestDto 객체
-     * @return 생성된 ScheduleViewDto 객체
-     * @author 김현정
-     * @since 2024-10-03
-     */
-    public static ScheduleViewDto from(ScheduleRequestDto requestDto) {
-        return new ScheduleViewDto(requestDto);
-    }
 }

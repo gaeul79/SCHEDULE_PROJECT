@@ -63,7 +63,7 @@ public class ScheduleService {
      */
     public ScheduleResponseDto searchSchedule(ScheduleRequestDto scheduleRequestDto) {
         try {
-            ScheduleViewDto scheduleViewDto = ScheduleViewDto.from(scheduleRequestDto);
+            ScheduleViewDto scheduleViewDto = new ScheduleViewDto(scheduleRequestDto);
             Integer totalCount = scheduleRepository.searchScheduleCount(scheduleViewDto);
             List<ScheduleViewDto> schedules = Optional.of(totalCount).orElse(0) > 0 ?
                     scheduleRepository.searchSchedules(scheduleViewDto) : null;
