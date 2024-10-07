@@ -43,7 +43,7 @@ public class UserService {
         try {
             UserDto user = UserDto.from(requestUserDto);
             UserDto resultUser = userRepository.findById(user);
-            checkLoginUser(user, resultUser);
+            checkLoginUserInputParam(user, resultUser);
             return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
         } catch (ResponseException ex) {
             return new ResponseStatusDto(ex.getResponseCode());
@@ -59,7 +59,7 @@ public class UserService {
      * @author 김현정
      * @since 2024-10-03
      */
-    public void checkLoginUser(UserDto inputUser, UserDto resultUser) throws ResponseException {
+    public void checkLoginUserInputParam(UserDto inputUser, UserDto resultUser) throws ResponseException {
         if (resultUser == null)
             throw new ResponseException(ResponseCode.USER_NAME_NOT_FOUND);
         else if (!inputUser.getPassword().equals(resultUser.getPassword()))
@@ -92,7 +92,7 @@ public class UserService {
     public ResponseStatusDto createUser(UserRequestDto userRequestDto) {
         try {
             UserDto user = UserDto.from(userRequestDto);
-            checkCreateUser(user);
+            checkCreateUserInputParam(user);
             userRepository.createUser(user);
             return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
         } catch (ResponseException ex) {
@@ -108,7 +108,7 @@ public class UserService {
      * @param user 생성하려는 사용자 정보
      * @throws ResponseException 아이디가 중복될 경우 발생
      */
-    public void checkCreateUser(UserDto user) throws ResponseException {
+    public void checkCreateUserInputParam(UserDto user) throws ResponseException {
         UserDto resultUser = userRepository.findById(user);
         if (resultUser != null) // 중복 아이디인지 확인
             throw new ResponseException(ResponseCode.USER_NAME_DUPLICATED);

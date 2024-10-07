@@ -30,7 +30,7 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @PostMapping("/schedules")
-    public ResponseEntity<ResponseStatusDto> createSchedules(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+    public ResponseEntity<ResponseStatusDto> createSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.createSchedule(scheduleRequestDto));
     }
 
