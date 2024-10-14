@@ -1,8 +1,8 @@
 package com.sparta.schedule_project.controller;
 
-import com.sparta.schedule_project.dto.ResponseStatusDto;
-import com.sparta.schedule_project.dto.UserRequestDto;
-import com.sparta.schedule_project.dto.UserResponseDto;
+import com.sparta.schedule_project.dto.response.ResponseStatusDto;
+import com.sparta.schedule_project.dto.request.create.CreateUserRequestDto;
+import com.sparta.schedule_project.dto.response.create.CreateUserResponseDto;
 import com.sparta.schedule_project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,14 +24,14 @@ public class UserController {
     /**
      * 로그인 API
      *
-     * @param userRequestDto 로그인 정보 (JSON 형태)
+     * @param createUserRequestDto 로그인 정보 (JSON 형태)
      * @return 로그인 처리 결과
      * @author 김현정
      * @since 2023-10-03
      */
     @PostMapping("/login")
-    public ResponseEntity<ResponseStatusDto> login(@RequestBody UserRequestDto userRequestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.login(userRequestDto));
+    public ResponseEntity<ResponseStatusDto> login(@RequestBody CreateUserRequestDto createUserRequestDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.login(createUserRequestDto));
     }
 
     /**
@@ -49,52 +49,52 @@ public class UserController {
     /**
      * 회원가입 API.
      *
-     * @param userRequestDto 회원가입 정보 (JSON 형태)
+     * @param createUserRequestDto 회원가입 정보 (JSON 형태)
      * @return 회원가입 처리 결과
      * @author 김현정
      * @since 2023-10-03
      */
     @PostMapping("/users")
-    public ResponseEntity<ResponseStatusDto> createUser(@RequestBody UserRequestDto userRequestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(userRequestDto));
+    public ResponseEntity<ResponseStatusDto> createUser(@RequestBody CreateUserRequestDto createUserRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(createUserRequestDto));
     }
 
     /**
      * 회원 정보 조회 API
      *
-     * @param userRequestDto 회원 정보 조회 정보 (JSON 형태)
+     * @param createUserRequestDto 회원 정보 조회 정보 (JSON 형태)
      * @return 회원 정보 조회 결과
      * @author 김현정
      * @since 2023-10-03
      */
     @GetMapping("/users")
-    public ResponseEntity<UserResponseDto> getUserInfo(@RequestBody UserRequestDto userRequestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.searchUser(userRequestDto));
+    public ResponseEntity<CreateUserResponseDto> getUserInfo(@RequestBody CreateUserRequestDto createUserRequestDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.searchUser(createUserRequestDto));
     }
 
     /**
      * 회원 정보 수정 API
      *
-     * @param userRequestDto 회원 정보 수정 정보 (JSON 형태)
+     * @param createUserRequestDto 회원 정보 수정 정보 (JSON 형태)
      * @return 회원 정보 수정 결과
      * @author 김현정
      * @since 2023-10-03
      */
     @PutMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> updateUser(@RequestBody UserRequestDto userRequestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(userRequestDto));
+    public ResponseEntity<ResponseStatusDto> updateUser(@RequestBody CreateUserRequestDto createUserRequestDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(createUserRequestDto));
     }
 
     /**
      * 회원 정보 삭제 API
      *
-     * @param userRequestDto 회원 정보 삭제 정보 (JSON 형태)
+     * @param createUserRequestDto 회원 정보 삭제 정보 (JSON 형태)
      * @return 회원 정보 삭제 결과
      * @author 김현정
      * @since 2023-10-03
      */
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> deleteUser(@RequestBody UserRequestDto userRequestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUser(userRequestDto));
+    public ResponseEntity<ResponseStatusDto> deleteUser(@RequestBody CreateUserRequestDto createUserRequestDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUser(createUserRequestDto));
     }
 }

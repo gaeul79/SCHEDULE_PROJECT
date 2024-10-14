@@ -1,6 +1,7 @@
-package com.sparta.schedule_project.dto;
+package com.sparta.schedule_project.dto.response.remove;
 
-import com.sparta.schedule_project.dto.entity.UserDto;
+import com.sparta.schedule_project.dto.response.ResponseStatusDto;
+import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import lombok.Data;
 
@@ -11,20 +12,20 @@ import lombok.Data;
  * @since 2024-10-03
  */
 @Data
-public class UserResponseDto {
-    private UserDto user;
+public class RemoveUserResponseDto {
+    private User user;
     private ResponseStatusDto responseStatusDto;
 
-    public static UserResponseDto from(UserDto user, ResponseCode responseCode) {
-        UserResponseDto responseDto = new UserResponseDto();
+    public static RemoveUserResponseDto from(User user, ResponseCode responseCode) {
+        RemoveUserResponseDto responseDto = new RemoveUserResponseDto();
         ResponseStatusDto status = new ResponseStatusDto(responseCode);
         responseDto.setUser(user);
         responseDto.setResponseStatusDto(status);
         return responseDto;
     }
 
-    public static UserResponseDto from(UserDto user, ResponseCode responseCode, String message) {
-        UserResponseDto responseDto = new UserResponseDto();
+    public static RemoveUserResponseDto from(User user, ResponseCode responseCode, String message) {
+        RemoveUserResponseDto responseDto = new RemoveUserResponseDto();
         ResponseStatusDto status = new ResponseStatusDto(responseCode, message);
         responseDto.setUser(user);
         responseDto.setResponseStatusDto(status);

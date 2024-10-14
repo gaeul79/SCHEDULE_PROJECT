@@ -1,13 +1,13 @@
-package com.sparta.schedule_project.dto.entity;
+package com.sparta.schedule_project.entity;
 
-import com.sparta.schedule_project.dto.ScheduleRequestDto;
+import com.sparta.schedule_project.dto.request.create.CreateScheduleRequestDto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
 /**
- * 일정 정보를 담는 DTO 클래스
+ * 일정 정보를 담는 Entity 클래스
  *
  * @author 김현정
  * @since 2024-10-03
@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScheduleDto {
+public class Schedule {
     @Setter
     private String id;
     private String userId;
@@ -31,7 +31,7 @@ public class ScheduleDto {
     private Integer page;
     private Integer size;
 
-    public ScheduleDto(ScheduleRequestDto requestDto) {
+    public Schedule(CreateScheduleRequestDto requestDto) {
         this.id = requestDto.getId();
         this.userId = requestDto.getUserId();
         this.title = requestDto.getTitle();

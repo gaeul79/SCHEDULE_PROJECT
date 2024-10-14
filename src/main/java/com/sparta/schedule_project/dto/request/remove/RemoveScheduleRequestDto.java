@@ -1,4 +1,4 @@
-package com.sparta.schedule_project.dto;
+package com.sparta.schedule_project.dto.request.remove;
 
 import lombok.Getter;
 
@@ -11,7 +11,7 @@ import java.time.LocalDate;
  * @since 2024-10-03
  */
 @Getter
-public class ScheduleRequestDto {
+public class RemoveScheduleRequestDto {
     private String loginUserId;
 
     private String id;

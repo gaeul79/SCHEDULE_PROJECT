@@ -1,7 +1,6 @@
 package com.sparta.schedule_project.repository;
 
-import com.sparta.schedule_project.dto.entity.ScheduleDto;
-import com.sparta.schedule_project.dto.entity.ScheduleViewDto;
+import com.sparta.schedule_project.entity.Schedule;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -39,12 +38,12 @@ public class ScheduleRepository {
     /**
      * 일정 등록
      *
-     * @param scheduleDto 일정 정보
+     * @param schedule 일정 정보
      * @author 김현정
      * @since 2024-10-03
      */
-    public void createSchedule(ScheduleDto scheduleDto) {
-        String query = makeInsertQuery(scheduleDto);
+    public void createSchedule(Schedule schedule) {
+        String query = makeInsertQuery(schedule);
         jdbcTemplate.update(query);
     }
 
@@ -56,12 +55,12 @@ public class ScheduleRepository {
      * @author 김현정
      * @since 2024-10-03
      */
-    public List<ScheduleViewDto> searchSchedules(ScheduleViewDto scheduleViewDto) {
+    public List<ScheduleView> searchSchedules(ScheduleView scheduleViewDto) {
         String query = makeSearchQuery(scheduleViewDto);
-        return jdbcTemplate.query(query, new RowMapper<ScheduleViewDto>() {
+        return jdbcTemplate.query(query, new RowMapper<ScheduleView>() {
             @Override
-            public ScheduleViewDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-                ScheduleViewDto scheduleViewDto = ScheduleViewDto.builder()
+            public ScheduleView mapRow(ResultSet rs, int rowNum) throws SQLException {
+                ScheduleView scheduleViewDto = ScheduleView.builder()
                         .id(rs.getString("id"))
                         .userId(rs.getString("user_id"))
                         .name(rs.getString("name"))
@@ -83,7 +82,7 @@ public class ScheduleRepository {
      * @author 김현정
      * @since 2024-10-03
      */
-    public Integer searchScheduleCount(ScheduleViewDto scheduleViewDto) {
+    public Integer searchScheduleCount(ScheduleView scheduleViewDto) {
         String query = makeCountQuery(scheduleViewDto);
         return jdbcTemplate.queryForObject(query, Integer.class);
     }
@@ -91,55 +90,55 @@ public class ScheduleRepository {
     /**
      * 일정 수정
      *
-     * @param scheduleDto 수정된 일정 정보
+     * @param schedule 수정된 일정 정보
      * @author 김현정
      * @since 2024-10-03
      */
-    public void updateSchedule(ScheduleDto scheduleDto) {
-        String query = makeUpdateQuery(scheduleDto);
+    public void updateSchedule(Schedule schedule) {
+        String query = makeUpdateQuery(schedule);
         jdbcTemplate.update(query);
     }
 
     /**
      * 일정을 삭제합니다.
      *
-     * @param scheduleDto 삭제할 일정 정보
+     * @param schedule 삭제할 일정 정보
      * @author 김현정
      * @since 2024-10-03
      */
-    public void deleteSchedule(ScheduleDto scheduleDto) {
-        String query = makeDeleteQuery(scheduleDto);
+    public void deleteSchedule(Schedule schedule) {
+        String query = makeDeleteQuery(schedule);
         jdbcTemplate.update(query);
     }
 
     /**
      * 일정 등록을 위한 SQL 쿼리를 생성합니다.
      *
-     * @param scheduleDto 일정 정보
+     * @param schedule 일정 정보
      * @return 생성된 SQL 쿼리
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makeInsertQuery(ScheduleDto scheduleDto) {
+    private String makeInsertQuery(Schedule schedule) {
         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO ");
         sql.append(SCHEDULE_TABLE_NAME);
         sql.append(" (");
 
         StringBuilder sqlValues = new StringBuilder(" VALUES (");
-        if (scheduleDto.getUserId() != null) {
+        if (schedule.getUserId() != null) {
             sql.append("user_id, ");
-            sqlValues.append("'").append(scheduleDto.getUserId()).append("', ");
+            sqlValues.append("'").append(schedule.getUserId()).append("', ");
         }
 
-        if (scheduleDto.getTitle() != null) {
+        if (schedule.getTitle() != null) {
             sql.append("title, ");
-            sqlValues.append("'").append(scheduleDto.getTitle()).append("', ");
+            sqlValues.append("'").append(schedule.getTitle()).append("', ");
         }
 
-        if (scheduleDto.getContent() != null) {
+        if (schedule.getContent() != null) {
             sql.append("content");
-            sqlValues.append("'").append(scheduleDto.getContent()).append("'");
+            sqlValues.append("'").append(schedule.getContent()).append("'");
             ;
         }
 
@@ -153,38 +152,38 @@ public class ScheduleRepository {
     /**
      * 일정 수정을 위한 SQL 쿼리를 생성합니다.
      *
-     * @param scheduleDto 수정된 일정 정보
+     * @param schedule 수정된 일정 정보
      * @return 생성된 SQL 쿼리
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makeUpdateQuery(ScheduleDto scheduleDto) {
+    private String makeUpdateQuery(Schedule schedule) {
         StringBuilder sql = new StringBuilder();
         sql.append("UPDATE ");
         sql.append(SCHEDULE_TABLE_NAME);
 
         StringBuilder setValues = new StringBuilder(" SET ");
-        Field[] fields = scheduleDto.getClass().getDeclaredFields();
+        Field[] fields = schedule.getClass().getDeclaredFields();
         for (Field field : fields) {
             String fieldName = field.getName();
 
-            if (fieldName.equals("title") && scheduleDto.getTitle() != null) {
+            if (fieldName.equals("title") && schedule.getTitle() != null) {
                 if (setValues.length() > 5)
                     setValues.append(", ");
 
-                setValues.append("title='").append(scheduleDto.getTitle()).append("'");
+                setValues.append("title='").append(schedule.getTitle()).append("'");
             }
 
-            if (fieldName.equals("content") && scheduleDto.getContent() != null) {
+            if (fieldName.equals("content") && schedule.getContent() != null) {
                 if (setValues.length() > 5)
                     setValues.append(", ");
 
-                setValues.append("content='").append(scheduleDto.getContent()).append("'");
+                setValues.append("content='").append(schedule.getContent()).append("'");
             }
         }
 
-        ScheduleDto whereDto = new ScheduleDto();
-        whereDto.setId(scheduleDto.getId());
+        Schedule whereDto = new Schedule();
+        whereDto.setId(schedule.getId());
         String whereQuery = makeWhere(whereDto);
 
         sql.append(setValues).append(whereQuery);
@@ -194,16 +193,16 @@ public class ScheduleRepository {
     /**
      * 일정 삭제를 위한 SQL 쿼리를 생성합니다.
      *
-     * @param scheduleDto 삭제할 일정 정보
+     * @param schedule 삭제할 일정 정보
      * @return 생성된 SQL 쿼리
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makeDeleteQuery(ScheduleDto scheduleDto) {
+    private String makeDeleteQuery(Schedule schedule) {
         StringBuilder sql = new StringBuilder();
         sql.append("DELETE FROM ");
         sql.append(SCHEDULE_TABLE_NAME);
-        sql.append(makeWhere(scheduleDto));
+        sql.append(makeWhere(schedule));
         return sql.toString();
     }
 
@@ -215,7 +214,7 @@ public class ScheduleRepository {
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makeSearchQuery(ScheduleViewDto scheduleDto) {
+    private String makeSearchQuery(ScheduleView scheduleDto) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT ");
         sql.append("id");
@@ -236,18 +235,18 @@ public class ScheduleRepository {
     /**
      * 페이징 처리를 위한 SQL 조건을 생성합니다.
      *
-     * @param scheduleDto 조회 조건
+     * @param schedule 조회 조건
      * @return 생성된 페이징 조건 문자열
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makePaging(ScheduleDto scheduleDto) {
+    private String makePaging(Schedule schedule) {
         StringBuilder sql = new StringBuilder();
-        if (scheduleDto.getPage() != null && scheduleDto.getSize() != null) {
+        if (schedule.getPage() != null && schedule.getSize() != null) {
             sql.append(" LIMIT ");
-            sql.append(scheduleDto.getSize());
+            sql.append(schedule.getSize());
             sql.append(" OFFSET ");
-            sql.append((scheduleDto.getPage() - 1) * scheduleDto.getSize());
+            sql.append((schedule.getPage() - 1) * schedule.getSize());
         }
         return sql.toString();
     }
@@ -260,7 +259,7 @@ public class ScheduleRepository {
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makeCountQuery(ScheduleViewDto scheduleDto) {
+    private String makeCountQuery(ScheduleView scheduleDto) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT ");
         sql.append("COUNT(*)");
@@ -273,58 +272,58 @@ public class ScheduleRepository {
     /**
      * WHERE 조건을 생성합니다.
      *
-     * @param scheduleDto (ScheduleDto)조회 조건
+     * @param schedule (ScheduleDto)조회 조건
      * @return 생성된 WHERE 조건 문자열
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makeWhere(ScheduleDto scheduleDto) {
+    private String makeWhere(Schedule schedule) {
         StringBuilder sql = new StringBuilder();
 
-        if (scheduleDto.getId() != null) {
+        if (schedule.getId() != null) {
             if (sql.isEmpty())
                 sql.append(" WHERE ");
             else
                 sql.append("  and  ");
 
-            sql.append("id='").append(scheduleDto.getId()).append("'");
+            sql.append("id='").append(schedule.getId()).append("'");
         }
 
-        if (scheduleDto.getUserId() != null) {
+        if (schedule.getUserId() != null) {
             if (sql.isEmpty())
                 sql.append(" WHERE ");
             else
                 sql.append("  and  ");
 
-            sql.append("user_id='").append(scheduleDto.getUserId()).append("'");
+            sql.append("user_id='").append(schedule.getUserId()).append("'");
         }
 
-        if (scheduleDto.getTitle() != null) {
+        if (schedule.getTitle() != null) {
             if (sql.isEmpty())
                 sql.append(" WHERE ");
             else
                 sql.append("  and  ");
 
-            sql.append("title like '%").append(scheduleDto.getTitle()).append("%'");
+            sql.append("title like '%").append(schedule.getTitle()).append("%'");
         }
 
-        if (scheduleDto.getContent() != null) {
+        if (schedule.getContent() != null) {
             if (sql.isEmpty())
                 sql.append(" WHERE ");
             else
                 sql.append("  and  ");
 
-            sql.append("content like '%").append(scheduleDto.getContent()).append("%'");
+            sql.append("content like '%").append(schedule.getContent()).append("%'");
         }
 
-        if (scheduleDto.getStartUpdateDate() != null && scheduleDto.getEndUpdateDate() != null) {
+        if (schedule.getStartUpdateDate() != null && schedule.getEndUpdateDate() != null) {
             if (sql.isEmpty())
                 sql.append(" WHERE ");
             else
                 sql.append("  and  ");
 
-            sql.append("updateDate between '").append(scheduleDto.getStartUpdateDate()).append("'");
-            sql.append(" and '").append(scheduleDto.getEndUpdateDate()).append("'");
+            sql.append("updateDate between '").append(schedule.getStartUpdateDate()).append("'");
+            sql.append(" and '").append(schedule.getEndUpdateDate()).append("'");
         }
 
         return sql.toString();
@@ -338,7 +337,7 @@ public class ScheduleRepository {
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makeWhere(ScheduleViewDto scheduleDto) {
+    private String makeWhere(ScheduleView scheduleDto) {
         StringBuilder sql = new StringBuilder();
 
         if (scheduleDto.getName() != null) {

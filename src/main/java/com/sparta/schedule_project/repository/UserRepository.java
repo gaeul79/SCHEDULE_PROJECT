@@ -1,6 +1,6 @@
 package com.sparta.schedule_project.repository;
 
-import com.sparta.schedule_project.dto.entity.UserDto;
+import com.sparta.schedule_project.entity.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -32,12 +32,12 @@ public class UserRepository {
     /**
      * 회원가입을 위한 유저 정보를 저장합니다.
      *
-     * @param userDto 저장할 유저 정보
+     * @param user 저장할 유저 정보
      * @author 김현정
      * @since 2024-10-03
      */
-    public void createUser(UserDto userDto) {
-        String query = makeInsertQuery(userDto);
+    public void createUser(User user) {
+        String query = makeInsertQuery(user);
         jdbcTemplate.update(query);
     }
 
@@ -49,11 +49,11 @@ public class UserRepository {
      * @author 김현정
      * @since 2024-10-03
      */
-    public UserDto findById(UserDto userDto) {
+    public User findById(User userDto) {
         String query = makeFindByIdQuery(userDto);
         return jdbcTemplate.query(query, resultSet -> {
             if (resultSet.next()) {
-                UserDto user = new UserDto();
+                User user = new User();
                 user.setUserId(resultSet.getString("user_id"));
                 user.setPassword(resultSet.getString("password"));
                 return user;
@@ -71,11 +71,11 @@ public class UserRepository {
      * @author 김현정
      * @since 2024-10-03
      */
-    public UserDto searchUser(UserDto userDto) {
+    public User searchUser(User userDto) {
         String query = makeSearchQuery(userDto);
         return jdbcTemplate.query(query, resultSet -> {
             if (resultSet.next()) {
-                UserDto user = new UserDto();
+                User user = new User();
                 user.setUserId(resultSet.getString("user_id"));
                 user.setPassword(resultSet.getString("password"));
                 user.setName(resultSet.getString("name"));
@@ -92,60 +92,60 @@ public class UserRepository {
     /**
      * 유저 정보를 수정합니다.
      *
-     * @param userDto 수정할 유저 정보
+     * @param user 수정할 유저 정보
      * @author 김현정
      * @since 2024-10-03
      */
-    public void updateUser(UserDto userDto) {
-        String query = makeUpdateQuery(userDto);
+    public void updateUser(User user) {
+        String query = makeUpdateQuery(user);
         jdbcTemplate.update(query);
     }
 
     /**
      * 사용자를 데이터베이스에서 삭제합니다.
      *
-     * @param userDto 삭제할 사용자 정보
+     * @param user 삭제할 사용자 정보
      * @author 김현정
      * @since 2024-10-03
      */
-    public void deleteUser(UserDto userDto) {
-        String query = makeDeleteQuery(userDto);
+    public void deleteUser(User user) {
+        String query = makeDeleteQuery(user);
         jdbcTemplate.update(query);
     }
 
     /**
      * 사용자 등록을 위한 SQL 쿼리 생성
      *
-     * @param userDto 사용자 정보
+     * @param user 사용자 정보
      * @return 생성된 SQL 쿼리
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makeInsertQuery(UserDto userDto) {
+    private String makeInsertQuery(User user) {
         StringBuilder sql = new StringBuilder();
         sql.append("INSERT INTO ");
         sql.append(USER_TABLE_NAME);
         sql.append(" (");
 
         StringBuilder sqlValues = new StringBuilder(" VALUES (");
-        if (userDto.getUserId() != null) {
+        if (user.getUserId() != null) {
             sql.append("user_id, ");
-            sqlValues.append("'").append(userDto.getUserId()).append("', ");
+            sqlValues.append("'").append(user.getUserId()).append("', ");
         }
 
-        if (userDto.getPassword() != null) {
+        if (user.getPassword() != null) {
             sql.append("password, ");
-            sqlValues.append("'").append(userDto.getPassword()).append("', ");
+            sqlValues.append("'").append(user.getPassword()).append("', ");
         }
 
-        if (userDto.getEmail() != null) {
+        if (user.getEmail() != null) {
             sql.append("email, ");
-            sqlValues.append("'").append(userDto.getEmail()).append("', ");
+            sqlValues.append("'").append(user.getEmail()).append("', ");
         }
 
-        if (userDto.getName() != null) {
+        if (user.getName() != null) {
             sql.append("name");
-            sqlValues.append("'").append(userDto.getName()).append("'");
+            sqlValues.append("'").append(user.getName()).append("'");
         }
 
         sqlValues.append(")");
@@ -158,31 +158,31 @@ public class UserRepository {
     /**
      * id와 일치하는 사용자 조회를 위한 SQL 쿼리를 생성합니다.
      *
-     * @param userDto 조회 조건
+     * @param user 조회 조건
      * @return 생성된 SQL 쿼리
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makeFindByIdQuery(UserDto userDto) {
+    private String makeFindByIdQuery(User user) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT ");
         sql.append("user_id");
         sql.append(", password");
         sql.append(" FROM ");
         sql.append(USER_TABLE_NAME);
-        sql.append(makeWhere(userDto.getUserId()));
+        sql.append(makeWhere(user.getUserId()));
         return sql.toString();
     }
 
     /**
      * 사용자 조회를 위한 SQL 쿼리를 생성합니다.
      *
-     * @param userDto 조회 조건
+     * @param user 조회 조건
      * @return 생성된 SQL 쿼리
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makeSearchQuery(UserDto userDto) {
+    private String makeSearchQuery(User user) {
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT ");
         sql.append("user_id");
@@ -193,59 +193,59 @@ public class UserRepository {
         sql.append(", updateDate");
         sql.append(" FROM ");
         sql.append(USER_TABLE_NAME);
-        sql.append(makeWhere(userDto));
+        sql.append(makeWhere(user));
         return sql.toString();
     }
 
     /**
      * 사용자 수정을 위한 SQL 쿼리 생성
      *
-     * @param userDto 수정된 사용자 정보
+     * @param user 수정된 사용자 정보
      * @return 생성된 SQL 쿼리
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makeUpdateQuery(UserDto userDto) {
+    private String makeUpdateQuery(User user) {
         StringBuilder sql = new StringBuilder();
         sql.append("UPDATE ");
         sql.append(USER_TABLE_NAME);
 
         StringBuilder setValues = new StringBuilder();
-        Field[] fields = userDto.getClass().getDeclaredFields();
+        Field[] fields = user.getClass().getDeclaredFields();
 
         for (Field field : fields) {
             String fieldName = field.getName();
 
-            if (fieldName.equals("password") && userDto.getPassword() != null) {
+            if (fieldName.equals("password") && user.getPassword() != null) {
                 if (setValues.isEmpty())
                     setValues.append(" SET ");
                 else
                     setValues.append(", ");
 
-                setValues.append("password='").append(userDto.getPassword()).append("'");
+                setValues.append("password='").append(user.getPassword()).append("'");
             }
 
-            if (fieldName.equals("email") && userDto.getEmail() != null) {
+            if (fieldName.equals("email") && user.getEmail() != null) {
                 if (setValues.isEmpty())
                     setValues.append(" SET ");
                 else
                     setValues.append(", ");
 
-                setValues.append("email='").append(userDto.getEmail()).append("'");
+                setValues.append("email='").append(user.getEmail()).append("'");
             }
 
-            if (fieldName.equals("name") && userDto.getName() != null) {
+            if (fieldName.equals("name") && user.getName() != null) {
                 if (setValues.isEmpty())
                     setValues.append(" SET ");
                 else
                     setValues.append(", ");
 
-                setValues.append("name='").append(userDto.getName()).append("'");
+                setValues.append("name='").append(user.getName()).append("'");
             }
         }
 
-        UserDto whereDto = new UserDto();
-        whereDto.setUserId(userDto.getUserId());
+        User whereDto = new User();
+        whereDto.setUserId(user.getUserId());
         String whereQuery = makeWhere(whereDto);
 
         sql.append(setValues).append(whereQuery);
@@ -255,16 +255,16 @@ public class UserRepository {
     /**
      * 사용자 삭제를 위한 SQL 쿼리 생성
      *
-     * @param userDto 삭제할 사용자 정보
+     * @param user 삭제할 사용자 정보
      * @return 생성된 SQL 쿼리
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makeDeleteQuery(UserDto userDto) {
+    private String makeDeleteQuery(User user) {
         StringBuilder sql = new StringBuilder();
         sql.append("DELETE FROM ");
         sql.append(USER_TABLE_NAME);
-        sql.append(makeWhere(userDto));
+        sql.append(makeWhere(user));
         return sql.toString();
     }
 
@@ -286,48 +286,48 @@ public class UserRepository {
     /**
      * WHERE 조건을 생성합니다.
      *
-     * @param userDto 조회 조건
+     * @param user 조회 조건
      * @return 생성된 WHERE 조건 문자열
      * @author 김현정
      * @since 2024-10-03
      */
-    private String makeWhere(UserDto userDto) {
+    private String makeWhere(User user) {
         StringBuilder sql = new StringBuilder();
 
-        if (userDto.getUserId() != null) {
+        if (user.getUserId() != null) {
             if (sql.isEmpty())
                 sql.append(" WHERE ");
             else
                 sql.append(" and ");
 
-            sql.append("user_id='").append(userDto.getUserId()).append("'");
+            sql.append("user_id='").append(user.getUserId()).append("'");
         }
 
-        if (userDto.getPassword() != null) {
+        if (user.getPassword() != null) {
             if (sql.isEmpty())
                 sql.append(" WHERE ");
             else
                 sql.append(" and ");
 
-            sql.append("password='").append(userDto.getPassword()).append("'");
+            sql.append("password='").append(user.getPassword()).append("'");
         }
 
-        if (userDto.getEmail() != null) {
+        if (user.getEmail() != null) {
             if (sql.isEmpty())
                 sql.append(" WHERE ");
             else
                 sql.append(" and ");
 
-            sql.append("email='").append(userDto.getEmail()).append("'");
+            sql.append("email='").append(user.getEmail()).append("'");
         }
 
-        if (userDto.getName() != null) {
+        if (user.getName() != null) {
             if (sql.isEmpty())
                 sql.append(" WHERE ");
             else
                 sql.append(" and ");
 
-            sql.append("name='").append(userDto.getName()).append("'");
+            sql.append("name='").append(user.getName()).append("'");
         }
 
         return sql.toString();

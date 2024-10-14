@@ -1,7 +1,9 @@
 ## 📆일정 관리 앱
-일정을 `등록/조회/수정/삭제` 할 수 있는 웹페이지.
+### 일정을 `등록/조회/수정/삭제` 할 수 있는 웹페이지.
 
 ### 📖요구사항
+<details><summary><b>요구사항 (펼치기/접기)</b></summary>
+
 1. 사용자 관리
     - 사용자 등록
         - `이름`, `이메일`, `작성자명`, `비밀번호`을 입력받아 사용자를 생성한다.
@@ -40,6 +42,7 @@
     - 생성된 일정에 `댓글`을 남길 수 있다.
     - 댓글을 `조회`, `수정`, `삭제`할 수 있다.
     - 본인이 작성한 댓글만 `삭제`할 수 있다.
+</details>
 
 ### 🗂️프로젝트 구조 및 설명
 <details><summary><b>프로젝트 구조 및 설명(펼치기/접기)</b></summary> 
@@ -49,6 +52,8 @@
  ├── 'main'
  │   └── 'java.com.sparta.schedule_project'                     # 일정 관리 프로젝트 
  │        ├── ScheduleProjectApplication.java                   # 시작 함수가 있는 class 
+ │        ├── 'infra'                                           # 외부 API 연동과 관련된 폴더와 클래스들을 모아놓은 폴더
+ │        │   └── ?????.java                                    # ????
  │        ├── 'config'                                          # 프로젝트 설정 관련 class들을 모아놓은 폴더
  │        │   └── PasswordConfig.java                           # 비밀번호 관련 설정 (암호화 등)을 담당하는 class
  │        │
@@ -64,26 +69,26 @@
  │        ├── 'dto'                                             # 데이터를 주고받기 위한 객체를 모아놓은 폴더 
  │        │   ├── 'request'                                     # 서버에 무언가 요청할때 사용되는 폴더 및 class들을 모아놓은 폴더
  │        │   │    ├── 'create'                                 # 등록 요청할 때 사용하는 dto 
- │        │   │    │    ├── ScheduleCreateRequestDto.java       # 일정 정보를 등록 요청할 때 사용하는 dto 
- │        │   │    │    ├── UserCreateRequestDto.java           # 사용자를 등록 요청할 때 사용하는 dto 
- │        │   │    │    └── CommentCreateRequesthDto.java       # 댓글을 등록 요청할 때 사용하는 dto  
+ │        │   │    │    ├── CreateScheduleRequestDto.java       # 일정 정보를 등록 요청할 때 사용하는 dto 
+ │        │   │    │    ├── CreateUserRequestDto.java           # 사용자를 등록 요청할 때 사용하는 dto 
+ │        │   │    │    └── CreateCommentRequesthDto.java       # 댓글을 등록 요청할 때 사용하는 dto  
  │        │   │    │        
  │        │   │    ├── 'search'                                 # 조회 요청할 때 사용하는 dto 
- │        │   │    │    ├── ScheduleSearchRequesthDto.java      # 일정 정보를 요청할 때 사용하는 dto 
- │        │   │    │    ├── UserSearchRequestDto.java           # 사용자 정보를 요청할 때 사용하는 dto 
- │        │   │    │    └── CommentSearchRequesthDto.java       # 댓글 정보를 요청할 때 사용하는 dto 
+ │        │   │    │    ├── SearchScheduleRequesthDto.java      # 일정 정보를 요청할 때 사용하는 dto 
+ │        │   │    │    ├── SearchUserRequestDto.java           # 사용자 정보를 요청할 때 사용하는 dto 
+ │        │   │    │    └── SearchCommentRequesthDto.java       # 댓글 정보를 요청할 때 사용하는 dto 
  │        │   │    │   
  │        │   │    ├── 'modify'                                 # 수정 요청할 때 사용하는 dto 
- │        │   │    │    ├── ScheduleModifyRequesthDto.java      # 일정을 수정할 때 사용하는 dto 
- │        │   │    │    ├── UserModifyRequestDto.java           # 사용자를 수정할 때 사용하는 dto 
- │        │   │    │    └── CommentModifyRequesthDto.java       # 댓글을 수정할 때 사용하는 dto
+ │        │   │    │    ├── ModifyScheduleRequesthDto.java      # 일정을 수정할 때 사용하는 dto 
+ │        │   │    │    ├── ModifyUserRequestDto.java           # 사용자를 수정할 때 사용하는 dto 
+ │        │   │    │    └── ModifyCommentRequesthDto.java       # 댓글을 수정할 때 사용하는 dto
  │        │   │    │     
  │        │   │    └── 'remove'                                 # 삭제 요청할 때 사용하는 dto 
- │        │   │          ├── ScheduleRemoveRequesthDto.java     # 일정을 삭제할 때 사용하는 dto 
- │        │   │          ├── UserRemoveRequestDto.java          # 사용자를 삭제할 때 사용하는 dto 
- │        │   │          └── CommentRemoveRequesthDto.java      # 댓글을 삭제할 때 사용하는 dto 
+ │        │   │          ├── RemoveScheduleRequesthDto.java     # 일정을 삭제할 때 사용하는 dto 
+ │        │   │          ├── RemoveUserRequestDto.java          # 사용자를 삭제할 때 사용하는 dto 
+ │        │   │          └── RemoveCommentRequesthDto.java      # 댓글을 삭제할 때 사용하는 dto 
  │        │   │
- │        │   └── 'reponse'                                     # 서버에서 응답할때 사용되는 폴더 및 class들을 모아놓은 폴더
+ │        │   └── 'response'                                    # 서버에서 응답할때 사용되는 폴더 및 class들을 모아놓은 폴더
  │        │       ├── ResponseStatusDto.java                    # API응답 상태에 대한 정보를 제공하는 dto    
  │        │       │
  │        │       ├── 'create'                                  # 서버로부터 등록 결과를 받을 때 사용하는 class들을 모아놓은 폴더
@@ -97,19 +102,19 @@
  │        │       │    └── SearchCommentResponseDto.java        # 서버로부터 조회된 댓글 정보를 받을 때 사용하는 dto   
  │        │       │         
  │        │       ├── 'modify'                                  # 서버로부터 수정 관련 정보를 받을 때 사용하는 class들을 모아놓은 폴더 
- │        │       │    ├── ScheduleModifyResponseDto.java       # 서버로부터 일정 수정 결과를 받을 때 사용하는 dto 
- │        │       │    ├── UserModifyResponseDto.java           # 서버로부터 사용자 수정 결과를 받을 때 사용하는 dto 
- │        │       │    └── CommentModifyResponseDto.java        # 서버로부터 댓글 수정 결과를 받을 때 사용하는 dto   
+ │        │       │    ├── ModifyScheduleResponseDto.java       # 서버로부터 일정 수정 결과를 받을 때 사용하는 dto 
+ │        │       │    ├── ModifyUserResponseDto.java           # 서버로부터 사용자 수정 결과를 받을 때 사용하는 dto 
+ │        │       │    └── ModifyCommentResponseDto.java        # 서버로부터 댓글 수정 결과를 받을 때 사용하는 dto   
  │        │       │         
  │        │       └── 'remove'                                  # 서버로부터 삭제 관련 정보를 받을 때 사용하는 class들을 모아놓은 폴더 
- │        │            ├── ScheduleRemoveResponseDto.java       # 서버로부터 일정 삭제 결과를 받을 때 사용하는 dto 
- │        │            ├── UserRemoveResponseDto.java           # 서버로부터 사용자 삭제 결과를 받을 때 사용하는 dto 
- │        │            └── CommentRemoveResponseDto.java        # 서버로부터 댓글 삭제 결과를 받을 때 사용하는 dto   
+ │        │            ├── RemoveScheduleResponseDto.java       # 서버로부터 일정 삭제 결과를 받을 때 사용하는 dto 
+ │        │            ├── RemoveUserResponseDto.java           # 서버로부터 사용자 삭제 결과를 받을 때 사용하는 dto 
+ │        │            └── RemoveCommentResponseDto.java        # 서버로부터 댓글 삭제 결과를 받을 때 사용하는 dto   
  │        │            
  │        ├── 'common'                                          # 공통으로 사용되는 클래스들을 모아놓은 폴더
  │        │    ├── UserAuth.java                                # 사용자 권한 Enum
- │        │    ├── jwtUtil.java                                 # JWT 토큰 생성 및 검증을 수행하는 class
- │        │    └── validationUtil.java                          # 데이터 유효성을 검증하는 class
+ │        │    ├── JwtUtil.java                                 # JWT 토큰 생성 및 검증을 수행하는 class
+ │        │    └── ValidationUtil.java                          # 데이터 유효성을 검증하는 class
  │        │         
  │        ├── 'entity'                                          # DB와 매핑되는 엔티티 클래스들을 모아놓은 폴더 
  │        │    ├── Comment.java                                 # 댓글 entity 
@@ -248,7 +253,8 @@
         <td><pre lang="json">{
     "userSeq" : 1,
     "title": "제목제목제목",
-    "content": "내용내용내용"
+    "content": "내용내용내용",
+    "weather": "날씨 맑음"
 }</pre></td>
         <td><pre lang="json">{
     "message": "create schedule success",
@@ -273,6 +279,7 @@
         "name": "홍길동",
         "title" : "제목제목제목",
         "content" : "내용내용내용",
+        "weather": "날씨 맑음"
         "createDate": "2022-10-16",
         "updateDate": "2022-10-20"
     }, ...],
@@ -293,7 +300,8 @@
     "seq": "1",
     "userSeq": 1,
     "title" : "제목제목제목",
-    "content" : "수정수정수정"
+    "content" : "수정수정수정",
+    "weather": "날씨 흐림"
 }</pre></td>
         <td><pre lang="json">{
     "message": "update schedule success",
@@ -358,7 +366,7 @@
     },
     "totalPage": 1
 }</pre></td>
-        <td><span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 일정 정상조회</td>
+        <td><span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 댓글 정상조회</td>
     </tr>
     <tr>
         <td><b>댓글 수정</b></td>
@@ -375,8 +383,7 @@
     "status": 200
 }</pre></td>
         <td>
-            <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 일정 정상수정<br/>
-            <span style=background-color:skyblue;font-weight:bold;color:black;>403</span>: 권한이 없습니다.
+            <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 댓글 정상수정
         </td>
     </tr>
     <tr>
@@ -393,10 +400,24 @@
     "status": 200
 }</pre></td>
         <td>
-            <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 일정 정상삭제<br/>
-            <span style=background-color:skyblue;font-weight:bold;color:black;>403</span>: 권한이 없습니다.
+            <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 댓글 정상삭제
         </td>
-    </tr>        
+    </tr>
+    <tr>
+        <td><b>현재 날씨 조회</b></td>
+        <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
+        <td>https://f-api.github.io/f-api/weather.json????????</td>
+        <td><pre lang="json">{
+    "date": "01-01"
+}</pre></td>
+        <td><pre lang="json">{
+date: "01-01",
+weather: "Sunny"
+}</pre></td>
+        <td>
+            <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 날씨 정상조회
+        </td>
+    </tr>             
 </table>
 </details>
 

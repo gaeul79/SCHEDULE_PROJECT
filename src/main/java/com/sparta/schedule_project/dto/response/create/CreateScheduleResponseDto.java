@@ -1,6 +1,6 @@
-package com.sparta.schedule_project.dto;
+package com.sparta.schedule_project.dto.response.create;
 
-import com.sparta.schedule_project.dto.entity.ScheduleViewDto;
+import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.exception.ResponseCode;
 
 import java.util.List;
@@ -11,16 +11,16 @@ import java.util.List;
  * @author 김현정
  * @since 2024-10-03
  */
-public class ScheduleResponseDto {
-    private List<ScheduleViewDto> schedule;
+public class CreateScheduleResponseDto {
+    private List<ScheduleView> schedule;
     private ResponseStatusDto responseStatusDto;
     private int totalCount;
 
-    public List<ScheduleViewDto> getSchedule() {
+    public List<ScheduleView> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(List<ScheduleViewDto> schedule) {
+    public void setSchedule(List<ScheduleView> schedule) {
         this.schedule = schedule;
     }
 
@@ -44,16 +44,16 @@ public class ScheduleResponseDto {
         this.totalCount = totalCount;
     }
 
-    public static ScheduleResponseDto from(List<ScheduleViewDto> schedules, ResponseCode responseCode) {
-        ScheduleResponseDto responseScheduleDto = new ScheduleResponseDto();
+    public static CreateScheduleResponseDto from(List<ScheduleView> schedules, ResponseCode responseCode) {
+        CreateScheduleResponseDto responseScheduleDto = new CreateScheduleResponseDto();
         ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode);
         responseScheduleDto.setSchedule(schedules);
         responseScheduleDto.setResponseStatusDto(responseStatusDto);
         return responseScheduleDto;
     }
 
-    public static ScheduleResponseDto from(List<ScheduleViewDto> schedules, ResponseCode responseCode, String message) {
-        ScheduleResponseDto responseScheduleDto = new ScheduleResponseDto();
+    public static CreateScheduleResponseDto from(List<ScheduleView> schedules, ResponseCode responseCode, String message) {
+        CreateScheduleResponseDto responseScheduleDto = new CreateScheduleResponseDto();
         ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode, message);
         responseScheduleDto.setSchedule(schedules);
         responseScheduleDto.setResponseStatusDto(responseStatusDto);

@@ -1,4 +1,4 @@
-package com.sparta.schedule_project.dto;
+package com.sparta.schedule_project.dto.request.modify;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import lombok.Data;
  * @since 2024-10-03
  */
 @Data
-public class UserRequestDto {
+public class ModifyUserRequestDto {
     private String userId;
     private String password;
     private String name;
