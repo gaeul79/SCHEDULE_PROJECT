@@ -20,6 +20,7 @@ public class ScheduleDto {
     private String userName;
     private String title;
     private String content;
+    private String weather;
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
 
@@ -30,6 +31,7 @@ public class ScheduleDto {
                 .userName(schedule.getUser().getName())
                 .title(schedule.getTitle())
                 .content(schedule.getContent())
+                .weather(schedule.getWeather())
                 .createDate(schedule.getCreateDate())
                 .updateDate(schedule.getUpdateDate()).build();
     }

@@ -432,6 +432,7 @@ weather: "Sunny"
 - `Spring Data JPA`
 - `MySQL Driver`
 - `Validation`
+- `Spring Security`
 
 ### 🔨개발 툴
 - `Intellij`

@@ -43,6 +43,9 @@ public class Schedule extends Timestamped {
     @Column(nullable = false, length = 500)
     private String content;
 
+    @Column(nullable = false, length = 30)
+    private String weather;
+
     @Transient
     private LocalDate startUpdateDate;
 
