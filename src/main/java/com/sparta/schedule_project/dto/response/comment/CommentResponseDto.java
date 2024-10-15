@@ -21,13 +21,13 @@ public class CommentResponseDto {
         this.responseStatusDto = new ResponseStatusDto(responseCode);
     }
 
-    public static CommentResponseDto createCommentResponseDto(ResponseCode responseCode) {
+    public static CommentResponseDto createResponseDto(ResponseCode responseCode) {
         CommentResponseDto responseScheduleDto = new CommentResponseDto();
         responseScheduleDto.setResponseStatusDto(responseCode);
         return responseScheduleDto;
     }
 
-    public static CommentResponseDto createCommentResponseDto(Page<Comment> comments, ResponseCode responseCode) {
+    public static CommentResponseDto createResponseDto(Page<Comment> comments, ResponseCode responseCode) {
         CommentResponseDto responseScheduleDto = new CommentResponseDto();
         ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode);
         responseScheduleDto.setComments(comments.map(CommentDto::from));
@@ -35,7 +35,7 @@ public class CommentResponseDto {
         return responseScheduleDto;
     }
 
-    public static CommentResponseDto createCommentResponseDto(ResponseCode responseCode, String message) {
+    public static CommentResponseDto createResponseDto(ResponseCode responseCode, String message) {
         CommentResponseDto responseScheduleDto = new CommentResponseDto();
         ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode, message);
         responseScheduleDto.setResponseStatusDto(responseStatusDto);

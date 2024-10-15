@@ -19,7 +19,7 @@ public class UserResponseDto {
     private UserDto user;
     private ResponseStatusDto responseStatusDto;
 
-    public static UserResponseDto createUserResponseDto(User user, ResponseCode responseCode) {
+    public static UserResponseDto createResponseDto(User user, ResponseCode responseCode) {
         UserResponseDto responseDto = new UserResponseDto();
         ResponseStatusDto status = new ResponseStatusDto(responseCode);
         responseDto.setUser(UserDto.from(user));
@@ -27,7 +27,7 @@ public class UserResponseDto {
         return responseDto;
     }
 
-    public static UserResponseDto createUserResponseDto(ResponseCode responseCode, String message) {
+    public static UserResponseDto createResponseDto(ResponseCode responseCode, String message) {
         UserResponseDto responseDto = new UserResponseDto();
         ResponseStatusDto status = new ResponseStatusDto(responseCode, message);
         responseDto.setResponseStatusDto(status);

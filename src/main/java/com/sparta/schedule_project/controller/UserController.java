@@ -6,6 +6,8 @@ import com.sparta.schedule_project.dto.request.user.RemoveUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.SearchUserRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.user.UserResponseDto;
+import com.sparta.schedule_project.exception.ResponseCode;
+import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,7 +36,15 @@ public class UserController {
      */
     @PostMapping("/login")
     public ResponseEntity<ResponseStatusDto> login(@RequestBody SearchUserRequestDto createUserRequestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.login(createUserRequestDto));
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(userService.login(createUserRequestDto));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 
     /**
@@ -46,7 +56,15 @@ public class UserController {
      */
     @PostMapping("/logout")
     public ResponseEntity<ResponseStatusDto> logout() {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.logout());
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(userService.logout());
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 
     /**
@@ -59,7 +77,19 @@ public class UserController {
      */
     @PostMapping("/users")
     public ResponseEntity<ResponseStatusDto> createUser(@RequestBody CreateUserRequestDto createUserRequestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(createUserRequestDto));
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(userService.createUser(createUserRequestDto));
+        } catch (ResponseException ex) {
+            return ResponseEntity
+                    .status(ex.getResponseCode().getHttpStatus())
+                    .body(new ResponseStatusDto(ex.getResponseCode()));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 
     /**
@@ -72,7 +102,15 @@ public class UserController {
      */
     @GetMapping("/users")
     public ResponseEntity<UserResponseDto> getUserInfo(@RequestBody SearchUserRequestDto createUserRequestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.searchUser(createUserRequestDto));
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(userService.searchUser(createUserRequestDto));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(UserResponseDto.createResponseDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 
     /**
@@ -85,7 +123,15 @@ public class UserController {
      */
     @PutMapping("/users/{userId}")
     public ResponseEntity<ResponseStatusDto> updateUser(@RequestBody ModifyUserRequestDto createUserRequestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(createUserRequestDto));
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(userService.updateUser(createUserRequestDto));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 
     /**
@@ -98,6 +144,14 @@ public class UserController {
      */
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<ResponseStatusDto> deleteUser(@RequestBody RemoveUserRequestDto createUserRequestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUser(createUserRequestDto));
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(userService.deleteUser(createUserRequestDto));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 }

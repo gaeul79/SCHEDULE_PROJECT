@@ -15,12 +15,12 @@ public class ResponseStatusDto {
     private String message;
 
     public ResponseStatusDto(ResponseCode responseCode) {
-        state = responseCode.getStatus().value();
+        state = responseCode.getHttpStatus().value();
         message = responseCode.getMessage();
     }
 
     public ResponseStatusDto(ResponseCode responseCode, String message) {
-        state = responseCode.getStatus().value();
+        state = responseCode.getHttpStatus().value();
         this.message = responseCode.getMessage() + ": " + message;
     }
 }

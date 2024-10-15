@@ -20,15 +20,7 @@ public class ScheduleResponseDto {
     private Page<ScheduleDto> schedules;
     private ResponseStatusDto responseStatusDto;
 
-    private void setResponseStatusDto(ResponseStatusDto responseStatusDto) {
-        this.responseStatusDto = responseStatusDto;
-    }
-
-    public void setResponseStatusDto(ResponseCode responseCode) {
-        this.responseStatusDto = new ResponseStatusDto(responseCode);
-    }
-
-    public static ScheduleResponseDto createScheduleResponseDto(Page<Schedule> schedules, ResponseCode responseCode) {
+    public static ScheduleResponseDto createResponseDto(Page<Schedule> schedules, ResponseCode responseCode) {
         ScheduleResponseDto responseScheduleDto = new ScheduleResponseDto();
         ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode);
         responseScheduleDto.setSchedules(schedules.map(ScheduleDto::from));
@@ -36,7 +28,7 @@ public class ScheduleResponseDto {
         return responseScheduleDto;
     }
 
-    public static ScheduleResponseDto createScheduleResponseDto(ResponseCode responseCode, String errorMsg) {
+    public static ScheduleResponseDto createResponseDto(ResponseCode responseCode, String errorMsg) {
         ScheduleResponseDto responseScheduleDto = new ScheduleResponseDto();
         ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode, errorMsg);
         responseScheduleDto.setResponseStatusDto(responseStatusDto);

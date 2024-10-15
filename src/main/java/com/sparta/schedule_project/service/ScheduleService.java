@@ -1,5 +1,7 @@
 package com.sparta.schedule_project.service;
 
+import com.sparta.schedule_project.common.AuthType;
+import com.sparta.schedule_project.common.TestCookieData;
 import com.sparta.schedule_project.dto.request.schedule.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.ModifyScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.RemoveScheduleRequestDto;
@@ -34,13 +36,9 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ResponseStatusDto createSchedule(CreateScheduleRequestDto requestDto) {
-        try {
-            Schedule schedule = CreateScheduleRequestDto.to(requestDto);
-            scheduleRepository.save(schedule);
-            return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
-        } catch (Exception ex) {
-            return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
-        }
+        Schedule schedule = CreateScheduleRequestDto.to(requestDto);
+        scheduleRepository.save(schedule);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
     }
 
     /**
@@ -52,13 +50,9 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ScheduleResponseDto searchSchedule(SearchScheduleRequestDto requestDto) {
-        try {
-            Schedule schedule = SearchScheduleRequestDto.to(requestDto);
-            Page<Schedule> schedules = scheduleRepository.findAllByUserOrderByUpdateDate(schedule.getUser(), schedule.getPage());
-            return ScheduleResponseDto.createScheduleResponseDto(schedules, ResponseCode.SUCCESS_SEARCH_SCHEDULE);
-        } catch (Exception ex) {
-            return ScheduleResponseDto.createScheduleResponseDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
-        }
+        Schedule schedule = SearchScheduleRequestDto.to(requestDto);
+        Page<Schedule> schedules = scheduleRepository.findAllByUserOrderByUpdateDate(schedule.getUser(), schedule.getPage());
+        return ScheduleResponseDto.createResponseDto(schedules, ResponseCode.SUCCESS_SEARCH_SCHEDULE);
     }
 
     /**
@@ -69,21 +63,12 @@ public class ScheduleService {
      * @author 김현정
      * @since 2024-10-03
      */
-    public ResponseStatusDto updateSchedule(ModifyScheduleRequestDto requestDto) {
-        try {
-//            checkAccess(requestDto);
-            Schedule schedule = scheduleRepository.findBySeq(requestDto.getUserSeq());
-            // 체크 필요
-            Schedule updateInfo = ModifyScheduleRequestDto.to(requestDto);
-            schedule.update(updateInfo);
-            return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE);
-        }
-//        catch (ResponseException ex) {
-//            return new ResponseStatusDto(ex.getResponseCode());
-//        }
-        catch (Exception ex) {
-            return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
-        }
+    public ResponseStatusDto updateSchedule(ModifyScheduleRequestDto requestDto) throws ResponseException {
+        Schedule schedule = scheduleRepository.findBySeq(requestDto.getUserSeq());
+        checkAccess();
+        Schedule updateInfo = ModifyScheduleRequestDto.to(requestDto);
+        schedule.update(updateInfo);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE);
     }
 
     /**
@@ -94,32 +79,22 @@ public class ScheduleService {
      * @author 김현정
      * @since 2024-10-03
      */
-    public ResponseStatusDto deleteSchedule(RemoveScheduleRequestDto requestDto) {
-        try {
-//            checkAccess(requestDto);
-            Schedule schedule = RemoveScheduleRequestDto.to(requestDto);
-            scheduleRepository.delete(schedule);
-            return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE);
-        }
-//        catch (ResponseException ex)
-//        {
-//            return new ResponseStatusDto(ex.getResponseCode());
-//        }
-        catch (Exception ex) {
-            return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
-        }
+    public ResponseStatusDto deleteSchedule(RemoveScheduleRequestDto requestDto) throws ResponseException {
+        Schedule schedule = RemoveScheduleRequestDto.to(requestDto);
+        checkAccess();
+        scheduleRepository.delete(schedule);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE);
     }
 
     /**
      * 일정 수정 요청에 대한 권한을 검사합니다.
      *
-     * @param requestDto 일정 수정 요청 DTO
      * @throws ResponseException 권한이 없는 경우 예외를 발생시킵니다.
      * @author 김현정
      * @since 2024-10-04
      */
-    private void checkAccess(ModifyScheduleRequestDto requestDto) throws ResponseException {
-//        if (!requestDto.getLoginUserId().equals(requestDto.getUserId()))
-//            throw new ResponseException(ResponseCode.INVALID_PERMISSION);
+    private void checkAccess() throws ResponseException {
+        if(TestCookieData.testAuth != AuthType.ADMIN)
+            throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }

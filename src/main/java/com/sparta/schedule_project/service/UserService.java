@@ -10,6 +10,7 @@ import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,19 +21,9 @@ import org.springframework.stereotype.Service;
  * @since 2024-10-03
  */
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-
-    /**
-     * UserRepository 객체를 의존성 주입 방식으로 받아옵니다.
-     *
-     * @param userRepository 사용자 레포지토리
-     * @author 김현정
-     * @since 2024-10-03
-     */
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     /**
      * 로그인을 처리합니다.
@@ -42,16 +33,11 @@ public class UserService {
      * @author 김현정
      * @since 2024-10-03
      */
-    public ResponseStatusDto login(SearchUserRequestDto requestDto) {
-        try {
-            User user = SearchUserRequestDto.to(requestDto);
-            User findUser = userRepository.findByEmail(user.getEmail());
-            // TODO khj 수정 필요
-            checkLoginUserInputParam(user, findUser);
-            return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
-        } catch (ResponseException ex) {
-            return new ResponseStatusDto(ex.getResponseCode());
-        }
+    public ResponseStatusDto login(SearchUserRequestDto requestDto) throws ResponseException {
+        User user = SearchUserRequestDto.to(requestDto);
+        User findUser = userRepository.findByEmail(user.getEmail());
+        checkLoginUserInputParam(user, findUser);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
     }
 
     /**
@@ -78,12 +64,8 @@ public class UserService {
      * @since 2024-10-03
      */
     public ResponseStatusDto logout() {
-        try {
-            // TODO. 토큰 해제
-            return new ResponseStatusDto(ResponseCode.SUCCESS_LOGOUT);
-        } catch (Exception ex) {
-            return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
-        }
+        // TODO. 토큰 해제
+        return new ResponseStatusDto(ResponseCode.SUCCESS_LOGOUT);
     }
 
     /**
@@ -94,17 +76,11 @@ public class UserService {
      * @author 김현정
      * @since 2024-10-03
      */
-    public ResponseStatusDto createUser(CreateUserRequestDto requestDto) {
-        try {
-            User user = CreateUserRequestDto.to(requestDto);
-            checkCreateUserInputParam(user);
-            userRepository.save(user);
-            return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
-        } catch (ResponseException ex) {
-            return new ResponseStatusDto(ex.getResponseCode());
-        } catch (Exception ex) {
-            return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR);
-        }
+    public ResponseStatusDto createUser(CreateUserRequestDto requestDto) throws ResponseException {
+        User user = CreateUserRequestDto.to(requestDto);
+        checkCreateUserInputParam(user);
+        userRepository.save(user);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
     }
 
     /**
@@ -128,13 +104,9 @@ public class UserService {
      * @since 2024-10-03
      */
     public UserResponseDto searchUser(SearchUserRequestDto requestDto) {
-        try {
-            User user = SearchUserRequestDto.to(requestDto);
-            User resultUser = userRepository.findByEmail(user.getEmail());
-            return UserResponseDto.createUserResponseDto(resultUser, ResponseCode.SUCCESS_SEARCH_USER);
-        } catch (Exception ex) {
-            return UserResponseDto.createUserResponseDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
-        }
+        User user = SearchUserRequestDto.to(requestDto);
+        User resultUser = userRepository.findByEmail(user.getEmail());
+        return UserResponseDto.createResponseDto(resultUser, ResponseCode.SUCCESS_SEARCH_USER);
     }
 
     /**
@@ -146,14 +118,10 @@ public class UserService {
      * @since 2024-10-03
      */
     public ResponseStatusDto updateUser(ModifyUserRequestDto requestDto) {
-        try {
-            User updateInfo = ModifyUserRequestDto.to(requestDto);
-            User user = userRepository.findBySeq(requestDto.getUserSeq());
-            user.update(updateInfo);
-            return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
-        } catch (Exception ex) {
-            return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
-        }
+        User updateInfo = ModifyUserRequestDto.to(requestDto);
+        User user = userRepository.findBySeq(requestDto.getUserSeq());
+        user.update(updateInfo);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
     }
 
     /**
@@ -165,12 +133,8 @@ public class UserService {
      * @since 2024-10-03
      */
     public ResponseStatusDto deleteUser(RemoveUserRequestDto requestDto) {
-        try {
-            User user = RemoveUserRequestDto.to(requestDto);
-            userRepository.delete(user);
-            return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
-        } catch (Exception ex) {
-            return new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage());
-        }
+        User user = RemoveUserRequestDto.to(requestDto);
+        userRepository.delete(user);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
     }
 }

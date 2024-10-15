@@ -6,6 +6,8 @@ import com.sparta.schedule_project.dto.request.comment.RemoveCommentRequestDto;
 import com.sparta.schedule_project.dto.request.comment.SearchCommentRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.comment.CommentResponseDto;
+import com.sparta.schedule_project.exception.ResponseCode;
+import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api.sparta.com")
+@RequestMapping("/api.sparta.com/schedules/{scheduleSeq}")
 public class CommentController {
     private final CommentService commentService;
 
@@ -26,9 +28,17 @@ public class CommentController {
      * @author 김현정
      * @since 2024-10-15
      */
-    @PostMapping("/schedules")
+    @PostMapping("/comments")
     public ResponseEntity<ResponseStatusDto> createComment(@RequestBody CreateCommentRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(requestDto));
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(commentService.createComment(requestDto));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 
     /**
@@ -39,9 +49,17 @@ public class CommentController {
      * @author 김현정
      * @since 2024-10-15
      */
-    @GetMapping("/schedules")
+    @GetMapping("/comments/{commentSeq}")
     public ResponseEntity<CommentResponseDto> searchComment(@RequestBody SearchCommentRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.searchComment(requestDto));
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(commentService.searchComment(requestDto));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(CommentResponseDto.createResponseDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 
     /**
@@ -52,9 +70,21 @@ public class CommentController {
      * @author 김현정
      * @since 2024-10-15
      */
-    @PutMapping("/schedules/{scheduleId}")
+    @PutMapping("/comments")
     public ResponseEntity<ResponseStatusDto> updateComment(@RequestBody ModifyCommentRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.updateComment(requestDto));
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(commentService.updateComment(requestDto));
+        } catch (ResponseException ex) {
+            return ResponseEntity
+                    .status(ex.getResponseCode().getHttpStatus())
+                    .body(new ResponseStatusDto(ex.getResponseCode()));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 
     /**
@@ -67,6 +97,18 @@ public class CommentController {
      */
     @DeleteMapping("/schedules/{scheduleId}")
     public ResponseEntity<ResponseStatusDto> deleteComment(@RequestBody RemoveCommentRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.deleteSchedule(requestDto));
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(commentService.deleteSchedule(requestDto));
+        } catch (ResponseException ex) {
+            return ResponseEntity
+                    .status(ex.getResponseCode().getHttpStatus())
+                    .body(new ResponseStatusDto(ex.getResponseCode()));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 }

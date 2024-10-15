@@ -6,6 +6,8 @@ import com.sparta.schedule_project.dto.request.schedule.RemoveScheduleRequestDto
 import com.sparta.schedule_project.dto.request.schedule.SearchScheduleRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.schedule.ScheduleResponseDto;
+import com.sparta.schedule_project.exception.ResponseCode;
+import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,7 +36,15 @@ public class ScheduleController {
      */
     @PostMapping("/schedules")
     public ResponseEntity<ResponseStatusDto> createSchedule(@RequestBody CreateScheduleRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(scheduleService.createSchedule(requestDto));
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(scheduleService.createSchedule(requestDto));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 
     /**
@@ -47,7 +57,15 @@ public class ScheduleController {
      */
     @GetMapping("/schedules")
     public ResponseEntity<ScheduleResponseDto> searchSchedules(@RequestBody SearchScheduleRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.searchSchedule(requestDto));
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(scheduleService.searchSchedule(requestDto));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(ScheduleResponseDto.createResponseDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 
     /**
@@ -60,7 +78,19 @@ public class ScheduleController {
      */
     @PutMapping("/schedules/{scheduleId}")
     public ResponseEntity<ResponseStatusDto> updateSchedule(@RequestBody ModifyScheduleRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.updateSchedule(requestDto));
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(scheduleService.updateSchedule(requestDto));
+        } catch (ResponseException ex) {
+            return ResponseEntity
+                    .status(ex.getResponseCode().getHttpStatus())
+                    .body(new ResponseStatusDto(ex.getResponseCode()));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 
     /**
@@ -73,6 +103,18 @@ public class ScheduleController {
      */
     @DeleteMapping("/schedules/{scheduleId}")
     public ResponseEntity<ResponseStatusDto> deleteSchedule(@RequestBody RemoveScheduleRequestDto requestDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(scheduleService.deleteSchedule(requestDto));
+        try {
+           return ResponseEntity
+                   .status(HttpStatus.OK)
+                   .body(scheduleService.deleteSchedule(requestDto));
+        } catch (ResponseException ex) {
+            return ResponseEntity
+                    .status(ex.getResponseCode().getHttpStatus())
+                    .body(new ResponseStatusDto(ex.getResponseCode()));
+        } catch (Exception ex) {
+            return ResponseEntity
+                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
+                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
+        }
     }
 }

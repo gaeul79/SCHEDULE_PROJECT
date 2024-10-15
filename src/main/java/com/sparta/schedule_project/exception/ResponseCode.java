@@ -38,6 +38,6 @@ public enum ResponseCode {
     // 권한 관련 에러 코드
     INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "권한이 없습니다");
 
-    private final HttpStatus status;
+    private final HttpStatus httpStatus;
     private final String message;
 }
