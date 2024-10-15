@@ -159,7 +159,8 @@
         <td><pre lang="json">{     
     "email": "hong@gmail.com",
     "password": "1q2w3e4r#",
-    "name": "홍길동"
+    "name": "홍길동",
+    "auth": "ADMIN"
 }</pre></td>
         <td><pre lang="json">{
     "message": "create user success",
@@ -211,6 +212,7 @@
         "email": "hong@gmail.com",
         "password": "1q2w3e4r#",
         "name": "홍길동",
+        "auth": "ADMIN"
     },
     status: {
         "message": "search user success",
@@ -296,7 +298,8 @@
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
         <td>/api.sparta.com/schedules/{scheduleSeq}</td>
         <td><pre lang="json">{
-    "loginUserSeq": 1,  ...? JWT에서..?      
+    "loginUserSeq": 1,  ...? JWT에서..?,
+    "userAuth": "ADMIN",      
     "seq": "1",
     "userSeq": 1,
     "title" : "제목제목제목",
@@ -317,7 +320,8 @@
         <td><span style=background-color:#CE3636AA;font-weight:bold;>DELETE</span></td>
         <td>/api.sparta.com/schedules/{scheduleSeq}</td>
         <td><pre lang="json">{
-    "loginUserSeq": 1, ...? JWT에서..?
+    "loginUserSeq": 1, ...? JWT에서..?,
+    "userAuth": "ADMIN",    
     "seq" : 1
 }</pre></td>
         <td><pre lang="json">{

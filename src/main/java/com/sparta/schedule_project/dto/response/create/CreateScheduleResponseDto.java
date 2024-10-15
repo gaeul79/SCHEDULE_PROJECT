@@ -1,6 +1,7 @@
 package com.sparta.schedule_project.dto.response.create;
 
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
+import com.sparta.schedule_project.entity.Schedule;
 import com.sparta.schedule_project.exception.ResponseCode;
 
 import java.util.List;
@@ -12,15 +13,15 @@ import java.util.List;
  * @since 2024-10-03
  */
 public class CreateScheduleResponseDto {
-    private List<ScheduleView> schedule;
+    private List<Schedule> schedule;
     private ResponseStatusDto responseStatusDto;
     private int totalCount;
 
-    public List<ScheduleView> getSchedule() {
+    public List<Schedule> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(List<ScheduleView> schedule) {
+    public void setSchedule(List<Schedule> schedule) {
         this.schedule = schedule;
     }
 
@@ -44,7 +45,7 @@ public class CreateScheduleResponseDto {
         this.totalCount = totalCount;
     }
 
-    public static CreateScheduleResponseDto from(List<ScheduleView> schedules, ResponseCode responseCode) {
+    public static CreateScheduleResponseDto from(List<Schedule> schedules, ResponseCode responseCode) {
         CreateScheduleResponseDto responseScheduleDto = new CreateScheduleResponseDto();
         ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode);
         responseScheduleDto.setSchedule(schedules);
@@ -52,7 +53,7 @@ public class CreateScheduleResponseDto {
         return responseScheduleDto;
     }
 
-    public static CreateScheduleResponseDto from(List<ScheduleView> schedules, ResponseCode responseCode, String message) {
+    public static CreateScheduleResponseDto from(List<Schedule> schedules, ResponseCode responseCode, String message) {
         CreateScheduleResponseDto responseScheduleDto = new CreateScheduleResponseDto();
         ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode, message);
         responseScheduleDto.setSchedule(schedules);

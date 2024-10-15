@@ -4,6 +4,7 @@ create table User
     email varchar(100) not null comment '이메일',
     password varchar(20) not null comment '비밀번호',
     name varchar(10) not null comment '닉네임',
+    auth varchar(10) not null comment '권한',
     createDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP comment '생성 날짜',
     updateDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '수정 날짜'
 );

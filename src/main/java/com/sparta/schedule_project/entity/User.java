@@ -1,5 +1,6 @@
 package com.sparta.schedule_project.entity;
 
+import com.sparta.schedule_project.common.AuthType;
 import com.sparta.schedule_project.dto.request.create.CreateUserRequestDto;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 회원 정보를 담는 Entity 클래스
@@ -18,7 +21,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "user")
 @NoArgsConstructor
-public class User {
+public class User extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int seq;
@@ -26,11 +29,20 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false, length = 50)
+    private String email;
+
     @Column(nullable = false, length = 30)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String email;
+    @Enumerated(value = EnumType.STRING)
+    private AuthType auth;
+
+    @OneToMany(mappedBy = "user")
+    private List<Schedule> schedules = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     /**
      * UserRequestDto 객체로부터 회원 정보를 복사하여 UserDto 객체를 생성합니다.
@@ -42,10 +54,10 @@ public class User {
      */
     public static User from(CreateUserRequestDto user) {
         User userDto = new User();
-        userDto.setUserId(user.getUserId());
-        userDto.setPassword(user.getPassword());
-        userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
+//        userDto.setSeq(user.getUserId());
+//        userDto.setPassword(user.getPassword());
+//        userDto.setName(user.getName());
+//        userDto.setEmail(user.getEmail());
         return userDto;
     }
 }
