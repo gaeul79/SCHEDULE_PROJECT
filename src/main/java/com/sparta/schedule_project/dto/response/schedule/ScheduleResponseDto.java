@@ -36,10 +36,9 @@ public class ScheduleResponseDto {
         return responseScheduleDto;
     }
 
-    public static ScheduleResponseDto createScheduleResponseDto(Page<Schedule> schedules, ResponseCode responseCode, String message) {
+    public static ScheduleResponseDto createScheduleResponseDto(ResponseCode responseCode, String errorMsg) {
         ScheduleResponseDto responseScheduleDto = new ScheduleResponseDto();
-        ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode, message);
-        responseScheduleDto.setSchedules(schedules.map(ScheduleDto::from));
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode, errorMsg);
         responseScheduleDto.setResponseStatusDto(responseStatusDto);
         return responseScheduleDto;
     }

@@ -43,4 +43,9 @@ public class User extends Timestamped {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    public void update(User user) {
+        this.name = user.getName();
+        this.password = user.getPassword();
+    }
 }

@@ -1,13 +1,12 @@
 package com.sparta.schedule_project.entity;
 
-import com.sparta.schedule_project.dto.request.schedule.CreateScheduleRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
-import java.awt.print.Pageable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,4 +53,10 @@ public class Schedule extends Timestamped {
 
     @Transient
     private Pageable page;
+
+    public void update(Schedule schedule) {
+        this.title = schedule.getTitle();
+        this.content = schedule.getContent();
+        this.weather = schedule.getWeather();
+    }
 }

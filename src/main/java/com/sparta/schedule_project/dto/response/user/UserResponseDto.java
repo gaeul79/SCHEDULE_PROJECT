@@ -27,10 +27,9 @@ public class UserResponseDto {
         return responseDto;
     }
 
-    public static UserResponseDto createUserResponseDto(User user, ResponseCode responseCode, String message) {
+    public static UserResponseDto createUserResponseDto(ResponseCode responseCode, String message) {
         UserResponseDto responseDto = new UserResponseDto();
         ResponseStatusDto status = new ResponseStatusDto(responseCode, message);
-        responseDto.setUser(UserDto.from(user));
         responseDto.setResponseStatusDto(status);
         return responseDto;
     }

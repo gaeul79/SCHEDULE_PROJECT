@@ -1,11 +1,11 @@
 package com.sparta.schedule_project.entity;
 
-
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.awt.print.Pageable;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
 @Builder
 @Getter
@@ -31,4 +31,8 @@ public class Comment extends Timestamped {
 
     @Transient
     private Pageable page;
+
+    public void update(Comment comment) {
+        this.content = comment.getContent();
+    }
 }

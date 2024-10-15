@@ -33,7 +33,7 @@ create table Comment
     CONSTRAINT foreign key (schedule_seq) references Schedule(seq) ON DELETE CASCADE
 );
 
-insert into User(password, email, name) values('1q2w3e4r', 'hong@gmail.com', '홍길동');
+insert into User(password, email, name, auth) values('1q2w3e4r', 'hong@gmail.com', '홍길동', 'Admin');
 insert into Schedule(user_seq, title, content) values(1, '제목제목제목', '내용내용내용');
 insert into Comment(user_seq, schedule_seq, content) values(1, 1, '댓글댓글댓글');
 
