@@ -2,12 +2,10 @@ package com.sparta.schedule_project.dto.request.comment;
 
 import com.sparta.schedule_project.entity.Comment;
 import com.sparta.schedule_project.entity.Schedule;
-import com.sparta.schedule_project.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.awt.print.Pageable;
+import org.springframework.data.domain.Pageable;
 
 @Getter
 @NoArgsConstructor
@@ -21,6 +19,6 @@ public class SearchCommentRequestDto {
     public static Comment to(SearchCommentRequestDto commentDto) {
         return Comment.builder()
                 .schedule(Schedule.builder().seq(commentDto.scheduleSeq).build())
-                .page(commentDto.page).build();
+                .page(commentDto.getPage()).build();
     }
 }
