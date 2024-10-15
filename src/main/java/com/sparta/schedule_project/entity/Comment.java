@@ -2,13 +2,17 @@ package com.sparta.schedule_project.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Entity
+import java.awt.print.Pageable;
+
+
+@Builder
 @Getter
-@Table(name = "comment")
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "comment")
 public class Comment extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +28,7 @@ public class Comment extends Timestamped {
 
     @Column(name = "content", nullable = false, length = 300)
     private String content;
+
+    @Transient
+    private Pageable page;
 }

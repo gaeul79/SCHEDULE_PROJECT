@@ -68,48 +68,38 @@
  │        │
  │        ├── 'dto'                                             # 데이터를 주고받기 위한 객체를 모아놓은 폴더 
  │        │   ├── 'request'                                     # 서버에 무언가 요청할때 사용되는 폴더 및 class들을 모아놓은 폴더
- │        │   │    ├── 'create'                                 # 등록 요청할 때 사용하는 dto 
- │        │   │    │    ├── CreateScheduleRequestDto.java       # 일정 정보를 등록 요청할 때 사용하는 dto 
+ │        │   │    ├── 'user'                                   # 서버에 유저관련 요청할 때 사용하는 dto 
  │        │   │    │    ├── CreateUserRequestDto.java           # 사용자를 등록 요청할 때 사용하는 dto 
- │        │   │    │    └── CreateCommentRequesthDto.java       # 댓글을 등록 요청할 때 사용하는 dto  
- │        │   │    │        
- │        │   │    ├── 'search'                                 # 조회 요청할 때 사용하는 dto 
- │        │   │    │    ├── SearchScheduleRequesthDto.java      # 일정 정보를 요청할 때 사용하는 dto 
  │        │   │    │    ├── SearchUserRequestDto.java           # 사용자 정보를 요청할 때 사용하는 dto 
- │        │   │    │    └── SearchCommentRequesthDto.java       # 댓글 정보를 요청할 때 사용하는 dto 
- │        │   │    │   
- │        │   │    ├── 'modify'                                 # 수정 요청할 때 사용하는 dto 
- │        │   │    │    ├── ModifyScheduleRequesthDto.java      # 일정을 수정할 때 사용하는 dto 
  │        │   │    │    ├── ModifyUserRequestDto.java           # 사용자를 수정할 때 사용하는 dto 
- │        │   │    │    └── ModifyCommentRequesthDto.java       # 댓글을 수정할 때 사용하는 dto
- │        │   │    │     
- │        │   │    └── 'remove'                                 # 삭제 요청할 때 사용하는 dto 
- │        │   │          ├── RemoveScheduleRequesthDto.java     # 일정을 삭제할 때 사용하는 dto 
- │        │   │          ├── RemoveUserRequestDto.java          # 사용자를 삭제할 때 사용하는 dto 
- │        │   │          └── RemoveCommentRequesthDto.java      # 댓글을 삭제할 때 사용하는 dto 
+ │        │   │    │    └── RemoveUserRequestDto.java           # 사용자를 삭제할 때 사용하는 dto 
+ │        │   │    │  
+ │        │   │    ├── 'schedule'                               # 서버에 일정관련 요청할 때 사용하는 dto 
+ │        │   │    │    ├── CreateScheduleRequestDto.java       # 일정 정보를 등록 요청할 때 사용하는 dto 
+ │        │   │    │    ├── SearchScheduleRequesthDto.java      # 일정 정보를 요청할 때 사용하는 dto 
+ │        │   │    │    ├── ModifyScheduleRequesthDto.java      # 일정을 수정할 때 사용하는 dto 
+ │        │   │    │    └── RemoveScheduleRequesthDto.java      # 일정을 삭제할 때 사용하는 dto 
+ │        │   │    │
+ │        │   │    └── 'comment'                                # 서버에 댓글 관련 요청할 때 사용하는 dto 
+ │        │   │         ├── CreateCommentRequesthDto.java       # 댓글을 등록 요청할 때 사용하는 dto  
+ │        │   │         ├── SearchCommentRequesthDto.java       # 댓글 정보를 요청할 때 사용하는 dto 
+ │        │   │         ├── ModifyCommentRequesthDto.java       # 댓글을 수정할 때 사용하는 dto
+ │        │   │         └── RemoveCommentRequesthDto.java       # 댓글을 삭제할 때 사용하는 dto 
  │        │   │
  │        │   └── 'response'                                    # 서버에서 응답할때 사용되는 폴더 및 class들을 모아놓은 폴더
  │        │       ├── ResponseStatusDto.java                    # API응답 상태에 대한 정보를 제공하는 dto    
  │        │       │
- │        │       ├── 'create'                                  # 서버로부터 등록 결과를 받을 때 사용하는 class들을 모아놓은 폴더
- │        │       │    ├── CreateScheduleResponseDto.java       # 서버로부터 일정 등록 결과를 받을 때 사용하는 dto 
- │        │       │    ├── CreateUserResponseDto.java           # 서버로부터 사용자 등록 결과를 받을 때 사용하는 dto 
- │        │       │    └── CreateCommentResponseDto.java        # 서버로부터 댓글 등록 결과를 받을 때 사용하는 dto    
+ │        │       ├── 'user'                                    # 서버로부터 사용자 관련 정보를 받을 때 사용하는 class들을 모아놓은 폴더
+ │        │       │    ├── UserResponseDto.java                 # 서버로부터 사용자 요청 처리 결과를 받을 때 사용하는 class
+ │        │       │    └── UserDto.java                         # 사용자 dto 
  │        │       │        
- │        │       ├── 'search'                                  # 서버로부터 조회 관련 정보를 받을 때 사용하는 class들을 모아놓은 폴더
- │        │       │    ├── SearchScheduleResponseDto.java       # 서버로부터 조회된 일정 정보를 받을 때 사용하는 dto 
- │        │       │    ├── SearchUserResponseDto.java           # 서버로부터 조회된 사용자 정보를 받을 때 사용하는 dto 
- │        │       │    └── SearchCommentResponseDto.java        # 서버로부터 조회된 댓글 정보를 받을 때 사용하는 dto   
+ │        │       ├── 'schedule'                                # 서버로부터 일정 관련 정보를 받을 때 사용하는 class들을 모아놓은 폴더
+ │        │       │    ├── ScheduleResponseDto.java             # 서버로부터 일정 요청 처리 결과를 받을 때 사용하는 class
+ │        │       │    └── ScheduleDto.java                     # 일정 dto
  │        │       │         
- │        │       ├── 'modify'                                  # 서버로부터 수정 관련 정보를 받을 때 사용하는 class들을 모아놓은 폴더 
- │        │       │    ├── ModifyScheduleResponseDto.java       # 서버로부터 일정 수정 결과를 받을 때 사용하는 dto 
- │        │       │    ├── ModifyUserResponseDto.java           # 서버로부터 사용자 수정 결과를 받을 때 사용하는 dto 
- │        │       │    └── ModifyCommentResponseDto.java        # 서버로부터 댓글 수정 결과를 받을 때 사용하는 dto   
- │        │       │         
- │        │       └── 'remove'                                  # 서버로부터 삭제 관련 정보를 받을 때 사용하는 class들을 모아놓은 폴더 
- │        │            ├── RemoveScheduleResponseDto.java       # 서버로부터 일정 삭제 결과를 받을 때 사용하는 dto 
- │        │            ├── RemoveUserResponseDto.java           # 서버로부터 사용자 삭제 결과를 받을 때 사용하는 dto 
- │        │            └── RemoveCommentResponseDto.java        # 서버로부터 댓글 삭제 결과를 받을 때 사용하는 dto   
+ │        │       └── 'comment'                                 # 서버로부터 댓글 요청 처리 결과를 받을 때 사용하는 class들을 모아놓은 폴더
+ │        │            ├── CommentResponseDto.java              # 서버로부터 댓글 요청 처리 결과를 받을 때 사용하는 class    
+ │        │            └── CommentDto.java                      # 댓글 dto  
  │        │            
  │        ├── 'common'                                          # 공통으로 사용되는 클래스들을 모아놓은 폴더
  │        │    ├── UserAuth.java                                # 사용자 권한 Enum
@@ -410,7 +400,7 @@
     <tr>
         <td><b>현재 날씨 조회</b></td>
         <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
-        <td>https://f-api.github.io/f-api/weather.json????????</td>
+        <td>https://f-api.github.io/f-api</td>
         <td><pre lang="json">{
     "date": "01-01"
 }</pre></td>
