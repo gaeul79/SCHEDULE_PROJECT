@@ -1,5 +1,6 @@
 package com.sparta.schedule_project.controller;
 
+import com.sparta.schedule_project.common.infra.WeatherApiService;
 import com.sparta.schedule_project.dto.request.user.CreateUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.ModifyUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.RemoveUserRequestDto;

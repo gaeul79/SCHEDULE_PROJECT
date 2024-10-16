@@ -2,6 +2,7 @@ package com.sparta.schedule_project.service;
 
 import com.sparta.schedule_project.common.AuthType;
 import com.sparta.schedule_project.common.TestData;
+import com.sparta.schedule_project.common.infra.WeatherApiService;
 import com.sparta.schedule_project.dto.request.schedule.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.ModifyScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.RemoveScheduleRequestDto;
@@ -14,9 +15,13 @@ import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 /**
  * 일정 관리 서비스 클래스
@@ -28,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
+    private final WeatherApiService weatherApiService;
 
     /**
      * 일정 생성
@@ -38,8 +44,8 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ResponseStatusDto createSchedule(CreateScheduleRequestDto requestDto) {
-        // TODO. khj 날씨
-        Schedule schedule = CreateScheduleRequestDto.convertDtoToEntity(requestDto, TestData.testSeq, "날씨 맑음");
+        String weather = weatherApiService.getTodayWeather();
+        Schedule schedule = CreateScheduleRequestDto.convertDtoToEntity(requestDto, TestData.testSeq, weather);
         scheduleRepository.save(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
     }
@@ -68,9 +74,11 @@ public class ScheduleService {
      */
     @Transactional
     public ResponseStatusDto updateSchedule(ModifyScheduleRequestDto requestDto) throws ResponseException {
-        Schedule schedule = ModifyScheduleRequestDto.convertDtoToEntity(requestDto, "천둥 번개");
+        String weather = weatherApiService.getTodayWeather();
+        Schedule schedule = ModifyScheduleRequestDto.convertDtoToEntity(requestDto, weather);
         Schedule updateSchedule = scheduleRepository.findBySeq(schedule.getUser().getSeq());
         checkAccess(updateSchedule);
+
         updateSchedule.update(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE);
     }
