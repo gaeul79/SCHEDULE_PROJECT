@@ -1,6 +1,7 @@
 package com.sparta.schedule_project.dto.request.schedule;
 
 import com.sparta.schedule_project.entity.Schedule;
+import com.sparta.schedule_project.entity.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -40,6 +41,7 @@ public class ModifyScheduleRequestDto {
     public Schedule convertDtoToEntity(ModifyScheduleRequestDto scheduleDto, String weather) {
         return Schedule.builder()
                 .seq(scheduleDto.getScheduleSeq())
+                .user(User.builder().seq(scheduleDto.getUserSeq()).build())
                 .title(scheduleDto.getTitle())
                 .weather(weather)
                 .content(scheduleDto.getContent()).build();

@@ -130,6 +130,6 @@ public class ScheduleService {
 
         if (!loginUser.getEmail().equals(searchUser.getEmail()))
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
-        return loginUser;
+        return searchUser;
     }
 }

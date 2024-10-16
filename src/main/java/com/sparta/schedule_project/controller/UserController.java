@@ -45,8 +45,8 @@ public class UserController {
                     .body(userService.login(res, createUserRequestDto));
         } catch (UnsupportedEncodingException ex) {
             return ResponseEntity
-                    .status(ResponseCode.FAIL_ENCODING.getHttpStatus())
-                    .body(new ResponseStatusDto(ResponseCode.FAIL_ENCODING, ex.getMessage()));
+                    .status(ResponseCode.TOKEN_FAIL_ENCODING.getHttpStatus())
+                    .body(new ResponseStatusDto(ResponseCode.TOKEN_FAIL_ENCODING, ex.getMessage()));
         } catch (Exception ex) {
             return ResponseEntity
                     .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())

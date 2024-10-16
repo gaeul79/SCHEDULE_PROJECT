@@ -113,8 +113,20 @@ public class UserService {
     public UserResponseDto searchUser(String token, SearchUserRequestDto requestDto) throws ResponseException {
         User user = requestDto.convertDtoToEntity(requestDto);
         User findUser = userRepository.findBySeq(user.getSeq());
-        checkUser(token, findUser);
+        checkSearchUser(findUser);
         return UserResponseDto.createResponseDto(findUser, ResponseCode.SUCCESS_SEARCH_USER);
+    }
+
+    /**
+     * 사용자 정보를 검증합니다.
+     *
+     * @param user  사용자 정보
+     * @throws ResponseException 사용자가 존재하지 않은 경우 예외 발생
+     * @since 2024-10-17
+     */
+    private void checkSearchUser(User user) throws ResponseException {
+        if (user == null)
+            throw new ResponseException(ResponseCode.USER_NOT_FOUND);
     }
 
     /**
@@ -147,7 +159,8 @@ public class UserService {
     public ResponseStatusDto deleteUser(String token, RemoveUserRequestDto requestDto) throws ResponseException {
         User user = requestDto.convertDtoToEntity(requestDto);
         checkUser(token, user);
-        userRepository.delete(user);
+        User deleteUser = userRepository.findBySeq(user.getSeq());
+        userRepository.delete(deleteUser);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);
     }
 

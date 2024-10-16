@@ -302,7 +302,7 @@
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
         <td>/api.sparta.com/schedules/{scheduleSeq}</td>
         <td><pre lang="json">{
-    "seq": "1",
+    "seq": 1,
     "userSeq": 1,
     "title" : "제목제목제목",
     "content" : "수정수정수정"

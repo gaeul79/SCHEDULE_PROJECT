@@ -36,11 +36,11 @@ public enum ResponseCode {
 
     // 사용자 관련 에러 코드
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
-    USER_PASSWORD_NOT_MATCH(HttpStatus.NOT_FOUND, "비밀번호가 틀렸습니다."),
+    USER_PASSWORD_NOT_MATCH(HttpStatus.UNAUTHORIZED, "비밀번호가 틀렸습니다."),
     USER_EMAIL_DUPLICATED(HttpStatus.CONFLICT, "이메일이 중복됩니다"),
 
     // 토큰 관련 에러 코드
-    FAIL_ENCODING(HttpStatus.BAD_REQUEST, "잘못된 인코딩을 사용하였습니다."),
+    TOKEN_FAIL_ENCODING(HttpStatus.BAD_REQUEST, "잘못된 인코딩을 사용하였습니다."),
     TOKEN_UNSIGNED(HttpStatus.BAD_REQUEST, "유효하지 않는 JWT 서명 입니다."),
     TOKEN_INVALID(HttpStatus.BAD_REQUEST, "잘못된 JWT 토큰 입니다."),
     TOKEN_TIMEOUT(HttpStatus.UNAUTHORIZED, "만료된 JWT token 입니다."),
