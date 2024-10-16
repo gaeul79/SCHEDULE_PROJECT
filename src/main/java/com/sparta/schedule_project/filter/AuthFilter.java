@@ -1,11 +1,18 @@
 package com.sparta.schedule_project.filter;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.jwt.JwtUtil;
 import com.sparta.schedule_project.repository.UserRepository;
-import io.jsonwebtoken.*;
-import jakarta.servlet.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,9 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
@@ -24,44 +31,44 @@ import java.nio.charset.StandardCharsets;
 @Slf4j(topic = "AuthFilter")
 @RequiredArgsConstructor
 @Component
-public class AuthFilter implements Filter {
-
+public class AuthFilter extends OncePerRequestFilter {
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        System.out.println("request = " + request);
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String url = httpServletRequest.getRequestURI();
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String url = request.getRequestURI();
 
         try {
-            if(ignorePage(url)) {
-                log.info("인증 처리를 하지 않는 URL : " + url);
-            }
+            if(ignorePage(url))
+                log.info("인증 처리를 하지 않는 URL : {}", url);
             else {
-                String tokenValue = getTokenFromRequest(httpServletRequest);
+                String tokenValue = getTokenFromRequest(request);
                 User user = getUserInfoFromToken(tokenValue);
                 request.setAttribute("user", user);
             }
-
-            chain.doFilter(request, response); // 다음 Filter 로 이동
-            System.out.println("response = " + response);
-        } catch (SecurityException | MalformedJwtException | SignatureException e) {
-            HttpServletResponse httpResponse = (HttpServletResponse) response;
-            httpResponse.sendError(HttpServletResponse.SC_BAD_REQUEST, "유효하지 않는 JWT 서명 입니다.");
+            filterChain.doFilter(request, response); // 다음 Filter 로 이동
+        } catch (SecurityException | MalformedJwtException | IllegalArgumentException ex) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSIGNED));
+            response.getWriter().write(json);
         } catch (ExpiredJwtException e) {
-            HttpServletResponse httpResponse = (HttpServletResponse) response;
-            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "만료된 JWT token 입니다.");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_TIMEOUT));
+            response.getWriter().write(json);
         } catch (UnsupportedJwtException e) {
-            HttpServletResponse httpResponse = (HttpServletResponse) response;
-            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "지원되지 않는 JWT 토큰 입니다.");
-        } catch (IllegalArgumentException e) {
-            HttpServletResponse httpResponse = (HttpServletResponse) response;
-            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "잘못된 JWT 토큰 입니다.");
-        }catch (Exception ex) {
-            HttpServletResponse httpResponse = (HttpServletResponse) response;
-            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "오류 발생");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSUPPORTED));
+            response.getWriter().write(json);
+        } catch (Exception ex) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR));
+            response.getWriter().write(json);
         }
     }
 

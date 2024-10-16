@@ -16,7 +16,7 @@ public enum ResponseCode {
     SUCCESS_LOGIN(HttpStatus.OK, "로그인 성공"),
     SUCCESS_LOGOUT(HttpStatus.OK, "로그아웃 성공"),
 
-    SUCCESS_CREATE_USER(HttpStatus.OK, "회원가입 성공"),
+    SUCCESS_CREATE_USER(HttpStatus.OK, "회원 가입 성공"),
     SUCCESS_UPDATE_USER(HttpStatus.OK, "유저 수정 성공"),
     SUCCESS_SEARCH_USER(HttpStatus.OK, "유저 조회 성공"),
     SUCCESS_DELETE_USER(HttpStatus.OK, "유저 삭제 성공"),
@@ -42,6 +42,10 @@ public enum ResponseCode {
 
     // 토큰 관련 에러 코드
     FAIL_ENCODING(HttpStatus.BAD_REQUEST, "잘못된 인코딩을 사용하였습니다."),
+    TOKEN_UNSIGNED(HttpStatus.BAD_REQUEST, "유효하지 않는 JWT 서명 입니다."),
+    TOKEN_INVALID(HttpStatus.BAD_REQUEST, "잘못된 JWT 토큰 입니다."),
+    TOKEN_TIMEOUT(HttpStatus.UNAUTHORIZED, "만료된 JWT token 입니다."),
+    TOKEN_UNSUPPORTED(HttpStatus.UNAUTHORIZED, "지원되지 않는 JWT 토큰 입니다."),
 
     // 일정 관련 에러 코드
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미 삭제된 일정입니다."),

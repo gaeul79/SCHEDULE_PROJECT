@@ -134,12 +134,11 @@ public class UserController {
      * @since 2023-10-03
      */
     @PutMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> updateUser(@CookieValue(required = false, name = JwtUtil.AUTHORIZATION_HEADER) String tokenValue, @RequestBody ModifyUserRequestDto createUserRequestDto) {
-        System.out.println("tokenValue = " + tokenValue);
+    public ResponseEntity<ResponseStatusDto> updateUser(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody ModifyUserRequestDto createUserRequestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.updateUser(tokenValue, createUserRequestDto));
+                    .body(userService.updateUser(token, createUserRequestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
