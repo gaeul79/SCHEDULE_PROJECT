@@ -134,7 +134,8 @@ public class UserController {
      * @since 2023-10-03
      */
     @PutMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> updateUser(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String tokenValue, @RequestBody ModifyUserRequestDto createUserRequestDto) {
+    public ResponseEntity<ResponseStatusDto> updateUser(@CookieValue(required = false, name = JwtUtil.AUTHORIZATION_HEADER) String tokenValue, @RequestBody ModifyUserRequestDto createUserRequestDto) {
+        System.out.println("tokenValue = " + tokenValue);
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
