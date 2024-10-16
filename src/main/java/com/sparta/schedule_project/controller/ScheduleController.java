@@ -8,6 +8,7 @@ import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.schedule.ScheduleResponseDto;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
+import com.sparta.schedule_project.jwt.JwtUtil;
 import com.sparta.schedule_project.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,11 +36,15 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @PostMapping("/schedules")
-    public ResponseEntity<ResponseStatusDto> createSchedule(@RequestBody CreateScheduleRequestDto requestDto) {
+    public ResponseEntity<ResponseStatusDto> createSchedule(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody CreateScheduleRequestDto requestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(scheduleService.createSchedule(requestDto));
+                    .body(scheduleService.createSchedule(token, requestDto));
+        } catch (ResponseException ex) {
+            return ResponseEntity
+                    .status(ex.getResponseCode().getHttpStatus())
+                    .body(new ResponseStatusDto(ex.getResponseCode()));
         } catch (Exception ex) {
             return ResponseEntity
                     .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
@@ -77,11 +82,11 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @PutMapping("/schedules/{scheduleId}")
-    public ResponseEntity<ResponseStatusDto> updateSchedule(@RequestBody ModifyScheduleRequestDto requestDto) {
+    public ResponseEntity<ResponseStatusDto> updateSchedule(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody ModifyScheduleRequestDto requestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(scheduleService.updateSchedule(requestDto));
+                    .body(scheduleService.updateSchedule(token, requestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -102,11 +107,11 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @DeleteMapping("/schedules/{scheduleId}")
-    public ResponseEntity<ResponseStatusDto> deleteSchedule(@RequestBody RemoveScheduleRequestDto requestDto) {
+    public ResponseEntity<ResponseStatusDto> deleteSchedule(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody RemoveScheduleRequestDto requestDto) {
         try {
            return ResponseEntity
                    .status(HttpStatus.OK)
-                   .body(scheduleService.deleteSchedule(requestDto));
+                   .body(scheduleService.deleteSchedule(token, requestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())

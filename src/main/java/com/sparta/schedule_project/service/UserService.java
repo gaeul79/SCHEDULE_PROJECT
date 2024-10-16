@@ -1,6 +1,6 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.jwt.TestData;
+import com.sparta.schedule_project.jwt.CookieManager;
 import com.sparta.schedule_project.dto.request.user.CreateUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.ModifyUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.RemoveUserRequestDto;
@@ -11,10 +11,13 @@ import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * 사용자 관리 서비스 클래스
@@ -28,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CookieManager cookieManager;
 
     /**
      * 로그인을 처리합니다.
@@ -37,10 +41,11 @@ public class UserService {
      * @author 김현정
      * @since 2024-10-03
      */
-    public ResponseStatusDto login(SearchUserRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto login(HttpServletResponse res, SearchUserRequestDto requestDto) throws ResponseException, UnsupportedEncodingException {
         User user = requestDto.convertDtoToEntity(requestDto);
         User findUser = userRepository.findByEmail(user.getEmail());
         checkLoginUserInputParam(user, findUser);
+        cookieManager.addJwtToCookie(findUser, res);
         return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
     }
 
@@ -97,7 +102,7 @@ public class UserService {
     public void checkCreateUser(User user) throws ResponseException {
         User findUser = userRepository.findByEmail(user.getEmail());
         if (findUser != null) // 중복 이메일 확인
-            throw new ResponseException(ResponseCode.USER_NAME_DUPLICATED);
+            throw new ResponseException(ResponseCode.USER_EMAIL_DUPLICATED);
     }
 
     /**
@@ -108,10 +113,10 @@ public class UserService {
      * @author 김현정
      * @since 2024-10-03
      */
-    public UserResponseDto searchUser(SearchUserRequestDto requestDto) throws ResponseException {
+    public UserResponseDto searchUser(String token, SearchUserRequestDto requestDto) throws ResponseException {
         User user = requestDto.convertDtoToEntity(requestDto);
         User findUser = userRepository.findBySeq(user.getSeq());
-        checkAccess(findUser);
+        checkUser(token, findUser);
         return UserResponseDto.createResponseDto(findUser, ResponseCode.SUCCESS_SEARCH_USER);
     }
 
@@ -124,14 +129,12 @@ public class UserService {
      * @since 2024-10-03
      */
     @Transactional
-    public ResponseStatusDto updateUser(ModifyUserRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto updateUser(String token, ModifyUserRequestDto requestDto) throws ResponseException {
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         User user = requestDto.convertDtoToEntity(requestDto);
-
+        checkUser(token, user);
         User updateUser = userRepository.findBySeq(user.getSeq());
-        checkAccess(updateUser);
         updateUser.update(user);
-
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
     }
 
@@ -144,18 +147,20 @@ public class UserService {
      * @since 2024-10-03
      */
     @Transactional
-    public ResponseStatusDto deleteUser(RemoveUserRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto deleteUser(String token, RemoveUserRequestDto requestDto) throws ResponseException {
         User user = requestDto.convertDtoToEntity(requestDto);
-        User deleteUser = userRepository.findBySeq(user.getSeq());
-        checkAccess(deleteUser);
-        userRepository.delete(deleteUser);
+        checkUser(token, user);
+        userRepository.delete(user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);
     }
 
-    private void checkAccess(User user) throws ResponseException {
-        if(user == null)
+    private void checkUser(String token, User user) throws ResponseException {
+        User loginUser = cookieManager.getUserFromJwtToken(token);
+        User searchUser = userRepository.findBySeq(user.getSeq());
+        if(searchUser == null)
             throw new ResponseException(ResponseCode.USER_NOT_FOUND);
-        else if (TestData.testSeq != user.getSeq())
+
+        if (!loginUser.getEmail().equals(searchUser.getEmail()))
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }

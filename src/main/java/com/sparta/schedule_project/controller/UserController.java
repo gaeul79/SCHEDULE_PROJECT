@@ -8,11 +8,15 @@ import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.user.UserResponseDto;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
+import com.sparta.schedule_project.jwt.JwtUtil;
 import com.sparta.schedule_project.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * 회원 관리 컨트롤러 클래스입니다.
@@ -35,11 +39,15 @@ public class UserController {
      * @since 2023-10-03
      */
     @PostMapping("/login")
-    public ResponseEntity<ResponseStatusDto> login(@RequestBody SearchUserRequestDto createUserRequestDto) {
+    public ResponseEntity<ResponseStatusDto> login(HttpServletResponse res, @RequestBody SearchUserRequestDto createUserRequestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.login(createUserRequestDto));
+                    .body(userService.login(res, createUserRequestDto));
+        } catch (UnsupportedEncodingException ex) {
+            return ResponseEntity
+                    .status(ResponseCode.FAIL_ENCODING.getHttpStatus())
+                    .body(new ResponseStatusDto(ResponseCode.FAIL_ENCODING, ex.getMessage()));
         } catch (Exception ex) {
             return ResponseEntity
                     .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
@@ -75,7 +83,7 @@ public class UserController {
      * @author 김현정
      * @since 2023-10-03
      */
-    @PostMapping("/users")
+    @PostMapping("/signup")
     public ResponseEntity<ResponseStatusDto> createUser(@RequestBody CreateUserRequestDto createUserRequestDto) {
         try {
             return ResponseEntity
@@ -101,11 +109,11 @@ public class UserController {
      * @since 2023-10-03
      */
     @GetMapping("/users")
-    public ResponseEntity<UserResponseDto> getUserInfo(@RequestBody SearchUserRequestDto createUserRequestDto) {
+    public ResponseEntity<UserResponseDto> getUserInfo(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody SearchUserRequestDto createUserRequestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.searchUser(createUserRequestDto));
+                    .body(userService.searchUser(token, createUserRequestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -126,11 +134,11 @@ public class UserController {
      * @since 2023-10-03
      */
     @PutMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> updateUser(@RequestBody ModifyUserRequestDto createUserRequestDto) {
+    public ResponseEntity<ResponseStatusDto> updateUser(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String tokenValue, @RequestBody ModifyUserRequestDto createUserRequestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.updateUser(createUserRequestDto));
+                    .body(userService.updateUser(tokenValue, createUserRequestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -151,11 +159,11 @@ public class UserController {
      * @since 2023-10-03
      */
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> deleteUser(@RequestBody RemoveUserRequestDto createUserRequestDto) {
+    public ResponseEntity<ResponseStatusDto> deleteUser(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody RemoveUserRequestDto createUserRequestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.deleteUser(createUserRequestDto));
+                    .body(userService.deleteUser(token, createUserRequestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())

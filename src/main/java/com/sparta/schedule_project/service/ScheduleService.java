@@ -1,7 +1,8 @@
 package com.sparta.schedule_project.service;
 
+import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.jwt.AuthType;
-import com.sparta.schedule_project.jwt.TestData;
+import com.sparta.schedule_project.jwt.CookieManager;
 import com.sparta.schedule_project.infra.WeatherApiService;
 import com.sparta.schedule_project.dto.request.schedule.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.ModifyScheduleRequestDto;
@@ -13,6 +14,7 @@ import com.sparta.schedule_project.entity.Schedule;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.ScheduleRepository;
+import com.sparta.schedule_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
-    private final ScheduleRepository scheduleRepository;
     private final WeatherApiService weatherApiService;
+    private final CookieManager cookieManager;
+    private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
     /**
      * 일정 생성
@@ -38,9 +42,10 @@ public class ScheduleService {
      * @author 김현정
      * @since 2024-10-03
      */
-    public ResponseStatusDto createSchedule(CreateScheduleRequestDto requestDto) {
+    public ResponseStatusDto createSchedule(String token, CreateScheduleRequestDto requestDto) throws ResponseException {
         String weather = weatherApiService.getTodayWeather();
-        Schedule schedule = requestDto.convertDtoToEntity(requestDto, TestData.testSeq, weather);
+        User user = getLoginUserInfo(token);
+        Schedule schedule = requestDto.convertDtoToEntity(requestDto, user.getSeq(), weather);
         scheduleRepository.save(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
     }
@@ -68,12 +73,11 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     @Transactional
-    public ResponseStatusDto updateSchedule(ModifyScheduleRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto updateSchedule(String token, ModifyScheduleRequestDto requestDto) throws ResponseException {
         String weather = weatherApiService.getTodayWeather();
         Schedule schedule = requestDto.convertDtoToEntity(requestDto, weather);
         Schedule updateSchedule = scheduleRepository.findBySeq(schedule.getUser().getSeq());
-        checkAccess(updateSchedule);
-
+        checkValue(token, updateSchedule);
         updateSchedule.update(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE);
     }
@@ -86,10 +90,10 @@ public class ScheduleService {
      * @author 김현정
      * @since 2024-10-03
      */
-    public ResponseStatusDto deleteSchedule(RemoveScheduleRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto deleteSchedule(String token, RemoveScheduleRequestDto requestDto) throws ResponseException {
         Schedule schedule = requestDto.convertDtoToEntity(requestDto);
         Schedule deleteSchedule = scheduleRepository.findBySeq(schedule.getUser().getSeq());
-        checkAccess(deleteSchedule);
+        checkValue(token, deleteSchedule);
         scheduleRepository.delete(deleteSchedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE);
     }
@@ -101,12 +105,23 @@ public class ScheduleService {
      * @author 김현정
      * @since 2024-10-04
      */
-    private void checkAccess(Schedule schedule) throws ResponseException {
+    private void checkValue(String token, Schedule schedule) throws ResponseException {
+        User loginUser = getLoginUserInfo(token);
         if(schedule == null)
             throw new ResponseException(ResponseCode.SCHEDULE_NOT_FOUND);
-        else if(TestData.testAuth != AuthType.ADMIN)
+        else if(loginUser.getAuth() != AuthType.ADMIN ||
+                loginUser.getSeq() != schedule.getUser().getSeq())
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
-        else if (TestData.testSeq != schedule.getUser().getSeq())
+    }
+
+    private User getLoginUserInfo(String token) throws ResponseException {
+        User loginUser = cookieManager.getUserFromJwtToken(token);
+        User searchUser = userRepository.findByEmail(loginUser.getEmail());
+        if(searchUser == null)
+            throw new ResponseException(ResponseCode.USER_NOT_FOUND);
+
+        if (!loginUser.getEmail().equals(searchUser.getEmail()))
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
+        return loginUser;
     }
 }

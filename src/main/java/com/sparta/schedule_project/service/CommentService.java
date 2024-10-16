@@ -1,7 +1,8 @@
 package com.sparta.schedule_project.service;
 
+import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.jwt.AuthType;
-import com.sparta.schedule_project.jwt.TestData;
+import com.sparta.schedule_project.jwt.CookieManager;
 import com.sparta.schedule_project.dto.request.comment.CreateCommentRequestDto;
 import com.sparta.schedule_project.dto.request.comment.ModifyCommentRequestDto;
 import com.sparta.schedule_project.dto.request.comment.RemoveCommentRequestDto;
@@ -12,6 +13,7 @@ import com.sparta.schedule_project.entity.Comment;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.CommentRepository;
+import com.sparta.schedule_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final CookieManager cookieManager;
 
     /**
      * 댓글 생성
@@ -30,8 +34,9 @@ public class CommentService {
      * @author 김현정
      * @since 2024-10-15
      */
-    public ResponseStatusDto createComment(CreateCommentRequestDto requestDto) {
-        Comment comment = requestDto.convertDtoToEntity(requestDto);
+    public ResponseStatusDto createComment(String token, CreateCommentRequestDto requestDto) throws ResponseException {
+        User user = getLoginUserInfo(token);
+        Comment comment = requestDto.convertDtoToEntity(requestDto, user);
         commentRepository.save(comment);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_COMMENT);
     }
@@ -59,11 +64,11 @@ public class CommentService {
      * @since 2024-10-15
      */
     @Transactional
-    public ResponseStatusDto updateComment(ModifyCommentRequestDto requestDto) throws ResponseException {
-        Comment updateInfo = requestDto.convertDtoToEntity(requestDto);
-        Comment comment = commentRepository.findBySeq(updateInfo.getSeq());
-        checkAccess(comment);
-        comment.update(updateInfo);
+    public ResponseStatusDto updateComment(String token, ModifyCommentRequestDto requestDto) throws ResponseException {
+        Comment updateComment = requestDto.convertDtoToEntity(requestDto);
+        Comment comment = commentRepository.findBySeq(updateComment.getSeq());
+        checkValue(token, comment);
+        comment.update(updateComment);
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_COMMENT);
     }
 
@@ -75,9 +80,9 @@ public class CommentService {
      * @author 김현정
      * @since 2024-10-15
      */
-    public ResponseStatusDto deleteSchedule(RemoveCommentRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto deleteSchedule(String token, RemoveCommentRequestDto requestDto) throws ResponseException {
         Comment comment = requestDto.convertDtoToEntity(requestDto);
-        checkAccess(comment);
+        checkValue(token, comment);
         commentRepository.delete(comment);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_COMMENT);
     }
@@ -90,12 +95,23 @@ public class CommentService {
      * @author 김현정
      * @since 2024-10-15
      */
-    private void checkAccess(Comment comment) throws ResponseException {
+    private void checkValue(String token, Comment comment) throws ResponseException {
+        User loginUser = getLoginUserInfo(token);
         if(comment == null)
             throw new ResponseException(ResponseCode.COMMENT_NOT_FOUND);
-        else if(TestData.testAuth != AuthType.ADMIN)
+        else if(loginUser.getAuth() != AuthType.ADMIN ||
+                loginUser.getSeq() != comment.getUser().getSeq() )
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
-        else if (TestData.testSeq != comment.getUser().getSeq())
+    }
+
+    private User getLoginUserInfo(String token) throws ResponseException {
+        User loginUser = cookieManager.getUserFromJwtToken(token);
+        User searchUser = userRepository.findByEmail(loginUser.getEmail());
+        if(searchUser == null)
+            throw new ResponseException(ResponseCode.USER_NOT_FOUND);
+
+        if (!loginUser.getEmail().equals(searchUser.getEmail()))
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
+        return loginUser;
     }
 }

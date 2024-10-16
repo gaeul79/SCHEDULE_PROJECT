@@ -8,6 +8,7 @@ import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.comment.CommentResponseDto;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
+import com.sparta.schedule_project.jwt.JwtUtil;
 import com.sparta.schedule_project.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,11 +30,15 @@ public class CommentController {
      * @since 2024-10-15
      */
     @PostMapping("/comments")
-    public ResponseEntity<ResponseStatusDto> createComment(@RequestBody CreateCommentRequestDto requestDto) {
+    public ResponseEntity<ResponseStatusDto> createComment(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody CreateCommentRequestDto requestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(commentService.createComment(requestDto));
+                    .body(commentService.createComment(token, requestDto));
+        } catch (ResponseException ex) {
+            return ResponseEntity
+                    .status(ex.getResponseCode().getHttpStatus())
+                    .body(new ResponseStatusDto(ex.getResponseCode()));
         } catch (Exception ex) {
             return ResponseEntity
                     .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
@@ -71,11 +76,11 @@ public class CommentController {
      * @since 2024-10-15
      */
     @PutMapping("/comments/{commentSeq}")
-    public ResponseEntity<ResponseStatusDto> updateComment(@RequestBody ModifyCommentRequestDto requestDto) {
+    public ResponseEntity<ResponseStatusDto> updateComment(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody ModifyCommentRequestDto requestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(commentService.updateComment(requestDto));
+                    .body(commentService.updateComment(token, requestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -96,11 +101,11 @@ public class CommentController {
      * @since 2024-10-15
      */
     @DeleteMapping("/comments/{commentSeq}")
-    public ResponseEntity<ResponseStatusDto> deleteComment(@RequestBody RemoveCommentRequestDto requestDto) {
+    public ResponseEntity<ResponseStatusDto> deleteComment(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody RemoveCommentRequestDto requestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(commentService.deleteSchedule(requestDto));
+                    .body(commentService.deleteSchedule(token, requestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
