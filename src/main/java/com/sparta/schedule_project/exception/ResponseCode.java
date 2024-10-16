@@ -47,7 +47,7 @@ public enum ResponseCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "이미 삭제된 댓글입니다."),
 
     // 권한 관련 에러 코드
-    INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "권한이 없습니다");
+    INVALID_PERMISSION(HttpStatus.FORBIDDEN, "권한이 없습니다");
 
     private final HttpStatus httpStatus;
     private final String message;
