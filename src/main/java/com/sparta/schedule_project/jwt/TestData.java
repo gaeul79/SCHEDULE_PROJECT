@@ -1,4 +1,4 @@
-package com.sparta.schedule_project.common;
+package com.sparta.schedule_project.jwt;
 
 public class TestData {
     public final static int testSeq = 1;

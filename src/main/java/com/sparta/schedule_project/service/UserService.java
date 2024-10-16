@@ -1,6 +1,6 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.common.TestData;
+import com.sparta.schedule_project.jwt.TestData;
 import com.sparta.schedule_project.dto.request.user.CreateUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.ModifyUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.RemoveUserRequestDto;

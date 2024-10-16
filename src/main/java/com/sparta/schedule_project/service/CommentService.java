@@ -1,7 +1,7 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.common.AuthType;
-import com.sparta.schedule_project.common.TestData;
+import com.sparta.schedule_project.jwt.AuthType;
+import com.sparta.schedule_project.jwt.TestData;
 import com.sparta.schedule_project.dto.request.comment.CreateCommentRequestDto;
 import com.sparta.schedule_project.dto.request.comment.ModifyCommentRequestDto;
 import com.sparta.schedule_project.dto.request.comment.RemoveCommentRequestDto;

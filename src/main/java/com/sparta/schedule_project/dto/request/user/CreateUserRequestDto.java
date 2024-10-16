@@ -1,13 +1,12 @@
 package com.sparta.schedule_project.dto.request.user;
 
-import com.sparta.schedule_project.common.AuthType;
+import com.sparta.schedule_project.jwt.AuthType;
 import com.sparta.schedule_project.entity.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**

@@ -1,27 +1,22 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.common.AuthType;
-import com.sparta.schedule_project.common.TestData;
-import com.sparta.schedule_project.common.infra.WeatherApiService;
+import com.sparta.schedule_project.jwt.AuthType;
+import com.sparta.schedule_project.jwt.TestData;
+import com.sparta.schedule_project.infra.WeatherApiService;
 import com.sparta.schedule_project.dto.request.schedule.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.ModifyScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.RemoveScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.SearchScheduleRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.schedule.ScheduleResponseDto;
-import com.sparta.schedule_project.entity.Comment;
 import com.sparta.schedule_project.entity.Schedule;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 /**
  * 일정 관리 서비스 클래스

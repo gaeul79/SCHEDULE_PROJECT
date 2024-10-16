@@ -1,6 +1,6 @@
 package com.sparta.schedule_project.entity;
 
-import com.sparta.schedule_project.common.AuthType;
+import com.sparta.schedule_project.jwt.AuthType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

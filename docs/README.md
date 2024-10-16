@@ -53,18 +53,23 @@
  │   └── 'java.com.sparta.schedule_project'                     # 일정 관리 프로젝트 
  │        ├── ScheduleProjectApplication.java                   # 시작 함수가 있는 class 
  │        ├── 'infra'                                           # 외부 API 연동과 관련된 폴더와 클래스들을 모아놓은 폴더
- │        │   └── ?????.java                                    # ????
- │        ├── 'config'                                          # 프로젝트 설정 관련 class들을 모아놓은 폴더
- │        │   └── PasswordConfig.java                           # 비밀번호 관련 설정 (암호화 등)을 담당하는 class
+ │        │    └── WeatherApiService.java                       # 현재 날씨를 외부 API로부터 받아도는 서비스 class
  │        │
+ │        ├── 'config'                                          # 프로젝트 설정 관련 class들을 모아놓은 폴더
+ │        │    └── PasswordConfig.java                          # 비밀번호 관련 설정 (암호화 등)을 담당하는 class
+ │        │
+ │        ├── 'common'                                          # 공통으로 사용되는 클래스들을 모아놓은 폴더
+ │        │    ├── UserAuth.java                                # 사용자 권한 Enum
+ │        │    └── JwtUtil.java                                 # JWT 토큰 생성 및 검증을 수행하는 class
+ │        │ 
  │        ├── 'filter'                                          # 필터들을 모아놓은 폴더
- │        │   ├── AuthFilter.java`                              # 인증 필터 (로그인 여부 확인 등)
- │        │   └── LoggingFilter.java                            # 로그 필터 (요청/응답 로그 기록)
+ │        │    ├── AuthFilter.java`                             # 인증 필터 (로그인 여부 확인 등)
+ │        │    └── LoggingFilter.java                           # 로그 필터 (요청/응답 로그 기록)
  │        │
  │        ├── 'controller'                                      # 사용자 요청을 처리하기 위한 컨트롤러를 모아놓은 폴더 
- │        │   ├── ScheduleController.java`                      # 일정 관련 요청을 처리하는 컨트롤러 class 
- │        │   ├── CommentController.java`                       # 댓글 관련 요청을 처리하는 컨트롤러 class 
- │        │   └── UserController.java                           # 사용자 관련 요청을 처리하는 컨트롤러 class 
+ │        │    ├── ScheduleController.java`                     # 일정 관련 요청을 처리하는 컨트롤러 class 
+ │        │    ├── CommentController.java`                      # 댓글 관련 요청을 처리하는 컨트롤러 class 
+ │        │    └── UserController.java                          # 사용자 관련 요청을 처리하는 컨트롤러 class 
  │        │
  │        ├── 'dto'                                             # 데이터를 주고받기 위한 객체를 모아놓은 폴더 
  │        │   ├── 'request'                                     # 서버에 무언가 요청할때 사용되는 폴더 및 class들을 모아놓은 폴더
@@ -100,11 +105,6 @@
  │        │       └── 'comment'                                 # 서버로부터 댓글 요청 처리 결과를 받을 때 사용하는 class들을 모아놓은 폴더
  │        │            ├── CommentResponseDto.java              # 서버로부터 댓글 요청 처리 결과를 받을 때 사용하는 class    
  │        │            └── CommentDto.java                      # 댓글 dto  
- │        │            
- │        ├── 'common'                                          # 공통으로 사용되는 클래스들을 모아놓은 폴더
- │        │    ├── UserAuth.java                                # 사용자 권한 Enum
- │        │    ├── JwtUtil.java                                 # JWT 토큰 생성 및 검증을 수행하는 class
- │        │    └── ValidationUtil.java                          # 데이터 유효성을 검증하는 class
  │        │         
  │        ├── 'entity'                                          # DB와 매핑되는 엔티티 클래스들을 모아놓은 폴더 
  │        │    ├── Comment.java                                 # 댓글 entity 
