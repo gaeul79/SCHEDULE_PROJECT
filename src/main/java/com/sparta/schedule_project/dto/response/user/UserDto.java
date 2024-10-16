@@ -1,6 +1,6 @@
 package com.sparta.schedule_project.dto.response.user;
 
-import com.sparta.schedule_project.jwt.AuthType;
+import com.sparta.schedule_project.cookie.AuthType;
 import com.sparta.schedule_project.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

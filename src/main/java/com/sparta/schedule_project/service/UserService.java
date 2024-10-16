@@ -1,6 +1,6 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.jwt.CookieManager;
+import com.sparta.schedule_project.cookie.CookieManager;
 import com.sparta.schedule_project.dto.request.user.CreateUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.ModifyUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.RemoveUserRequestDto;

@@ -1,6 +1,6 @@
 package com.sparta.schedule_project.dto.request.user;
 
-import com.sparta.schedule_project.jwt.AuthType;
+import com.sparta.schedule_project.cookie.AuthType;
 import com.sparta.schedule_project.entity.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;

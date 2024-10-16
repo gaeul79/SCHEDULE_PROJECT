@@ -1,4 +1,4 @@
-package com.sparta.schedule_project.jwt;
+package com.sparta.schedule_project.cookie;
 
 import com.sparta.schedule_project.entity.User;
 import io.jsonwebtoken.Claims;

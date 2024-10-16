@@ -1,4 +1,4 @@
-package com.sparta.schedule_project.jwt;
+package com.sparta.schedule_project.cookie;
 
 public enum AuthType {
     USER,   // 사용자 권한

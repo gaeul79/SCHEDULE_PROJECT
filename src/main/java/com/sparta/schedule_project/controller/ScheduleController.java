@@ -8,7 +8,7 @@ import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.schedule.ScheduleResponseDto;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.jwt.JwtUtil;
+import com.sparta.schedule_project.cookie.JwtUtil;
 import com.sparta.schedule_project.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

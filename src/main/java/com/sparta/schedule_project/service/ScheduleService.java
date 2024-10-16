@@ -1,8 +1,8 @@
 package com.sparta.schedule_project.service;
 
 import com.sparta.schedule_project.entity.User;
-import com.sparta.schedule_project.jwt.AuthType;
-import com.sparta.schedule_project.jwt.CookieManager;
+import com.sparta.schedule_project.cookie.AuthType;
+import com.sparta.schedule_project.cookie.CookieManager;
 import com.sparta.schedule_project.infra.WeatherApiService;
 import com.sparta.schedule_project.dto.request.schedule.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.ModifyScheduleRequestDto;
