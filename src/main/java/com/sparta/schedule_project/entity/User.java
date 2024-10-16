@@ -13,10 +13,8 @@ import java.util.List;
 /**
  * 회원 정보를 담는 Entity 클래스
  *
- * @author 김현정
  * @since 2024-10-03
  */
-
 @Getter
 @Builder
 @NoArgsConstructor

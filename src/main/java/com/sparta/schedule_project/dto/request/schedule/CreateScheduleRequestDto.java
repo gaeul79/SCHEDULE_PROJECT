@@ -8,12 +8,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 일정 정보를 요청할 때 사용하는 DTO 클래스
+ * 일정 등록 요청 DTO 클래스
  *
  * @author 김현정
- * @since 2024-10-03
+ * @since 2024-10-18
  */
-
 @Getter
 @NoArgsConstructor
 public class CreateScheduleRequestDto {
@@ -25,6 +24,15 @@ public class CreateScheduleRequestDto {
     @Max(value = 300, message = "내용은 300자 이상 입력할 수 없습니다.")
     private String content;
 
+    /**
+     * DTO 객체를 Schedule 엔티티 객체로 변환
+     *
+     * @param scheduleDto 일정 생성 요청 DTO
+     * @param userSeq     사용자 번호
+     * @param weather     날씨 정보
+     * @return 생성된 Schedule 엔티티 객체
+     * @since 2024-10-18
+     */
     public Schedule convertDtoToEntity(CreateScheduleRequestDto scheduleDto, int userSeq, String weather) {
         return Schedule.builder()
                 .user(User.builder().seq(userSeq).build())

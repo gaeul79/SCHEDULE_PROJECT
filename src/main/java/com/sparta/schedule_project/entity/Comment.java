@@ -7,6 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Pageable;
 
+/**
+ * 댓글에 대한 댓글 엔티티 클래스
+ *
+ * @since 2024-10-18
+ */
 @Builder
 @Getter
 @NoArgsConstructor

@@ -6,11 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * 일정 데이터를 관리하는 레포지토리 클래스
- * JDBC를 사용하여 데이터베이스와 상호작용합니다.
+ * 일정 엔티티를 위한 JPA 레포지토리입니다.
  *
- * @author 김현정
- * @since 2024-10-03
+ * @since 2024-10-17
  */
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
 

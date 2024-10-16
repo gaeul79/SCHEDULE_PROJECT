@@ -21,7 +21,6 @@ import java.io.UnsupportedEncodingException;
 /**
  * 회원 관리 컨트롤러 클래스입니다.
  *
- * @author 김현정 (수정 필요)
  * @since 2024-10-03
  */
 @RestController
@@ -33,9 +32,9 @@ public class UserController {
     /**
      * 로그인 API
      *
+     * @param res                  HttpServletResponse 객체
      * @param createUserRequestDto 로그인 정보 (JSON 형태)
      * @return 로그인 처리 결과
-     * @author 김현정
      * @since 2023-10-03
      */
     @PostMapping("/login")
@@ -59,12 +58,12 @@ public class UserController {
      * 로그아웃 API
      *
      * @return 로그아웃 처리 결과
-     * @author 김현정
      * @since 2023-10-03
      */
     @PostMapping("/logout")
     public ResponseEntity<ResponseStatusDto> logout() {
         try {
+            // TODO. khj 쿠키 해제 필요
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(userService.logout());
@@ -80,7 +79,6 @@ public class UserController {
      *
      * @param createUserRequestDto 회원가입 정보 (JSON 형태)
      * @return 회원가입 처리 결과
-     * @author 김현정
      * @since 2023-10-03
      */
     @PostMapping("/signup")
@@ -103,9 +101,9 @@ public class UserController {
     /**
      * 회원 정보 조회 API
      *
+     * @param token                요청 헤더의 쿠키에 담긴 인증 토큰
      * @param createUserRequestDto 회원 정보 조회 정보 (JSON 형태)
      * @return 회원 정보 조회 결과
-     * @author 김현정
      * @since 2023-10-03
      */
     @GetMapping("/users")
@@ -128,9 +126,9 @@ public class UserController {
     /**
      * 회원 정보 수정 API
      *
+     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
      * @param createUserRequestDto 회원 정보 수정 정보 (JSON 형태)
      * @return 회원 정보 수정 결과
-     * @author 김현정
      * @since 2023-10-03
      */
     @PutMapping("/users/{userId}")
@@ -153,9 +151,9 @@ public class UserController {
     /**
      * 회원 정보 삭제 API
      *
+     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
      * @param createUserRequestDto 회원 정보 삭제 정보 (JSON 형태)
      * @return 회원 정보 삭제 결과
-     * @author 김현정
      * @since 2023-10-03
      */
     @DeleteMapping("/users/{userId}")

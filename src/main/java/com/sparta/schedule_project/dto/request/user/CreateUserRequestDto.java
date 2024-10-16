@@ -10,18 +10,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 사용자 정보를 요청할 때 사용하는 DTO 클래스
+ * 회원가입 요청 DTO 클래스
  *
- * @author 김현정
- * @since 2024-10-03
+ * @since 2024-10-18
  */
-
 @Data
 @NoArgsConstructor
 public class CreateUserRequestDto {
     @NotBlank(message = "이메일을 입력해주세요.")
     @Pattern(regexp = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-z]+$",
-             message = "올바른 형식의 이메일을 입력해주세요")
+            message = "올바른 형식의 이메일을 입력해주세요")
     private String email;
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
@@ -35,6 +33,13 @@ public class CreateUserRequestDto {
     @NotBlank(message = "권한은 공백일 수 없습니다.")
     private AuthType auth;
 
+    /**
+     * DTO 객체를 User 엔티티 객체로 변환합니다.
+     *
+     * @param userDto 회원가입 요청 DTO
+     * @return 생성된 User 엔티티 객체
+     * @since 2024-10-18
+     */
     public User convertDtoToEntity(CreateUserRequestDto userDto) {
         return User.builder()
                 .password(userDto.getPassword())

@@ -23,7 +23,6 @@ import java.io.UnsupportedEncodingException;
  * 사용자 관리 서비스 클래스
  * UserRepository 이용하여 사용자를 관리합니다.
  *
- * @author 김현정
  * @since 2024-10-03
  */
 @Service
@@ -36,9 +35,9 @@ public class UserService {
     /**
      * 로그인을 처리합니다.
      *
+     * @param res        HttpServletResponse 객체
      * @param requestDto 로그인 요청 정보
      * @return 로그인 결과 (ResponseStatusDto)
-     * @author 김현정
      * @since 2024-10-03
      */
     public ResponseStatusDto login(HttpServletResponse res, SearchUserRequestDto requestDto) throws ResponseException, UnsupportedEncodingException {
@@ -52,10 +51,9 @@ public class UserService {
     /**
      * 로그인 시 유저 정보를 검사합니다.
      *
-     * @param inputUser  입력된 유저 정보
-     * @param findUser 조회된 유저 정보
+     * @param inputUser 입력된 유저 정보
+     * @param findUser  조회된 유저 정보
      * @throws ResponseException 유저 정보가 올바르지 않은 경우 예외를 발생시킵니다.
-     * @author 김현정
      * @since 2024-10-03
      */
     public void checkLoginUserInputParam(User inputUser, User findUser) throws ResponseException {
@@ -66,10 +64,9 @@ public class UserService {
     }
 
     /**
-     * 로그아웃을 처리합니다.
+     * 로그아웃
      *
      * @return 로그아웃 결과 (ResponseStatusDto)
-     * @author 김현정
      * @since 2024-10-03
      */
     public ResponseStatusDto logout() {
@@ -82,7 +79,6 @@ public class UserService {
      *
      * @param requestDto 회원가입 요청 정보
      * @return 회원가입 결과 (ResponseStatusDto)
-     * @author 김현정
      * @since 2024-10-03
      */
     public ResponseStatusDto createUser(CreateUserRequestDto requestDto) throws ResponseException {
@@ -98,6 +94,7 @@ public class UserService {
      *
      * @param user 생성하려는 사용자 정보
      * @throws ResponseException 아이디가 중복될 경우 발생
+     * @since 2024-10-07
      */
     public void checkCreateUser(User user) throws ResponseException {
         User findUser = userRepository.findByEmail(user.getEmail());
@@ -108,9 +105,9 @@ public class UserService {
     /**
      * 회원 정보를 조회합니다.
      *
+     * @param token      JWT 토큰 값
      * @param requestDto 회원 조회 요청 정보
      * @return 회원 조회 결과 (UserResponseDto)
-     * @author 김현정
      * @since 2024-10-03
      */
     public UserResponseDto searchUser(String token, SearchUserRequestDto requestDto) throws ResponseException {
@@ -123,9 +120,9 @@ public class UserService {
     /**
      * 회원 정보를 수정합니다.
      *
+     * @param token      JWT 토큰 값
      * @param requestDto 회원 정보 수정 요청 정보
      * @return 회원 정보 수정 결과 (ResponseStatusDto)
-     * @author 김현정
      * @since 2024-10-03
      */
     @Transactional
@@ -141,9 +138,9 @@ public class UserService {
     /**
      * 회원을 삭제합니다.
      *
+     * @param token      JWT 토큰 값
      * @param requestDto 회원 삭제 요청 정보
      * @return 회원 삭제 결과 (ResponseStatusDto)
-     * @author 김현정
      * @since 2024-10-03
      */
     @Transactional
@@ -154,10 +151,18 @@ public class UserService {
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);
     }
 
+    /**
+     * JWT 토큰과 사용자 정보를 검증합니다.
+     *
+     * @param token JWT 토큰 값
+     * @param user  사용자 정보
+     * @throws ResponseException 토큰이 유효하지 않거나, 사용자가 존재하지 않거나, 권한이 부족한 경우 예외 발생
+     * @since 2024-10-17
+     */
     private void checkUser(String token, User user) throws ResponseException {
         User loginUser = cookieManager.getUserFromJwtToken(token);
         User searchUser = userRepository.findBySeq(user.getSeq());
-        if(searchUser == null)
+        if (searchUser == null)
             throw new ResponseException(ResponseCode.USER_NOT_FOUND);
 
         if (!loginUser.getEmail().equals(searchUser.getEmail()))

@@ -24,9 +24,9 @@ public class CommentController {
     /**
      * 댓글 등록 API
      *
+     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
      * @param requestDto 댓글 등록 정보 (JSON 형태)
      * @return 등록 결과 (ResponseStatusDto)
-     * @author 김현정
      * @since 2024-10-15
      */
     @PostMapping("/comments")
@@ -70,9 +70,9 @@ public class CommentController {
     /**
      * 댓글 수정 API
      *
+     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
      * @param requestDto 댓글 수정 정보 (JSON 형태)
      * @return 수정 결과 (ResponseStatusDto)
-     * @author 김현정
      * @since 2024-10-15
      */
     @PutMapping("/comments/{commentSeq}")
@@ -95,9 +95,9 @@ public class CommentController {
     /**
      * 댓글 삭제 API
      *
+     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
      * @param requestDto 댓글 삭제 정보 (JSON 형태)
      * @return 삭제 결과 (ResponseStatusDto)
-     * @author 김현정
      * @since 2024-10-15
      */
     @DeleteMapping("/comments/{commentSeq}")

@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 /**
  * API 응답 시 사용되는 상태 코드와 메시지를 정의하는 enum
  *
- * @author 김현정
  * @since 2024-10-03
  */
 @Getter

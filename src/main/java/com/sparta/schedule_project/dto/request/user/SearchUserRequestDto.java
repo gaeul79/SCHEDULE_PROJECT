@@ -7,12 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 사용자 정보를 요청할 때 사용하는 DTO 클래스
+ * 유저 정보 조회 요청 DTO 클래스
  *
- * @author 김현정
- * @since 2024-10-03
+ * @since 2024-10-18
  */
-
 @Data
 @NoArgsConstructor
 public class SearchUserRequestDto {
@@ -20,6 +18,13 @@ public class SearchUserRequestDto {
     private String email;
     private String password;
 
+    /**
+     * DTO 객체를 User 엔티티 객체로 변환합니다.
+     *
+     * @param userDto 회원가입 요청 DTO
+     * @return 생성된 User 엔티티 객체
+     * @since 2024-10-18
+     */
     public User convertDtoToEntity(SearchUserRequestDto userDto) {
         return User.builder()
                 .seq(userDto.getUserSeq())

@@ -30,9 +30,9 @@ public class ScheduleController {
     /**
      * 일정 등록 API
      *
+     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
      * @param requestDto 일정 등록 정보 (JSON 형태)
      * @return 등록 결과 (ResponseStatusDto)
-     * @author 김현정
      * @since 2024-10-03
      */
     @PostMapping("/schedules")
@@ -57,7 +57,6 @@ public class ScheduleController {
      *
      * @param requestDto 일정 조회 정보 (JSON 형태)
      * @return 조회 결과 (ScheduleResponseDto)
-     * @author 김현정
      * @since 2024-10-03
      */
     @GetMapping("/schedules")
@@ -76,9 +75,9 @@ public class ScheduleController {
     /**
      * 일정 수정 API
      *
+     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
      * @param requestDto 일정 수정 정보 (JSON 형태)
      * @return 수정 결과 (ResponseStatusDto)
-     * @author 김현정
      * @since 2024-10-03
      */
     @PutMapping("/schedules/{scheduleId}")
@@ -101,9 +100,9 @@ public class ScheduleController {
     /**
      * 일정 삭제 API
      *
+     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
      * @param requestDto 일정 삭제 정보 (JSON 형태)
      * @return 삭제 결과 (ResponseStatusDto)
-     * @author 김현정
      * @since 2024-10-03
      */
     @DeleteMapping("/schedules/{scheduleId}")

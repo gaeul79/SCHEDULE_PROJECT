@@ -14,10 +14,8 @@ import java.util.List;
 /**
  * 일정 정보를 담는 Entity 클래스
  *
- * @author 김현정
  * @since 2024-10-03
  */
-
 @Builder
 @Getter
 @NoArgsConstructor
