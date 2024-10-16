@@ -36,7 +36,7 @@ public class CreateUserRequestDto {
     @NotBlank(message = "권한은 공백일 수 없습니다.")
     private AuthType auth;
 
-    public static User convertDtoToEntity(CreateUserRequestDto userDto) {
+    public User convertDtoToEntity(CreateUserRequestDto userDto) {
         return User.builder()
                 .password(userDto.getPassword())
                 .email(userDto.getEmail())

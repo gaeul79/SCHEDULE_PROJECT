@@ -20,7 +20,7 @@ public class SearchUserRequestDto {
     private String email;
     private String password;
 
-    public static User convertDtoToEntity(SearchUserRequestDto userDto) {
+    public User convertDtoToEntity(SearchUserRequestDto userDto) {
         return User.builder()
                 .seq(userDto.getUserSeq())
                 .email(userDto.getEmail())

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class SearchScheduleRequestDto extends PageDto {
-    public static Schedule convertDtoToEntity(SearchScheduleRequestDto scheduleDto) {
+    public Schedule convertDtoToEntity(SearchScheduleRequestDto scheduleDto) {
         return Schedule.builder()
                 .page(scheduleDto.convertDtoToPageable()).build();
     }

@@ -45,7 +45,7 @@ public class ScheduleService {
      */
     public ResponseStatusDto createSchedule(CreateScheduleRequestDto requestDto) {
         String weather = weatherApiService.getTodayWeather();
-        Schedule schedule = CreateScheduleRequestDto.convertDtoToEntity(requestDto, TestData.testSeq, weather);
+        Schedule schedule = requestDto.convertDtoToEntity(requestDto, TestData.testSeq, weather);
         scheduleRepository.save(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
     }
@@ -59,7 +59,7 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ScheduleResponseDto searchSchedule(SearchScheduleRequestDto requestDto) {
-        Schedule schedule = SearchScheduleRequestDto.convertDtoToEntity(requestDto);
+        Schedule schedule = requestDto.convertDtoToEntity(requestDto);
         Page<Schedule> schedules = scheduleRepository.findAllByOrderByUpdateDateDesc(schedule.getPage());
         return ScheduleResponseDto.createResponseDto(schedules, ResponseCode.SUCCESS_SEARCH_SCHEDULE);
     }
@@ -75,7 +75,7 @@ public class ScheduleService {
     @Transactional
     public ResponseStatusDto updateSchedule(ModifyScheduleRequestDto requestDto) throws ResponseException {
         String weather = weatherApiService.getTodayWeather();
-        Schedule schedule = ModifyScheduleRequestDto.convertDtoToEntity(requestDto, weather);
+        Schedule schedule = requestDto.convertDtoToEntity(requestDto, weather);
         Schedule updateSchedule = scheduleRepository.findBySeq(schedule.getUser().getSeq());
         checkAccess(updateSchedule);
 
@@ -92,7 +92,7 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ResponseStatusDto deleteSchedule(RemoveScheduleRequestDto requestDto) throws ResponseException {
-        Schedule schedule = RemoveScheduleRequestDto.convertDtoToEntity(requestDto);
+        Schedule schedule = requestDto.convertDtoToEntity(requestDto);
         Schedule deleteSchedule = scheduleRepository.findBySeq(schedule.getUser().getSeq());
         checkAccess(deleteSchedule);
         scheduleRepository.delete(deleteSchedule);

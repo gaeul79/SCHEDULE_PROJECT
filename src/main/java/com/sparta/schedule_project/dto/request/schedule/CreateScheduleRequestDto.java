@@ -25,8 +25,7 @@ public class CreateScheduleRequestDto {
     @Max(value = 300, message = "내용은 300자 이상 입력할 수 없습니다.")
     private String content;
 
-    public static Schedule convertDtoToEntity(CreateScheduleRequestDto scheduleDto, int userSeq, String weather) {
-        // TODO. khj 날씨 수정 필요
+    public Schedule convertDtoToEntity(CreateScheduleRequestDto scheduleDto, int userSeq, String weather) {
         return Schedule.builder()
                 .user(User.builder().seq(userSeq).build())
                 .title(scheduleDto.getTitle())

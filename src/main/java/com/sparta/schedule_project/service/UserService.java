@@ -38,7 +38,7 @@ public class UserService {
      * @since 2024-10-03
      */
     public ResponseStatusDto login(SearchUserRequestDto requestDto) throws ResponseException {
-        User user = SearchUserRequestDto.convertDtoToEntity(requestDto);
+        User user = requestDto.convertDtoToEntity(requestDto);
         User findUser = userRepository.findByEmail(user.getEmail());
         checkLoginUserInputParam(user, findUser);
         return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
@@ -82,7 +82,7 @@ public class UserService {
      */
     public ResponseStatusDto createUser(CreateUserRequestDto requestDto) throws ResponseException {
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        User user = CreateUserRequestDto.convertDtoToEntity(requestDto);
+        User user = requestDto.convertDtoToEntity(requestDto);
         checkCreateUser(user);
         userRepository.save(user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
@@ -109,7 +109,7 @@ public class UserService {
      * @since 2024-10-03
      */
     public UserResponseDto searchUser(SearchUserRequestDto requestDto) throws ResponseException {
-        User user = SearchUserRequestDto.convertDtoToEntity(requestDto);
+        User user = requestDto.convertDtoToEntity(requestDto);
         User findUser = userRepository.findBySeq(user.getSeq());
         checkAccess(findUser);
         return UserResponseDto.createResponseDto(findUser, ResponseCode.SUCCESS_SEARCH_USER);
@@ -126,7 +126,7 @@ public class UserService {
     @Transactional
     public ResponseStatusDto updateUser(ModifyUserRequestDto requestDto) throws ResponseException {
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        User user = ModifyUserRequestDto.convertDtoToEntity(requestDto);
+        User user = requestDto.convertDtoToEntity(requestDto);
 
         User updateUser = userRepository.findBySeq(user.getSeq());
         checkAccess(updateUser);
@@ -145,7 +145,7 @@ public class UserService {
      */
     @Transactional
     public ResponseStatusDto deleteUser(RemoveUserRequestDto requestDto) throws ResponseException {
-        User user = RemoveUserRequestDto.convertDtoToEntity(requestDto);
+        User user = requestDto.convertDtoToEntity(requestDto);
         User deleteUser = userRepository.findBySeq(user.getSeq());
         checkAccess(deleteUser);
         userRepository.delete(deleteUser);

@@ -19,7 +19,7 @@ public class RemoveUserRequestDto {
     @Positive(message = "유저번호는 0이상의 숫자입니다.")
     private int userSeq;
 
-    public static User convertDtoToEntity(RemoveUserRequestDto userDto) {
+    public User convertDtoToEntity(RemoveUserRequestDto userDto) {
         return User.builder()
                 .seq(userDto.getUserSeq()).build();
     }

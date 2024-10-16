@@ -31,7 +31,7 @@ public class CommentService {
      * @since 2024-10-15
      */
     public ResponseStatusDto createComment(CreateCommentRequestDto requestDto) {
-        Comment comment = CreateCommentRequestDto.convertDtoToEntity(requestDto);
+        Comment comment = requestDto.convertDtoToEntity(requestDto);
         commentRepository.save(comment);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_COMMENT);
     }
@@ -45,7 +45,7 @@ public class CommentService {
      * @since 2024-10-15
      */
     public CommentResponseDto searchComment(SearchCommentRequestDto requestDto) {
-        Comment comment = SearchCommentRequestDto.convertDtoToEntity(requestDto);
+        Comment comment = requestDto.convertDtoToEntity(requestDto);
         Page<Comment> comments = commentRepository.findAllByScheduleSeqOrderByUpdateDateDesc(comment.getSchedule().getSeq(), comment.getPage());
         return CommentResponseDto.createResponseDto(comments, ResponseCode.SUCCESS_SEARCH_COMMENT);
     }
@@ -60,7 +60,7 @@ public class CommentService {
      */
     @Transactional
     public ResponseStatusDto updateComment(ModifyCommentRequestDto requestDto) throws ResponseException {
-        Comment updateInfo = ModifyCommentRequestDto.convertDtoToEntity(requestDto);
+        Comment updateInfo = requestDto.convertDtoToEntity(requestDto);
         Comment comment = commentRepository.findBySeq(updateInfo.getSeq());
         checkAccess(comment);
         comment.update(updateInfo);
@@ -76,7 +76,7 @@ public class CommentService {
      * @since 2024-10-15
      */
     public ResponseStatusDto deleteSchedule(RemoveCommentRequestDto requestDto) throws ResponseException {
-        Comment comment = RemoveCommentRequestDto.convertDtoToEntity(requestDto);
+        Comment comment = requestDto.convertDtoToEntity(requestDto);
         checkAccess(comment);
         commentRepository.delete(comment);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_COMMENT);
