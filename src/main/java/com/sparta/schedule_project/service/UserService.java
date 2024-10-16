@@ -122,10 +122,10 @@ public class UserService {
      */
     @Transactional
     public ResponseStatusDto updateUser(ModifyUserRequestDto requestDto) throws ResponseException {
-        User updateInfo = ModifyUserRequestDto.convertDtoToEntity(requestDto);
-        User user = userRepository.findBySeq(updateInfo.getSeq());
-        checkAccess(user);
-        user.update(updateInfo);
+        User user = ModifyUserRequestDto.convertDtoToEntity(requestDto);
+        User updateUser = userRepository.findBySeq(user.getSeq());
+        checkAccess(updateUser);
+        updateUser.update(user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
     }
 
@@ -137,10 +137,12 @@ public class UserService {
      * @author 김현정
      * @since 2024-10-03
      */
+    @Transactional
     public ResponseStatusDto deleteUser(RemoveUserRequestDto requestDto) throws ResponseException {
         User user = RemoveUserRequestDto.convertDtoToEntity(requestDto);
-        checkAccess(user);
-        userRepository.delete(user);
+        User deleteUser = userRepository.findBySeq(user.getSeq());
+        checkAccess(deleteUser);
+        userRepository.delete(deleteUser);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);
     }
 

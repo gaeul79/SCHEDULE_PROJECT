@@ -68,10 +68,10 @@ public class ScheduleService {
      */
     @Transactional
     public ResponseStatusDto updateSchedule(ModifyScheduleRequestDto requestDto) throws ResponseException {
-        Schedule schedule = scheduleRepository.findBySeq(requestDto.getUserSeq());
-        checkAccess(schedule);
-        Schedule updateInfo = ModifyScheduleRequestDto.convertDtoToEntity(requestDto, "천둥 번개");
-        schedule.update(updateInfo);
+        Schedule schedule = ModifyScheduleRequestDto.convertDtoToEntity(requestDto, "천둥 번개");
+        Schedule updateSchedule = scheduleRepository.findBySeq(schedule.getUser().getSeq());
+        checkAccess(updateSchedule);
+        updateSchedule.update(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE);
     }
 
@@ -85,8 +85,9 @@ public class ScheduleService {
      */
     public ResponseStatusDto deleteSchedule(RemoveScheduleRequestDto requestDto) throws ResponseException {
         Schedule schedule = RemoveScheduleRequestDto.convertDtoToEntity(requestDto);
-        checkAccess(schedule);
-        scheduleRepository.delete(schedule);
+        Schedule deleteSchedule = scheduleRepository.findBySeq(schedule.getUser().getSeq());
+        checkAccess(deleteSchedule);
+        scheduleRepository.delete(deleteSchedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE);
     }
 
