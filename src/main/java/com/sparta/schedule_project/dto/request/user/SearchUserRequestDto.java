@@ -2,6 +2,7 @@ package com.sparta.schedule_project.dto.request.user;
 
 import com.sparta.schedule_project.entity.User;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,14 +13,17 @@ import lombok.NoArgsConstructor;
  * @since 2024-10-03
  */
 
-@Getter
+@Data
 @NoArgsConstructor
 public class SearchUserRequestDto {
-    @NotBlank(message = "유저번호는 공백일 수 없습니다.")
     private int userSeq;
+    private String email;
+    private String password;
 
     public static User convertDtoToEntity(SearchUserRequestDto userDto) {
         return User.builder()
-                .seq(userDto.getUserSeq()).build();
+                .seq(userDto.getUserSeq())
+                .email(userDto.getEmail())
+                .password(userDto.getPassword()).build();
     }
 }

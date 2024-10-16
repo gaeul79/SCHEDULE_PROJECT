@@ -3,7 +3,9 @@ package com.sparta.schedule_project.dto.request.user;
 import com.sparta.schedule_project.entity.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,10 +16,10 @@ import lombok.NoArgsConstructor;
  * @since 2024-10-03
  */
 
-@Getter
+@Data
 @NoArgsConstructor
 public class ModifyUserRequestDto {
-    @NotBlank(message = "유저번호는 공백일 수 없습니다.")
+    @Positive(message = "유저번호는 0이상의 숫자입니다.")
     private int userSeq;
 
     @NotBlank(message = "비밀번호를 입력해주세요.")

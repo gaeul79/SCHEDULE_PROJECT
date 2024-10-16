@@ -12,6 +12,7 @@ import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 로그인을 처리합니다.
@@ -46,16 +48,16 @@ public class UserService {
      * 로그인 시 유저 정보를 검사합니다.
      *
      * @param inputUser  입력된 유저 정보
-     * @param resultUser 조회된 유저 정보
+     * @param findUser 조회된 유저 정보
      * @throws ResponseException 유저 정보가 올바르지 않은 경우 예외를 발생시킵니다.
      * @author 김현정
      * @since 2024-10-03
      */
-    public void checkLoginUserInputParam(User inputUser, User resultUser) throws ResponseException {
-        if (resultUser == null)
+    public void checkLoginUserInputParam(User inputUser, User findUser) throws ResponseException {
+        if (findUser == null)
             throw new ResponseException(ResponseCode.USER_NOT_FOUND);
-        else if (!inputUser.getPassword().equals(resultUser.getPassword()))
-            throw new ResponseException(ResponseCode.USER_PASSWORD_NOT_FOUND);
+        else if (!passwordEncoder.matches(inputUser.getPassword(), findUser.getPassword()))
+            throw new ResponseException(ResponseCode.USER_PASSWORD_NOT_MATCH);
     }
 
     /**
@@ -79,8 +81,9 @@ public class UserService {
      * @since 2024-10-03
      */
     public ResponseStatusDto createUser(CreateUserRequestDto requestDto) throws ResponseException {
+        requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         User user = CreateUserRequestDto.convertDtoToEntity(requestDto);
-        checkCreateUserInputParam(user);
+        checkCreateUser(user);
         userRepository.save(user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
     }
@@ -91,9 +94,9 @@ public class UserService {
      * @param user 생성하려는 사용자 정보
      * @throws ResponseException 아이디가 중복될 경우 발생
      */
-    public void checkCreateUserInputParam(User user) throws ResponseException {
-        User resultUser = userRepository.findByEmail(user.getEmail());
-        if (resultUser != null) // 중복 아이디인지 확인
+    public void checkCreateUser(User user) throws ResponseException {
+        User findUser = userRepository.findByEmail(user.getEmail());
+        if (findUser != null) // 중복 이메일 확인
             throw new ResponseException(ResponseCode.USER_NAME_DUPLICATED);
     }
 
@@ -122,10 +125,13 @@ public class UserService {
      */
     @Transactional
     public ResponseStatusDto updateUser(ModifyUserRequestDto requestDto) throws ResponseException {
+        requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         User user = ModifyUserRequestDto.convertDtoToEntity(requestDto);
+
         User updateUser = userRepository.findBySeq(user.getSeq());
         checkAccess(updateUser);
         updateUser.update(user);
+
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
     }
 

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
  * @since 2024-10-03
  */
 
-@Getter
+@Data
 @NoArgsConstructor
 public class CreateUserRequestDto {
     @NotBlank(message = "이메일을 입력해주세요.")

@@ -37,7 +37,7 @@ public enum ResponseCode {
 
     // 사용자 관련 에러 코드
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
-    USER_PASSWORD_NOT_FOUND(HttpStatus.NOT_FOUND, "비밀번호가 틀렸습니다."),
+    USER_PASSWORD_NOT_MATCH(HttpStatus.NOT_FOUND, "비밀번호가 틀렸습니다."),
     USER_NAME_DUPLICATED(HttpStatus.CONFLICT, "유저명이 중복됩니다"),
 
     // 일정 관련 에러 코드
