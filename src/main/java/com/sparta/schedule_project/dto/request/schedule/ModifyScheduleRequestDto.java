@@ -1,9 +1,6 @@
 package com.sparta.schedule_project.dto.request.schedule;
 
-import com.sparta.schedule_project.dto.request.comment.ModifyCommentRequestDto;
-import com.sparta.schedule_project.entity.Comment;
 import com.sparta.schedule_project.entity.Schedule;
-import com.sparta.schedule_project.entity.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -33,10 +30,11 @@ public class ModifyScheduleRequestDto {
     @Max(value = 300, message = "내용은 300자 이상 입력할 수 없습니다.")
     private String content;
 
-    public static Schedule to(ModifyScheduleRequestDto scheduleDto) {
+    public static Schedule convertDtoToEntity(ModifyScheduleRequestDto scheduleDto, String weather) {
         return Schedule.builder()
                 .seq(scheduleDto.getScheduleSeq())
                 .title(scheduleDto.getTitle())
+                .weather(weather)
                 .content(scheduleDto.getContent()).build();
     }
 }

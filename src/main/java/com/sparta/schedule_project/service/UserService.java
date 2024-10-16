@@ -1,5 +1,6 @@
 package com.sparta.schedule_project.service;
 
+import com.sparta.schedule_project.common.TestData;
 import com.sparta.schedule_project.dto.request.user.CreateUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.ModifyUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.RemoveUserRequestDto;
@@ -12,6 +13,7 @@ import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 사용자 관리 서비스 클래스
@@ -34,7 +36,7 @@ public class UserService {
      * @since 2024-10-03
      */
     public ResponseStatusDto login(SearchUserRequestDto requestDto) throws ResponseException {
-        User user = SearchUserRequestDto.to(requestDto);
+        User user = SearchUserRequestDto.convertDtoToEntity(requestDto);
         User findUser = userRepository.findByEmail(user.getEmail());
         checkLoginUserInputParam(user, findUser);
         return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
@@ -51,7 +53,7 @@ public class UserService {
      */
     public void checkLoginUserInputParam(User inputUser, User resultUser) throws ResponseException {
         if (resultUser == null)
-            throw new ResponseException(ResponseCode.USER_NAME_NOT_FOUND);
+            throw new ResponseException(ResponseCode.USER_NOT_FOUND);
         else if (!inputUser.getPassword().equals(resultUser.getPassword()))
             throw new ResponseException(ResponseCode.USER_PASSWORD_NOT_FOUND);
     }
@@ -77,7 +79,7 @@ public class UserService {
      * @since 2024-10-03
      */
     public ResponseStatusDto createUser(CreateUserRequestDto requestDto) throws ResponseException {
-        User user = CreateUserRequestDto.to(requestDto);
+        User user = CreateUserRequestDto.convertDtoToEntity(requestDto);
         checkCreateUserInputParam(user);
         userRepository.save(user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
@@ -103,10 +105,11 @@ public class UserService {
      * @author 김현정
      * @since 2024-10-03
      */
-    public UserResponseDto searchUser(SearchUserRequestDto requestDto) {
-        User user = SearchUserRequestDto.to(requestDto);
-        User resultUser = userRepository.findByEmail(user.getEmail());
-        return UserResponseDto.createResponseDto(resultUser, ResponseCode.SUCCESS_SEARCH_USER);
+    public UserResponseDto searchUser(SearchUserRequestDto requestDto) throws ResponseException {
+        User user = SearchUserRequestDto.convertDtoToEntity(requestDto);
+        User findUser = userRepository.findBySeq(user.getSeq());
+        checkAccess(findUser);
+        return UserResponseDto.createResponseDto(findUser, ResponseCode.SUCCESS_SEARCH_USER);
     }
 
     /**
@@ -117,9 +120,11 @@ public class UserService {
      * @author 김현정
      * @since 2024-10-03
      */
-    public ResponseStatusDto updateUser(ModifyUserRequestDto requestDto) {
-        User updateInfo = ModifyUserRequestDto.to(requestDto);
-        User user = userRepository.findBySeq(requestDto.getUserSeq());
+    @Transactional
+    public ResponseStatusDto updateUser(ModifyUserRequestDto requestDto) throws ResponseException {
+        User updateInfo = ModifyUserRequestDto.convertDtoToEntity(requestDto);
+        User user = userRepository.findBySeq(updateInfo.getSeq());
+        checkAccess(user);
         user.update(updateInfo);
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
     }
@@ -132,9 +137,17 @@ public class UserService {
      * @author 김현정
      * @since 2024-10-03
      */
-    public ResponseStatusDto deleteUser(RemoveUserRequestDto requestDto) {
-        User user = RemoveUserRequestDto.to(requestDto);
+    public ResponseStatusDto deleteUser(RemoveUserRequestDto requestDto) throws ResponseException {
+        User user = RemoveUserRequestDto.convertDtoToEntity(requestDto);
+        checkAccess(user);
         userRepository.delete(user);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);
+    }
+
+    private void checkAccess(User user) throws ResponseException {
+        if(user == null)
+            throw new ResponseException(ResponseCode.USER_NOT_FOUND);
+        else if (TestData.testSeq != user.getSeq())
+            throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }

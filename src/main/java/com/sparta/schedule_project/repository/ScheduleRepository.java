@@ -17,5 +17,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     Schedule findBySeq(int seq);
 
-    Page<Schedule> findAllByUserOrderByUpdateDate(User user, Pageable pageable);
+    Page<Schedule> findAllByOrderByUpdateDateDesc(Pageable pageable);
 }

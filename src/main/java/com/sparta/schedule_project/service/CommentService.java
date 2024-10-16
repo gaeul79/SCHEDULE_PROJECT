@@ -1,6 +1,7 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.common.TestCookieData;
+import com.sparta.schedule_project.common.AuthType;
+import com.sparta.schedule_project.common.TestData;
 import com.sparta.schedule_project.dto.request.comment.CreateCommentRequestDto;
 import com.sparta.schedule_project.dto.request.comment.ModifyCommentRequestDto;
 import com.sparta.schedule_project.dto.request.comment.RemoveCommentRequestDto;
@@ -8,13 +9,13 @@ import com.sparta.schedule_project.dto.request.comment.SearchCommentRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.comment.CommentResponseDto;
 import com.sparta.schedule_project.entity.Comment;
-import com.sparta.schedule_project.entity.Schedule;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +31,9 @@ public class CommentService {
      * @since 2024-10-15
      */
     public ResponseStatusDto createComment(CreateCommentRequestDto requestDto) {
-        Comment comment = CreateCommentRequestDto.to(requestDto);
+        Comment comment = CreateCommentRequestDto.convertDtoToEntity(requestDto);
         commentRepository.save(comment);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_COMMENT);
     }
 
     /**
@@ -44,9 +45,9 @@ public class CommentService {
      * @since 2024-10-15
      */
     public CommentResponseDto searchComment(SearchCommentRequestDto requestDto) {
-        Comment comment = SearchCommentRequestDto.to(requestDto);
-        Page<Comment> comments = commentRepository.findAllByScheduleOrderByUpdateDateDesc(comment.getSchedule(), comment.getPage());
-        return CommentResponseDto.createResponseDto(comments, ResponseCode.SUCCESS_SEARCH_SCHEDULE);
+        Comment comment = SearchCommentRequestDto.convertDtoToEntity(requestDto);
+        Page<Comment> comments = commentRepository.findAllByScheduleSeqOrderByUpdateDateDesc(comment.getSchedule().getSeq(), comment.getPage());
+        return CommentResponseDto.createResponseDto(comments, ResponseCode.SUCCESS_SEARCH_COMMENT);
     }
 
     /**
@@ -57,12 +58,13 @@ public class CommentService {
      * @author 김현정
      * @since 2024-10-15
      */
+    @Transactional
     public ResponseStatusDto updateComment(ModifyCommentRequestDto requestDto) throws ResponseException {
-        Comment updateInfo = ModifyCommentRequestDto.to(requestDto);
+        Comment updateInfo = ModifyCommentRequestDto.convertDtoToEntity(requestDto);
         Comment comment = commentRepository.findBySeq(updateInfo.getSeq());
         checkAccess(comment);
         comment.update(updateInfo);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_COMMENT);
     }
 
     /**
@@ -74,10 +76,10 @@ public class CommentService {
      * @since 2024-10-15
      */
     public ResponseStatusDto deleteSchedule(RemoveCommentRequestDto requestDto) throws ResponseException {
-        Comment comment = RemoveCommentRequestDto.to(requestDto);
+        Comment comment = RemoveCommentRequestDto.convertDtoToEntity(requestDto);
         checkAccess(comment);
         commentRepository.delete(comment);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_COMMENT);
     }
 
     /**
@@ -89,7 +91,11 @@ public class CommentService {
      * @since 2024-10-15
      */
     private void checkAccess(Comment comment) throws ResponseException {
-        if (TestCookieData.testSeq != comment.getUser().getSeq())
+        if(comment == null)
+            throw new ResponseException(ResponseCode.COMMENT_NOT_FOUND);
+        else if(TestData.testAuth != AuthType.ADMIN)
+            throw new ResponseException(ResponseCode.INVALID_PERMISSION);
+        else if (TestData.testSeq != comment.getUser().getSeq())
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }

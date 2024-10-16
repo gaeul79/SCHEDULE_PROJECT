@@ -17,20 +17,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserResponseDto {
     private UserDto user;
-    private ResponseStatusDto responseStatusDto;
+    private ResponseStatusDto status;
 
     public static UserResponseDto createResponseDto(User user, ResponseCode responseCode) {
         UserResponseDto responseDto = new UserResponseDto();
         ResponseStatusDto status = new ResponseStatusDto(responseCode);
         responseDto.setUser(UserDto.from(user));
-        responseDto.setResponseStatusDto(status);
+        responseDto.setStatus(status);
         return responseDto;
     }
 
-    public static UserResponseDto createResponseDto(ResponseCode responseCode, String message) {
+    public static UserResponseDto createResponseDto(ResponseCode responseCode, String errorMsg) {
         UserResponseDto responseDto = new UserResponseDto();
-        ResponseStatusDto status = new ResponseStatusDto(responseCode, message);
-        responseDto.setResponseStatusDto(status);
+        ResponseStatusDto status = new ResponseStatusDto(responseCode, errorMsg);
+        responseDto.setStatus(status);
         return responseDto;
     }
 }

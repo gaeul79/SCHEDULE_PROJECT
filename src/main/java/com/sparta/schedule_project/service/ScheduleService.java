@@ -1,13 +1,14 @@
 package com.sparta.schedule_project.service;
 
 import com.sparta.schedule_project.common.AuthType;
-import com.sparta.schedule_project.common.TestCookieData;
+import com.sparta.schedule_project.common.TestData;
 import com.sparta.schedule_project.dto.request.schedule.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.ModifyScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.RemoveScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.SearchScheduleRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.schedule.ScheduleResponseDto;
+import com.sparta.schedule_project.entity.Comment;
 import com.sparta.schedule_project.entity.Schedule;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
@@ -15,6 +16,7 @@ import com.sparta.schedule_project.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 일정 관리 서비스 클래스
@@ -36,7 +38,8 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ResponseStatusDto createSchedule(CreateScheduleRequestDto requestDto) {
-        Schedule schedule = CreateScheduleRequestDto.to(requestDto);
+        // TODO. khj 날씨
+        Schedule schedule = CreateScheduleRequestDto.convertDtoToEntity(requestDto, TestData.testSeq, "날씨 맑음");
         scheduleRepository.save(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
     }
@@ -50,8 +53,8 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ScheduleResponseDto searchSchedule(SearchScheduleRequestDto requestDto) {
-        Schedule schedule = SearchScheduleRequestDto.to(requestDto);
-        Page<Schedule> schedules = scheduleRepository.findAllByUserOrderByUpdateDate(schedule.getUser(), schedule.getPage());
+        Schedule schedule = SearchScheduleRequestDto.convertDtoToEntity(requestDto);
+        Page<Schedule> schedules = scheduleRepository.findAllByOrderByUpdateDateDesc(schedule.getPage());
         return ScheduleResponseDto.createResponseDto(schedules, ResponseCode.SUCCESS_SEARCH_SCHEDULE);
     }
 
@@ -63,10 +66,11 @@ public class ScheduleService {
      * @author 김현정
      * @since 2024-10-03
      */
+    @Transactional
     public ResponseStatusDto updateSchedule(ModifyScheduleRequestDto requestDto) throws ResponseException {
         Schedule schedule = scheduleRepository.findBySeq(requestDto.getUserSeq());
-        checkAccess();
-        Schedule updateInfo = ModifyScheduleRequestDto.to(requestDto);
+        checkAccess(schedule);
+        Schedule updateInfo = ModifyScheduleRequestDto.convertDtoToEntity(requestDto, "천둥 번개");
         schedule.update(updateInfo);
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE);
     }
@@ -80,8 +84,8 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ResponseStatusDto deleteSchedule(RemoveScheduleRequestDto requestDto) throws ResponseException {
-        Schedule schedule = RemoveScheduleRequestDto.to(requestDto);
-        checkAccess();
+        Schedule schedule = RemoveScheduleRequestDto.convertDtoToEntity(requestDto);
+        checkAccess(schedule);
         scheduleRepository.delete(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE);
     }
@@ -93,8 +97,12 @@ public class ScheduleService {
      * @author 김현정
      * @since 2024-10-04
      */
-    private void checkAccess() throws ResponseException {
-        if(TestCookieData.testAuth != AuthType.ADMIN)
+    private void checkAccess(Schedule schedule) throws ResponseException {
+        if(schedule == null)
+            throw new ResponseException(ResponseCode.SCHEDULE_NOT_FOUND);
+        else if(TestData.testAuth != AuthType.ADMIN)
+            throw new ResponseException(ResponseCode.INVALID_PERMISSION);
+        else if (TestData.testSeq != schedule.getUser().getSeq())
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }

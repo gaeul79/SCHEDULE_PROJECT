@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
     Comment findBySeq(int seq);
 
-    Page<Comment> findAllByScheduleOrderByUpdateDateDesc(Schedule schedule, Pageable pageable);
+    Page<Comment> findAllByScheduleSeqOrderByUpdateDateDesc(int scheduleSeq, Pageable pageable);
 }

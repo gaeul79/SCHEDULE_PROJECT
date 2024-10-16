@@ -28,7 +28,7 @@ public class ModifyUserRequestDto {
     @Max(value = 20, message = "닉네임은 20자까지 입력할 수 있습니다.")
     private String name;
 
-    public static User to(ModifyUserRequestDto userDto) {
+    public static User convertDtoToEntity(ModifyUserRequestDto userDto) {
         return User.builder()
                 .seq(userDto.getUserSeq())
                 .password(userDto.getPassword())

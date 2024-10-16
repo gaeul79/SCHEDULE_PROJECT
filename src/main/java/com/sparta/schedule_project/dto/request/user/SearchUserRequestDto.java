@@ -18,7 +18,7 @@ public class SearchUserRequestDto {
     @NotBlank(message = "유저번호는 공백일 수 없습니다.")
     private int userSeq;
 
-    public static User to(SearchUserRequestDto userDto) {
+    public static User convertDtoToEntity(SearchUserRequestDto userDto) {
         return User.builder()
                 .seq(userDto.getUserSeq()).build();
     }

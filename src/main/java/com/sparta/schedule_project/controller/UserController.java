@@ -106,6 +106,10 @@ public class UserController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(userService.searchUser(createUserRequestDto));
+        } catch (ResponseException ex) {
+            return ResponseEntity
+                    .status(ex.getResponseCode().getHttpStatus())
+                    .body(UserResponseDto.createResponseDto(ex.getResponseCode(), ex.getMessage()));
         } catch (Exception ex) {
             return ResponseEntity
                     .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
@@ -127,6 +131,10 @@ public class UserController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(userService.updateUser(createUserRequestDto));
+        } catch (ResponseException ex) {
+            return ResponseEntity
+                    .status(ex.getResponseCode().getHttpStatus())
+                    .body(new ResponseStatusDto(ex.getResponseCode(), ex.getMessage()));
         } catch (Exception ex) {
             return ResponseEntity
                     .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
@@ -148,6 +156,10 @@ public class UserController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(userService.deleteUser(createUserRequestDto));
+        } catch (ResponseException ex) {
+            return ResponseEntity
+                    .status(ex.getResponseCode().getHttpStatus())
+                    .body(new ResponseStatusDto(ex.getResponseCode(), ex.getMessage()));
         } catch (Exception ex) {
             return ResponseEntity
                     .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())

@@ -49,7 +49,7 @@ public class CommentController {
      * @author 김현정
      * @since 2024-10-15
      */
-    @GetMapping("/comments/{commentSeq}")
+    @GetMapping("/comments")
     public ResponseEntity<CommentResponseDto> searchComment(@RequestBody SearchCommentRequestDto requestDto) {
         try {
             return ResponseEntity
@@ -70,7 +70,7 @@ public class CommentController {
      * @author 김현정
      * @since 2024-10-15
      */
-    @PutMapping("/comments")
+    @PutMapping("/comments/{commentSeq}")
     public ResponseEntity<ResponseStatusDto> updateComment(@RequestBody ModifyCommentRequestDto requestDto) {
         try {
             return ResponseEntity
@@ -95,7 +95,7 @@ public class CommentController {
      * @author 김현정
      * @since 2024-10-15
      */
-    @DeleteMapping("/schedules/{scheduleId}")
+    @DeleteMapping("/comments/{commentSeq}")
     public ResponseEntity<ResponseStatusDto> deleteComment(@RequestBody RemoveCommentRequestDto requestDto) {
         try {
             return ResponseEntity

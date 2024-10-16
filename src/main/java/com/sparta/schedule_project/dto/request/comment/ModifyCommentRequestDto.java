@@ -20,7 +20,7 @@ public class ModifyCommentRequestDto {
     @Max(value = 300, message = "댓글은 300자 이상 입력할 수 없습니다.")
     private String content;
 
-    public static Comment to(ModifyCommentRequestDto commentDto) {
+    public static Comment convertDtoToEntity(ModifyCommentRequestDto commentDto) {
         return Comment.builder()
                 .seq(commentDto.getCommentSeq())
                 .user(User.builder().seq(commentDto.getUserSeq()).build())

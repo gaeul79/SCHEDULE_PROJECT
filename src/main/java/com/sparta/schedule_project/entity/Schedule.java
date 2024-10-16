@@ -33,7 +33,7 @@ public class Schedule extends Timestamped {
     @JoinColumn(name = "user_seq")
     private User user;
 
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Column(nullable = false, length = 100)

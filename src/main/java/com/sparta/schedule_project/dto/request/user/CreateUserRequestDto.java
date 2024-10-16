@@ -1,7 +1,6 @@
 package com.sparta.schedule_project.dto.request.user;
 
-import com.sparta.schedule_project.dto.request.schedule.CreateScheduleRequestDto;
-import com.sparta.schedule_project.entity.Schedule;
+import com.sparta.schedule_project.common.AuthType;
 import com.sparta.schedule_project.entity.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -33,10 +32,14 @@ public class CreateUserRequestDto {
     @Max(value = 20, message = "닉네임은 20자까지 입력할 수 있습니다.")
     private String name;
 
-    public static User to(CreateUserRequestDto userDto) {
+    @NotBlank(message = "권한은 공백일 수 없습니다.")
+    private AuthType auth;
+
+    public static User convertDtoToEntity(CreateUserRequestDto userDto) {
         return User.builder()
                 .password(userDto.getPassword())
                 .email(userDto.getEmail())
-                .name(userDto.getName()).build();
+                .name(userDto.getName())
+                .auth(userDto.getAuth()).build();
     }
 }

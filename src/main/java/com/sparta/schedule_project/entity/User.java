@@ -4,7 +4,10 @@ import com.sparta.schedule_project.common.AuthType;
 import com.sparta.schedule_project.dto.request.user.CreateUserRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +48,7 @@ public class User extends Timestamped {
     private List<Comment> comments = new ArrayList<>();
 
     public void update(User user) {
+        this.seq = user.getSeq();
         this.name = user.getName();
         this.password = user.getPassword();
     }

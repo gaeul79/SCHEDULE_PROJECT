@@ -34,7 +34,10 @@ create table Comment
 );
 
 insert into User(password, email, name, auth) values('1q2w3e4r', 'hong@gmail.com', '홍길동', 'Admin');
-insert into Schedule(user_seq, title, content) values(1, '제목제목제목', '내용내용내용');
+# insert into User(password, email, name, auth, create_date, update_date) values('1q2w3e4r2', 'hong2@gmail.com', '홍2길동', 'Admin', '2020-10-10', '2022-10-10');
+
+insert into Schedule(user_seq, title, content, weather) values(1, '제목제목제목', '내용내용내용', '맑음');
+
 insert into Comment(user_seq, schedule_seq, content) values(1, 1, '댓글댓글댓글');
 
 # drop table Schedule;

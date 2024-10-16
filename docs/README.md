@@ -194,7 +194,7 @@
         <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
         <td>/api.sparta.com/users</td>
         <td><pre lang="json">{
-    "seq" : 1
+    "userSeq" : 1
 }</pre></td>
         <td><pre lang="json">{
     user: {
@@ -216,8 +216,9 @@
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
         <td>/api.sparta.com/users/{userSeq}</td>
         <td><pre lang="json">{    
+    "userSeq": 1,        
     "password": "1q2w3e4r#",
-    "name": "김길동",
+    "name": "김길동"
 }</pre></td>
         <td><pre lang="json">{
     "message": "update user success",
@@ -230,7 +231,7 @@
         <td><span style=background-color:#CE3636AA;font-weight:bold;>DELETE</span></td>
         <td>/api.sparta.com/users/{userSeq}</td>
         <td><pre lang="json">{
-    "seq": 1
+    "userSeq": 1
 }</pre></td>
         <td><pre lang="json">{
     "message": "delete user success",
@@ -243,10 +244,8 @@
         <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
         <td>/api.sparta.com/schedules</td>
         <td><pre lang="json">{
-    "userSeq" : 1,
     "title": "제목제목제목",
-    "content": "내용내용내용",
-    "weather": "날씨 맑음"
+    "content": "내용내용내용"
 }</pre></td>
         <td><pre lang="json">{
     "message": "create schedule success",
@@ -259,27 +258,41 @@
         <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
         <td>/api.sparta.com/schedules</td>
         <td><pre lang="json">{
-    "name": "홍길동",
-    "startUpdateDate" : "2000-10-16",
-    "endUpdateDate" : "2024-10-20",
     "page": 1,
-    "size": 5
+    "size": 2
 }</pre></td>
         <td><pre lang="json">{
-    schedule: [{
-        "seq": 1,
-        "name": "홍길동",
-        "title" : "제목제목제목",
-        "content" : "내용내용내용",
-        "weather": "날씨 맑음"
-        "createDate": "2022-10-16",
-        "updateDate": "2022-10-20"
-    }, ...],
-    status: {
-        "message": "create schedule success",
-        "status": 200
+    "schedules": [
+        {
+            "seq": 3,
+            "userSeq": 1,
+            "userName": "홍길동",
+            "title": "제목제목제목",
+            "content": "내용내용내용",
+            "weather": "맑다",
+            "createDate": "2024-10-16T09:31:05.4463",
+            "updateDate": "2024-10-16T09:31:05.4463"
+        },
+        {
+            "seq": 2,
+            "userSeq": 1,
+            "userName": "이길동",
+            "title": "제목제목제목22",
+            "content": "내용내용내용22",
+            "weather": "맑다",
+            "createDate": "2024-10-16T09:30:59.460334",
+            "updateDate": "2024-10-16T09:30:59.460334"
+        }
+    ],
+    "page": {
+        "page": 1,
+        "size": 2,
+        "totalPage": 3
     },
-    "totalPage": 1
+    "status": {
+        "state": 200,
+        "message": "일정 조회 성공"
+    }
 }</pre></td>
         <td><span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 일정 정상조회</td>
     </tr>
@@ -288,13 +301,10 @@
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
         <td>/api.sparta.com/schedules/{scheduleSeq}</td>
         <td><pre lang="json">{
-    "loginUserSeq": 1,  ...? JWT에서..?,
-    "userAuth": "ADMIN",      
     "seq": "1",
     "userSeq": 1,
     "title" : "제목제목제목",
-    "content" : "수정수정수정",
-    "weather": "날씨 흐림"
+    "content" : "수정수정수정"
 }</pre></td>
         <td><pre lang="json">{
     "message": "update schedule success",
@@ -309,10 +319,9 @@
         <td><b>일정 삭제</b></td>
         <td><span style=background-color:#CE3636AA;font-weight:bold;>DELETE</span></td>
         <td>/api.sparta.com/schedules/{scheduleSeq}</td>
-        <td><pre lang="json">{
-    "loginUserSeq": 1, ...? JWT에서..?,
-    "userAuth": "ADMIN",    
-    "seq" : 1
+        <td><pre lang="json">{ 
+    "secheduleSeq" : 1,
+    "userSeq": 1
 }</pre></td>
         <td><pre lang="json">{
     "message": "delete schedule success",
@@ -343,7 +352,9 @@
         <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
         <td>/api.sparta.com/schedule/{scheduleSeq}/comments</td>
         <td><pre lang="json">{
-    "scheduleSeq": 1
+    "scheduleSeq": 1,        
+    "page": 1,
+    "size": 2
 }</pre></td>
         <td><pre lang="json">{
     comment: [{
@@ -367,9 +378,8 @@
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
         <td>/api.sparta.com/schedule/{scheduleSeq}/comments/{commentSeq}</td>
         <td><pre lang="json">{
-    "loginUserSeq": 1,  ...? JWT에서..? 가져오면 없어도 될듯?
+    "commentSeq": 1,
     "userSeq": 1,
-    "seq": 1,
     "content" : "댓글 수정수정수정"
 }</pre></td>
         <td><pre lang="json">{
@@ -385,7 +395,6 @@
         <td><span style=background-color:#CE3636AA;font-weight:bold;>DELETE</span></td>
         <td>/api.sparta.com/schedule/{scheduleSeq}/comments/{commentSeq}</td>
         <td><pre lang="json">{
-    "loginUserSeq": 1, ...? JWT에서..?,
     "userSeq": 1,
     "seq" : 1
 }</pre></td>

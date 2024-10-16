@@ -1,7 +1,5 @@
 package com.sparta.schedule_project.dto.request.user;
 
-import com.sparta.schedule_project.dto.request.schedule.RemoveScheduleRequestDto;
-import com.sparta.schedule_project.entity.Comment;
 import com.sparta.schedule_project.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -20,7 +18,7 @@ public class RemoveUserRequestDto {
     @NotBlank(message = "유저번호는 공백일 수 없습니다.")
     private int userSeq;
 
-    public static User to(RemoveUserRequestDto userDto) {
+    public static User convertDtoToEntity(RemoveUserRequestDto userDto) {
         return User.builder()
                 .seq(userDto.getUserSeq()).build();
     }

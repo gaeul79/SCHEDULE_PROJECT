@@ -1,7 +1,5 @@
 package com.sparta.schedule_project.dto.response.schedule;
 
-import com.sparta.schedule_project.dto.response.comment.CommentDto;
-import com.sparta.schedule_project.entity.Comment;
 import com.sparta.schedule_project.entity.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
