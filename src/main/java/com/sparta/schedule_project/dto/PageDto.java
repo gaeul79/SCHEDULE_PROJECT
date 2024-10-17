@@ -23,7 +23,7 @@ public class PageDto {
     private int page;
 
     @Positive(message = "사이즈는 0이상이어야 합니다.")
-    private int size;
+    private int size = 10;
 
     @Positive(message = "총 페이지는 0이상이어야 합니다.")
     private int totalPage;

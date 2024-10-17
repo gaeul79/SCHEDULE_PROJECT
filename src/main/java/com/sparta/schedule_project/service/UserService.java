@@ -113,7 +113,7 @@ public class UserService {
     public UserResponseDto searchUser(String token, SearchUserRequestDto requestDto) throws ResponseException {
         User user = requestDto.convertDtoToEntity(requestDto);
         User findUser = userRepository.findBySeq(user.getSeq());
-        checkSearchUser(findUser);
+        checkSearchUser(token, findUser);
         return UserResponseDto.createResponseDto(findUser, ResponseCode.SUCCESS_SEARCH_USER);
     }
 
@@ -124,9 +124,12 @@ public class UserService {
      * @throws ResponseException 사용자가 존재하지 않은 경우 예외 발생
      * @since 2024-10-17
      */
-    private void checkSearchUser(User user) throws ResponseException {
+    private void checkSearchUser(String token, User user) throws ResponseException {
+        User loginUser = cookieManager.getUserFromJwtToken(token);
         if (user == null)
             throw new ResponseException(ResponseCode.USER_NOT_FOUND);
+        else if(!loginUser.getEmail().equals(user.getEmail()))
+            throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 
     /**

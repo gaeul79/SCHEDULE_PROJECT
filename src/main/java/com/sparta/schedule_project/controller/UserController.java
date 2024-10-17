@@ -43,6 +43,10 @@ public class UserController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(userService.login(res, createUserRequestDto));
+        } catch (ResponseException ex) {
+            return ResponseEntity
+                    .status(ex.getResponseCode().getHttpStatus())
+                    .body(new ResponseStatusDto(ex.getResponseCode()));
         } catch (UnsupportedEncodingException ex) {
             return ResponseEntity
                     .status(ResponseCode.TOKEN_FAIL_ENCODING.getHttpStatus())
@@ -126,7 +130,7 @@ public class UserController {
     /**
      * 회원 정보 수정 API
      *
-     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
+     * @param token                요청 헤더의 쿠키에 담긴 인증 토큰
      * @param createUserRequestDto 회원 정보 수정 정보 (JSON 형태)
      * @return 회원 정보 수정 결과
      * @since 2023-10-03
@@ -151,7 +155,7 @@ public class UserController {
     /**
      * 회원 정보 삭제 API
      *
-     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
+     * @param token                요청 헤더의 쿠키에 담긴 인증 토큰
      * @param createUserRequestDto 회원 정보 삭제 정보 (JSON 형태)
      * @return 회원 정보 삭제 결과
      * @since 2023-10-03
