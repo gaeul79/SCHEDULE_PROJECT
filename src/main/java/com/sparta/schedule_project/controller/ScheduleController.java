@@ -8,8 +8,8 @@ import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.schedule.ScheduleResponseDto;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.cookie.JwtUtil;
 import com.sparta.schedule_project.service.ScheduleService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,17 +30,17 @@ public class ScheduleController {
     /**
      * 일정 등록 API
      *
-     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
+     * @param req        HttpServletRequest 객체
      * @param requestDto 일정 등록 정보 (JSON 형태)
      * @return 등록 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
     @PostMapping("/schedules")
-    public ResponseEntity<ResponseStatusDto> createSchedule(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody CreateScheduleRequestDto requestDto) {
+    public ResponseEntity<ResponseStatusDto> createSchedule(HttpServletRequest req, @RequestBody CreateScheduleRequestDto requestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(scheduleService.createSchedule(token, requestDto));
+                    .body(scheduleService.createSchedule(req, requestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -75,17 +75,17 @@ public class ScheduleController {
     /**
      * 일정 수정 API
      *
-     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
+     * @param req        HttpServletRequest 객체
      * @param requestDto 일정 수정 정보 (JSON 형태)
      * @return 수정 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
     @PutMapping("/schedules/{scheduleId}")
-    public ResponseEntity<ResponseStatusDto> updateSchedule(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody ModifyScheduleRequestDto requestDto) {
+    public ResponseEntity<ResponseStatusDto> updateSchedule(HttpServletRequest req, @RequestBody ModifyScheduleRequestDto requestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(scheduleService.updateSchedule(token, requestDto));
+                    .body(scheduleService.updateSchedule(req, requestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -100,17 +100,17 @@ public class ScheduleController {
     /**
      * 일정 삭제 API
      *
-     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
+     * @param req        HttpServletRequest 객체
      * @param requestDto 일정 삭제 정보 (JSON 형태)
      * @return 삭제 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
     @DeleteMapping("/schedules/{scheduleId}")
-    public ResponseEntity<ResponseStatusDto> deleteSchedule(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody RemoveScheduleRequestDto requestDto) {
+    public ResponseEntity<ResponseStatusDto> deleteSchedule(HttpServletRequest req, @RequestBody RemoveScheduleRequestDto requestDto) {
         try {
-           return ResponseEntity
-                   .status(HttpStatus.OK)
-                   .body(scheduleService.deleteSchedule(token, requestDto));
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(scheduleService.deleteSchedule(req, requestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())

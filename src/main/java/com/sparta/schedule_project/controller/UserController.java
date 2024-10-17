@@ -8,13 +8,12 @@ import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.user.UserResponseDto;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.cookie.JwtUtil;
 import com.sparta.schedule_project.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
@@ -106,17 +105,16 @@ public class UserController {
     /**
      * 회원 정보 조회 API
      *
-     * @param token                요청 헤더의 쿠키에 담긴 인증 토큰
+     * @param req                  HttpServletRequest
      * @param createUserRequestDto 회원 정보 조회 정보 (JSON 형태)
      * @return 회원 정보 조회 결과
      * @since 2023-10-03
      */
-    @GetMapping("/users")
-    public ResponseEntity<UserResponseDto> getUserInfo(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody SearchUserRequestDto createUserRequestDto) {
+    public ResponseEntity<UserResponseDto> getUserInfo(HttpServletRequest req, @RequestBody SearchUserRequestDto createUserRequestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.searchUser(token, createUserRequestDto));
+                    .body(userService.searchUser(req, createUserRequestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -131,17 +129,17 @@ public class UserController {
     /**
      * 회원 정보 수정 API
      *
-     * @param token                요청 헤더의 쿠키에 담긴 인증 토큰
+     * @param req                  HttpServletRequest 객체
      * @param createUserRequestDto 회원 정보 수정 정보 (JSON 형태)
      * @return 회원 정보 수정 결과
      * @since 2023-10-03
      */
     @PutMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> updateUser(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody ModifyUserRequestDto createUserRequestDto) {
+    public ResponseEntity<ResponseStatusDto> updateUser(HttpServletRequest req, @RequestBody ModifyUserRequestDto createUserRequestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.updateUser(token, createUserRequestDto));
+                    .body(userService.updateUser(req, createUserRequestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -156,17 +154,17 @@ public class UserController {
     /**
      * 회원 정보 삭제 API
      *
-     * @param token                요청 헤더의 쿠키에 담긴 인증 토큰
+     * @param req                  HttpServletRequest 객체
      * @param createUserRequestDto 회원 정보 삭제 정보 (JSON 형태)
      * @return 회원 정보 삭제 결과
      * @since 2023-10-03
      */
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> deleteUser(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody RemoveUserRequestDto createUserRequestDto) {
+    public ResponseEntity<ResponseStatusDto> deleteUser(HttpServletRequest req, @RequestBody RemoveUserRequestDto createUserRequestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.deleteUser(token, createUserRequestDto));
+                    .body(userService.deleteUser(req, createUserRequestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())

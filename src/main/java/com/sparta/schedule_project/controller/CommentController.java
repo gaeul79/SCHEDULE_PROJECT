@@ -8,8 +8,8 @@ import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.comment.CommentResponseDto;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.cookie.JwtUtil;
 import com.sparta.schedule_project.service.CommentService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +24,17 @@ public class CommentController {
     /**
      * 댓글 등록 API
      *
-     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
+     * @param req        HttpServletRequest 객체
      * @param requestDto 댓글 등록 정보 (JSON 형태)
      * @return 등록 결과 (ResponseStatusDto)
      * @since 2024-10-15
      */
     @PostMapping("/comments")
-    public ResponseEntity<ResponseStatusDto> createComment(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody CreateCommentRequestDto requestDto) {
+    public ResponseEntity<ResponseStatusDto> createComment(HttpServletRequest req, @RequestBody CreateCommentRequestDto requestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(commentService.createComment(token, requestDto));
+                    .body(commentService.createComment(req, requestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -70,17 +70,17 @@ public class CommentController {
     /**
      * 댓글 수정 API
      *
-     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
+     * @param req        HttpServletRequest 객체
      * @param requestDto 댓글 수정 정보 (JSON 형태)
      * @return 수정 결과 (ResponseStatusDto)
      * @since 2024-10-15
      */
     @PutMapping("/comments/{commentSeq}")
-    public ResponseEntity<ResponseStatusDto> updateComment(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody ModifyCommentRequestDto requestDto) {
+    public ResponseEntity<ResponseStatusDto> updateComment(HttpServletRequest req, @RequestBody ModifyCommentRequestDto requestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(commentService.updateComment(token, requestDto));
+                    .body(commentService.updateComment(req, requestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -95,17 +95,17 @@ public class CommentController {
     /**
      * 댓글 삭제 API
      *
-     * @param token      요청 헤더의 쿠키에 담긴 인증 토큰
+     * @param req        HttpServletRequest 객체
      * @param requestDto 댓글 삭제 정보 (JSON 형태)
      * @return 삭제 결과 (ResponseStatusDto)
      * @since 2024-10-15
      */
     @DeleteMapping("/comments/{commentSeq}")
-    public ResponseEntity<ResponseStatusDto> deleteComment(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String token, @RequestBody RemoveCommentRequestDto requestDto) {
+    public ResponseEntity<ResponseStatusDto> deleteComment(HttpServletRequest req, @RequestBody RemoveCommentRequestDto requestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(commentService.deleteSchedule(token, requestDto));
+                    .body(commentService.deleteComment(req, requestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
