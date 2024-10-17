@@ -82,8 +82,7 @@ public class UserService {
      * @since 2024-10-03
      */
     public ResponseStatusDto createUser(CreateUserRequestDto requestDto) throws ResponseException {
-        requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        User user = requestDto.convertDtoToEntity(requestDto);
+        User user = requestDto.convertDtoToEntity(requestDto, passwordEncoder.encode(requestDto.getPassword()));
         checkCreateUser(user);
         userRepository.save(user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
@@ -142,10 +141,9 @@ public class UserService {
      */
     @Transactional
     public ResponseStatusDto updateUser(String token, ModifyUserRequestDto requestDto) throws ResponseException {
-        requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
-        User user = requestDto.convertDtoToEntity(requestDto);
-        checkUser(token, user);
+        User user = requestDto.convertDtoToEntity(requestDto, passwordEncoder.encode(requestDto.getPassword()));
         User updateUser = userRepository.findBySeq(user.getSeq());
+        checkUser(token, updateUser);
         updateUser.update(user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
     }
@@ -161,8 +159,8 @@ public class UserService {
     @Transactional
     public ResponseStatusDto deleteUser(String token, RemoveUserRequestDto requestDto) throws ResponseException {
         User user = requestDto.convertDtoToEntity(requestDto);
-        checkUser(token, user);
         User deleteUser = userRepository.findBySeq(user.getSeq());
+        checkUser(token, deleteUser);
         userRepository.delete(deleteUser);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);
     }
@@ -177,11 +175,10 @@ public class UserService {
      */
     private void checkUser(String token, User user) throws ResponseException {
         User loginUser = cookieManager.getUserFromJwtToken(token);
-        User searchUser = userRepository.findBySeq(user.getSeq());
-        if (searchUser == null)
+        if (user == null)
             throw new ResponseException(ResponseCode.USER_NOT_FOUND);
 
-        if (!loginUser.getEmail().equals(searchUser.getEmail()))
+        if (!loginUser.getEmail().equals(user.getEmail()))
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }

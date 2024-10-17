@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
  *
  * @since 2024-10-18
  */
-@Data
+@Getter
 @NoArgsConstructor
 public class CreateUserRequestDto {
     @NotBlank(message = "이메일을 입력해주세요.")
@@ -40,9 +41,9 @@ public class CreateUserRequestDto {
      * @return 생성된 User 엔티티 객체
      * @since 2024-10-18
      */
-    public User convertDtoToEntity(CreateUserRequestDto userDto) {
+    public User convertDtoToEntity(CreateUserRequestDto userDto, String password) {
         return User.builder()
-                .password(userDto.getPassword())
+                .password(password)
                 .email(userDto.getEmail())
                 .name(userDto.getName())
                 .auth(userDto.getAuth()).build();

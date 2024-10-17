@@ -19,13 +19,8 @@ import org.springframework.data.domain.Pageable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageDto {
-    @Positive(message = "페이지는 0이상이어야 합니다.")
     private int page;
-
-    @Positive(message = "사이즈는 0이상이어야 합니다.")
-    private int size = 10;
-
-    @Positive(message = "총 페이지는 0이상이어야 합니다.")
+    private int size;
     private int totalPage;
 
     /**
@@ -48,6 +43,11 @@ public class PageDto {
      * @since 2024-10-03
      */
     public Pageable convertDtoToPageable() {
-        return PageRequest.of(page - 1, size);
+        if(page <= 0 || size <= 0) {
+            return PageRequest.of(0, 10);
+        }
+        else  {
+            return PageRequest.of(page - 1, size);
+        }
     }
 }

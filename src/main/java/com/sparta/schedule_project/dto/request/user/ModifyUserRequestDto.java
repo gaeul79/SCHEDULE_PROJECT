@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
  *
  * @since 2024-10-18
  */
-@Data
+@Getter
 @NoArgsConstructor
 public class ModifyUserRequestDto {
     @Positive(message = "유저번호는 0이상의 숫자입니다.")
@@ -35,10 +35,10 @@ public class ModifyUserRequestDto {
      * @return 생성된 User 엔티티 객체
      * @since 2024-10-18
      */
-    public User convertDtoToEntity(ModifyUserRequestDto userDto) {
+    public User convertDtoToEntity(ModifyUserRequestDto userDto, String password) {
         return User.builder()
                 .seq(userDto.getUserSeq())
-                .password(userDto.getPassword())
+                .password(password)
                 .name(userDto.getName()).build();
     }
 }

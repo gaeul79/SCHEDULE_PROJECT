@@ -38,6 +38,20 @@ public class UserResponseDto {
      * 응답 코드와 에러 메시지를 포함하는 응답 DTO를 생성합니다.
      *
      * @param responseCode 응답 코드
+     * @return 생성된 응답 DTO 객체 (UserResponseDto)
+     * @since 2024-10-17
+     */
+    public static UserResponseDto createResponseDto(ResponseCode responseCode) {
+        UserResponseDto responseDto = new UserResponseDto();
+        ResponseStatusDto status = new ResponseStatusDto(responseCode);
+        responseDto.setStatus(status);
+        return responseDto;
+    }
+
+    /**
+     * 응답 코드와 에러 메시지를 포함하는 응답 DTO를 생성합니다.
+     *
+     * @param responseCode 응답 코드
      * @param errorMsg     에러 메시지
      * @return 생성된 응답 DTO 객체 (UserResponseDto)
      * @since 2024-10-18

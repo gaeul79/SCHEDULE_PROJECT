@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
@@ -50,7 +51,7 @@ public class UserController {
         } catch (UnsupportedEncodingException ex) {
             return ResponseEntity
                     .status(ResponseCode.TOKEN_FAIL_ENCODING.getHttpStatus())
-                    .body(new ResponseStatusDto(ResponseCode.TOKEN_FAIL_ENCODING, ex.getMessage()));
+                    .body(new ResponseStatusDto(ResponseCode.TOKEN_FAIL_ENCODING));
         } catch (Exception ex) {
             return ResponseEntity
                     .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
@@ -119,7 +120,7 @@ public class UserController {
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
-                    .body(UserResponseDto.createResponseDto(ex.getResponseCode(), ex.getMessage()));
+                    .body(UserResponseDto.createResponseDto(ex.getResponseCode()));
         } catch (Exception ex) {
             return ResponseEntity
                     .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
@@ -144,7 +145,7 @@ public class UserController {
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
-                    .body(new ResponseStatusDto(ex.getResponseCode(), ex.getMessage()));
+                    .body(new ResponseStatusDto(ex.getResponseCode()));
         } catch (Exception ex) {
             return ResponseEntity
                     .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
@@ -169,7 +170,7 @@ public class UserController {
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
-                    .body(new ResponseStatusDto(ex.getResponseCode(), ex.getMessage()));
+                    .body(new ResponseStatusDto(ex.getResponseCode()));
         } catch (Exception ex) {
             return ResponseEntity
                     .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())

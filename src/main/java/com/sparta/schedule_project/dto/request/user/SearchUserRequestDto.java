@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  *
  * @since 2024-10-18
  */
-@Data
+@Getter
 @NoArgsConstructor
 public class SearchUserRequestDto {
     private int userSeq;
