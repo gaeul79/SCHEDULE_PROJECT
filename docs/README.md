@@ -198,14 +198,14 @@
     "userSeq" : 1
 }</pre></td>
         <td><pre lang="json">{
-    user: {
+    "user": {
         "seq": 1,
         "email": "hong@gmail.com",
         "password": "1q2w3e4r#",
         "name": "홍길동",
         "auth": "ADMIN"
     },
-    status: {
+    "status": {
         "message": "search user success",
         "status": 200
     }
@@ -358,7 +358,7 @@
     "size": 2
 }</pre></td>
         <td><pre lang="json">{
-    comment: [{
+    "comment": [{
         "seq": 1,
         "userSeq": 1,
         "scheduleSeq" : 1,
@@ -366,7 +366,7 @@
         "createDate": "2022-10-16",
         "updateDate": "2022-10-20"
     }, ...],
-    status: {
+    "status": {
         "message": "search comment success",
         "status": 200
     },
@@ -406,22 +406,7 @@
         <td>
             <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 댓글 정상삭제
         </td>
-    </tr>
-    <tr>
-        <td><b>현재 날씨 조회</b></td>
-        <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
-        <td>https://f-api.github.io/f-api</td>
-        <td><pre lang="json">{
-    "date": "01-01"
-}</pre></td>
-        <td><pre lang="json">{
-date: "01-01",
-weather: "Sunny"
-}</pre></td>
-        <td>
-            <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 날씨 정상조회
-        </td>
-    </tr>             
+    </tr>          
 </table>
 </details>
 
