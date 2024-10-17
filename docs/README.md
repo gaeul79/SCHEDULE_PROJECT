@@ -64,12 +64,12 @@
  │        │    └── JwtUtil.java                                 # JWT 토큰 생성 및 검증을 수행하는 class
  │        │ 
  │        ├── 'filter'                                          # 필터들을 모아놓은 폴더
- │        │    ├── AuthFilter.java                             # 인증 필터 (로그인 여부 확인 등)
+ │        │    ├── AuthFilter.java                              # 인증 필터 (로그인 여부 확인 등)
  │        │    └── LoggingFilter.java                           # 로그 필터 (요청/응답 로그 기록)
  │        │
  │        ├── 'controller'                                      # 사용자 요청을 처리하기 위한 컨트롤러를 모아놓은 폴더 
- │        │    ├── ScheduleController.java                     # 일정 관련 요청을 처리하는 컨트롤러 class 
- │        │    ├── CommentController.java                      # 댓글 관련 요청을 처리하는 컨트롤러 class 
+ │        │    ├── ScheduleController.java                      # 일정 관련 요청을 처리하는 컨트롤러 class 
+ │        │    ├── CommentController.java                       # 댓글 관련 요청을 처리하는 컨트롤러 class 
  │        │    └── UserController.java                          # 사용자 관련 요청을 처리하는 컨트롤러 class 
  │        │
  │        ├── 'dto'                                             # 데이터를 주고받기 위한 객체를 모아놓은 폴더 
@@ -365,12 +365,24 @@
         "content" : "댓글댓글댓글",
         "createDate": "2022-10-16",
         "updateDate": "2022-10-20"
-    }, ...],
+    },
+    {
+        "seq": 2,
+        "userSeq": 1,
+        "scheduleSeq" : 1,
+        "content" : "댓글댓글댓글22",
+        "createDate": "2022-10-16",
+        "updateDate": "2022-10-20"
+    }],
+    "page": {
+        "page": 1,
+        "size": 2,
+        "totalPage": 3
+    },
     "status": {
         "message": "search comment success",
         "status": 200
     },
-    "totalPage": 1
 }</pre></td>
         <td><span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 댓글 정상조회</td>
     </tr>
