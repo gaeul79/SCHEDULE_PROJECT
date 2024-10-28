@@ -41,9 +41,8 @@ public class UserService {
      * @since 2024-10-03
      */
     public ResponseStatusDto login(HttpServletResponse res, SearchUserRequestDto requestDto) throws ResponseException, UnsupportedEncodingException {
-        User user = requestDto.convertDtoToEntity(requestDto);
-        User findUser = userRepository.findByEmail(user.getEmail());
-        checkLoginUserInputParam(user, findUser);
+        User findUser = userRepository.findByEmail(requestDto.getEmail());
+        validateLoginInfo(requestDto, findUser);
         cookieManager.addJwtToCookie(findUser, res);
         return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
     }
@@ -51,15 +50,15 @@ public class UserService {
     /**
      * 로그인 시 유저 정보를 검사합니다.
      *
-     * @param inputUser 입력된 유저 정보
-     * @param findUser  조회된 유저 정보
+     * @param requestDto 입력된 유저 정보
+     * @param findUser   조회된 유저 정보
      * @throws ResponseException 유저 정보가 올바르지 않은 경우 예외를 발생시킵니다.
      * @since 2024-10-03
      */
-    public void checkLoginUserInputParam(User inputUser, User findUser) throws ResponseException {
+    public void validateLoginInfo(SearchUserRequestDto requestDto, User findUser) throws ResponseException {
         if (findUser == null)
             throw new ResponseException(ResponseCode.USER_NOT_FOUND);
-        else if (!passwordEncoder.matches(inputUser.getPassword(), findUser.getPassword()))
+        else if (!passwordEncoder.matches(requestDto.getPassword(), findUser.getPassword()))
             throw new ResponseException(ResponseCode.USER_PASSWORD_NOT_MATCH);
     }
 
@@ -83,7 +82,7 @@ public class UserService {
      */
     public ResponseStatusDto createUser(CreateUserRequestDto requestDto) throws ResponseException {
         User user = requestDto.convertDtoToEntity(requestDto, passwordEncoder.encode(requestDto.getPassword()));
-        checkCreateUser(user);
+        validateCreateUserInfo(user);
         userRepository.save(user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
     }
@@ -95,7 +94,7 @@ public class UserService {
      * @throws ResponseException 아이디가 중복될 경우 발생
      * @since 2024-10-07
      */
-    public void checkCreateUser(User user) throws ResponseException {
+    public void validateCreateUserInfo(User user) throws ResponseException {
         User findUser = userRepository.findByEmail(user.getEmail());
         if (findUser != null) // 중복 이메일 확인
             throw new ResponseException(ResponseCode.USER_EMAIL_DUPLICATED);
@@ -144,7 +143,7 @@ public class UserService {
     public ResponseStatusDto updateUser(HttpServletRequest req, int userId, ModifyUserRequestDto requestDto) throws ResponseException {
         User loginUser = (User) req.getAttribute("user");
         User updateUser = userRepository.findBySeq(userId);
-        checkUser(loginUser, updateUser);
+        checkAuth(loginUser, updateUser);
         updateUser.update(requestDto, passwordEncoder.encode(requestDto.getPassword()));
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
     }
@@ -161,7 +160,7 @@ public class UserService {
     public ResponseStatusDto deleteUser(HttpServletRequest req, int userId) throws ResponseException {
         User loginUser = (User) req.getAttribute("user");
         User deleteUser = userRepository.findBySeq(userId);
-        checkUser(loginUser, deleteUser);
+        checkAuth(loginUser, deleteUser);
         userRepository.delete(deleteUser);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);
     }
@@ -174,7 +173,7 @@ public class UserService {
      * @throws ResponseException 토큰이 유효하지 않거나, 사용자가 존재하지 않거나, 권한이 부족한 경우 예외 발생
      * @since 2024-10-17
      */
-    private void checkUser(User loginUser, User user) throws ResponseException {
+    private void checkAuth(User loginUser, User user) throws ResponseException {
         if (user == null)
             throw new ResponseException(ResponseCode.USER_NOT_FOUND);
 
