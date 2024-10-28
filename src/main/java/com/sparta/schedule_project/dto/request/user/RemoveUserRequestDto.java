@@ -1,7 +1,6 @@
 package com.sparta.schedule_project.dto.request.user;
 
 import com.sparta.schedule_project.entity.User;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

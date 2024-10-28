@@ -1,11 +1,7 @@
 package com.sparta.schedule_project.repository;
 
 import com.sparta.schedule_project.entity.User;
-import com.sparta.schedule_project.exception.ResponseCode;
-import com.sparta.schedule_project.exception.ResponseException;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.Optional;
 
 /**
  * 유저 엔티티를 위한 JPA 레포지토리입니다.

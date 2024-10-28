@@ -3,7 +3,6 @@ package com.sparta.schedule_project.service;
 import com.sparta.schedule_project.cookie.CookieManager;
 import com.sparta.schedule_project.dto.request.user.CreateUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.ModifyUserRequestDto;
-import com.sparta.schedule_project.dto.request.user.RemoveUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.SearchUserRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.user.UserResponseDto;
@@ -105,15 +104,14 @@ public class UserService {
     /**
      * 회원 정보를 조회합니다.
      *
-     * @param req        HttpServletRequest 객체
-     * @param requestDto 회원 조회 요청 정보
+     * @param req    HttpServletRequest 객체
+     * @param userId 조회할 회원 번호
      * @return 회원 조회 결과 (UserResponseDto)
      * @since 2024-10-03
      */
-    public UserResponseDto searchUser(HttpServletRequest req, SearchUserRequestDto requestDto) throws ResponseException {
+    public UserResponseDto searchUser(HttpServletRequest req, int userId) throws ResponseException {
         User loginUser = (User) req.getAttribute("user");
-        User user = requestDto.convertDtoToEntity(requestDto);
-        User findUser = userRepository.findBySeq(user.getSeq());
+        User findUser = userRepository.findBySeq(userId);
         checkSearchUser(loginUser, findUser);
         return UserResponseDto.createResponseDto(findUser, ResponseCode.SUCCESS_SEARCH_USER);
     }
@@ -137,33 +135,32 @@ public class UserService {
      * 회원 정보를 수정합니다.
      *
      * @param req        HttpServletRequest 객체
-     * @param requestDto 회원 정보 수정 요청 정보
+     * @param userId     수정할 회원 번호
+     * @param requestDto 수정할 정보
      * @return 회원 정보 수정 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
     @Transactional
-    public ResponseStatusDto updateUser(HttpServletRequest req, ModifyUserRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto updateUser(HttpServletRequest req, int userId, ModifyUserRequestDto requestDto) throws ResponseException {
         User loginUser = (User) req.getAttribute("user");
-        User user = requestDto.convertDtoToEntity(requestDto, passwordEncoder.encode(requestDto.getPassword()));
-        User updateUser = userRepository.findBySeq(user.getSeq());
+        User updateUser = userRepository.findBySeq(userId);
         checkUser(loginUser, updateUser);
-        updateUser.update(user);
+        updateUser.update(requestDto, passwordEncoder.encode(requestDto.getPassword()));
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
     }
 
     /**
      * 회원을 삭제합니다.
      *
-     * @param req        HttpServletRequest 객체
-     * @param requestDto 회원 삭제 요청 정보
+     * @param req    HttpServletRequest 객체
+     * @param userId 삭제할 회원 번호
      * @return 회원 삭제 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
     @Transactional
-    public ResponseStatusDto deleteUser(HttpServletRequest req, RemoveUserRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto deleteUser(HttpServletRequest req, int userId) throws ResponseException {
         User loginUser = (User) req.getAttribute("user");
-        User user = requestDto.convertDtoToEntity(requestDto);
-        User deleteUser = userRepository.findBySeq(user.getSeq());
+        User deleteUser = userRepository.findBySeq(userId);
         checkUser(loginUser, deleteUser);
         userRepository.delete(deleteUser);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);

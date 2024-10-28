@@ -17,9 +17,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ModifyUserRequestDto {
-    @Positive(message = "유저번호는 0이상의 숫자입니다.")
-    private int userSeq;
-
     @NotBlank(message = "비밀번호를 입력해주세요.")
     @Size(min = 8, max = 20, message = "비밀번호는 8~20자 사이입니다.")
     private String password;
@@ -37,7 +34,6 @@ public class ModifyUserRequestDto {
      */
     public User convertDtoToEntity(ModifyUserRequestDto userDto, String password) {
         return User.builder()
-                .seq(userDto.getUserSeq())
                 .password(password)
                 .name(userDto.getName()).build();
     }

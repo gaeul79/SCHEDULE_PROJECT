@@ -105,16 +105,17 @@ public class UserController {
     /**
      * 회원 정보 조회 API
      *
-     * @param req                  HttpServletRequest
-     * @param createUserRequestDto 회원 정보 조회 정보 (JSON 형태)
+     * @param req    HttpServletRequest
+     * @param userId 조회할 회원 번호
      * @return 회원 정보 조회 결과
      * @since 2023-10-03
      */
-    public ResponseEntity<UserResponseDto> getUserInfo(HttpServletRequest req, @RequestBody SearchUserRequestDto createUserRequestDto) {
+    @PostMapping("/users/{userId}")
+    public ResponseEntity<UserResponseDto> getUserInfo(HttpServletRequest req, @PathVariable int userId) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.searchUser(req, createUserRequestDto));
+                    .body(userService.searchUser(req, userId));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -130,16 +131,17 @@ public class UserController {
      * 회원 정보 수정 API
      *
      * @param req                  HttpServletRequest 객체
+     * @param userId               수정할 회원 번호
      * @param createUserRequestDto 회원 정보 수정 정보 (JSON 형태)
      * @return 회원 정보 수정 결과
      * @since 2023-10-03
      */
     @PutMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> updateUser(HttpServletRequest req, @RequestBody ModifyUserRequestDto createUserRequestDto) {
+    public ResponseEntity<ResponseStatusDto> updateUser(HttpServletRequest req, @PathVariable int userId, @RequestBody ModifyUserRequestDto createUserRequestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.updateUser(req, createUserRequestDto));
+                    .body(userService.updateUser(req, userId, createUserRequestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -154,17 +156,17 @@ public class UserController {
     /**
      * 회원 정보 삭제 API
      *
-     * @param req                  HttpServletRequest 객체
-     * @param createUserRequestDto 회원 정보 삭제 정보 (JSON 형태)
+     * @param req    HttpServletRequest 객체
+     * @param userId 삭제할 회원 번호
      * @return 회원 정보 삭제 결과
      * @since 2023-10-03
      */
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> deleteUser(HttpServletRequest req, @RequestBody RemoveUserRequestDto createUserRequestDto) {
+    public ResponseEntity<ResponseStatusDto> deleteUser(HttpServletRequest req, @PathVariable int userId) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.deleteUser(req, createUserRequestDto));
+                    .body(userService.deleteUser(req, userId));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())

@@ -1,6 +1,7 @@
 package com.sparta.schedule_project.entity;
 
 import com.sparta.schedule_project.cookie.AuthType;
+import com.sparta.schedule_project.dto.request.user.ModifyUserRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,9 +49,8 @@ public class User extends Timestamped {
             orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    public void update(User user) {
-        this.seq = user.getSeq();
-        this.name = user.getName();
-        this.password = user.getPassword();
+    public void update(ModifyUserRequestDto userDto, String newPassword) {
+        this.name = userDto.getName();
+        this.password = newPassword;
     }
 }
