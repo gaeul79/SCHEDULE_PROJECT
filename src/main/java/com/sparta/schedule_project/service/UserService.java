@@ -81,8 +81,8 @@ public class UserService {
      * @since 2024-10-03
      */
     public ResponseStatusDto createUser(CreateUserRequestDto requestDto) throws ResponseException {
+        validateCreateUserInfo(requestDto);
         User user = requestDto.convertDtoToEntity(requestDto, passwordEncoder.encode(requestDto.getPassword()));
-        validateCreateUserInfo(user);
         userRepository.save(user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
     }
@@ -90,12 +90,12 @@ public class UserService {
     /**
      * 사용자 생성 시 올바른 정보를 입력하였는지 검사합니다.
      *
-     * @param user 생성하려는 사용자 정보
+     * @param requestDto 생성하려는 사용자 정보
      * @throws ResponseException 아이디가 중복될 경우 발생
      * @since 2024-10-07
      */
-    public void validateCreateUserInfo(User user) throws ResponseException {
-        User findUser = userRepository.findByEmail(user.getEmail());
+    public void validateCreateUserInfo(CreateUserRequestDto requestDto) throws ResponseException {
+        User findUser = userRepository.findByEmail(requestDto.getEmail());
         if (findUser != null) // 중복 이메일 확인
             throw new ResponseException(ResponseCode.USER_EMAIL_DUPLICATED);
     }
@@ -103,31 +103,13 @@ public class UserService {
     /**
      * 회원 정보를 조회합니다.
      *
-     * @param req    HttpServletRequest 객체
      * @param userId 조회할 회원 번호
      * @return 회원 조회 결과 (UserResponseDto)
      * @since 2024-10-03
      */
-    public UserResponseDto searchUser(HttpServletRequest req, int userId) throws ResponseException {
-        User loginUser = (User) req.getAttribute("user");
-        User findUser = userRepository.findBySeq(userId);
-        checkSearchUser(loginUser, findUser);
+    public UserResponseDto searchUser(int userId) throws ResponseException {
+        User findUser = findBySeq(userId);
         return UserResponseDto.createResponseDto(findUser, ResponseCode.SUCCESS_SEARCH_USER);
-    }
-
-    /**
-     * 사용자 정보를 검증합니다.
-     *
-     * @param loginUser   로그인한 사용자 정보
-     * @param requestUser 검증할 사용자 정보
-     * @throws ResponseException 사용자가 존재하지 않은 경우 예외 발생
-     * @since 2024-10-17
-     */
-    private void checkSearchUser(User loginUser, User requestUser) throws ResponseException {
-        if (requestUser == null)
-            throw new ResponseException(ResponseCode.USER_NOT_FOUND);
-        else if (!loginUser.getEmail().equals(requestUser.getEmail()))
-            throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 
     /**
@@ -141,9 +123,8 @@ public class UserService {
      */
     @Transactional
     public ResponseStatusDto updateUser(HttpServletRequest req, int userId, ModifyUserRequestDto requestDto) throws ResponseException {
-        User loginUser = (User) req.getAttribute("user");
-        User updateUser = userRepository.findBySeq(userId);
-        checkAuth(loginUser, updateUser);
+        User updateUser = findBySeq(userId);
+        validateMatchUser(req, updateUser);
         updateUser.update(requestDto, passwordEncoder.encode(requestDto.getPassword()));
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
     }
@@ -158,9 +139,8 @@ public class UserService {
      */
     @Transactional
     public ResponseStatusDto deleteUser(HttpServletRequest req, int userId) throws ResponseException {
-        User loginUser = (User) req.getAttribute("user");
-        User deleteUser = userRepository.findBySeq(userId);
-        checkAuth(loginUser, deleteUser);
+        User deleteUser = findBySeq(userId);
+        validateMatchUser(req, deleteUser);
         userRepository.delete(deleteUser);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);
     }
@@ -168,16 +148,29 @@ public class UserService {
     /**
      * JWT 토큰과 사용자 정보를 검증합니다.
      *
-     * @param loginUser 로그인한 사용자 정보
-     * @param user      검증할 사용자 정보
+     * @param req       HttpServletRequest 객체
+     * @param matchUser 검증할 사용자 정보
      * @throws ResponseException 토큰이 유효하지 않거나, 사용자가 존재하지 않거나, 권한이 부족한 경우 예외 발생
      * @since 2024-10-17
      */
-    private void checkAuth(User loginUser, User user) throws ResponseException {
+    private void validateMatchUser(HttpServletRequest req, User matchUser) throws ResponseException {
+        User loginUser = (User) req.getAttribute("user");
+        if (!loginUser.getEmail().equals(matchUser.getEmail()))
+            throw new ResponseException(ResponseCode.INVALID_PERMISSION);
+    }
+
+    /**
+     * 멤버 번호로 유저를 조회합니다.
+     *
+     * @param seq 유저 seq
+     * @return 검색된 회원
+     * @throws ResponseException 검색된 유저가 없을시 발생하는 예외
+     * @since 2024-10-23
+     */
+    private User findBySeq(int seq) throws ResponseException {
+        User user = userRepository.findById(seq).orElse(null);
         if (user == null)
             throw new ResponseException(ResponseCode.USER_NOT_FOUND);
-
-        if (!loginUser.getEmail().equals(user.getEmail()))
-            throw new ResponseException(ResponseCode.INVALID_PERMISSION);
+        return user;
     }
 }

@@ -105,17 +105,16 @@ public class UserController {
     /**
      * 회원 정보 조회 API
      *
-     * @param req    HttpServletRequest
      * @param userId 조회할 회원 번호
      * @return 회원 정보 조회 결과
      * @since 2023-10-03
      */
     @PostMapping("/users/{userId}")
-    public ResponseEntity<UserResponseDto> getUserInfo(HttpServletRequest req, @PathVariable int userId) {
+    public ResponseEntity<UserResponseDto> getUserInfo(@PathVariable int userId) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.searchUser(req, userId));
+                    .body(userService.searchUser(userId));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
