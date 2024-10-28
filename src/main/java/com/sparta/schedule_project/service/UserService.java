@@ -1,6 +1,7 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.cookie.CookieManager;
+import com.sparta.schedule_project.common.CommonFunction;
+import com.sparta.schedule_project.cookie.JwtUtil;
 import com.sparta.schedule_project.dto.request.user.CreateUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.ModifyUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.SearchUserRequestDto;
@@ -10,6 +11,7 @@ import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 사용자 관리 서비스 클래스
@@ -30,7 +34,7 @@ import java.io.UnsupportedEncodingException;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final CookieManager cookieManager;
+    private final JwtUtil jwtUtil;
 
     /**
      * 로그인을 처리합니다.
@@ -43,7 +47,7 @@ public class UserService {
     public ResponseStatusDto login(HttpServletResponse res, SearchUserRequestDto requestDto) throws ResponseException, UnsupportedEncodingException {
         User findUser = userRepository.findByEmail(requestDto.getEmail());
         validateLoginInfo(requestDto, findUser);
-        cookieManager.addJwtToCookie(findUser, res);
+        addJwtToCookie(findUser, res);
         return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
     }
 
@@ -108,7 +112,7 @@ public class UserService {
      * @since 2024-10-03
      */
     public UserResponseDto searchUser(int userId) throws ResponseException {
-        User findUser = findBySeq(userId);
+        User findUser = CommonFunction.findBySeq(userRepository, userId);
         return UserResponseDto.createResponseDto(findUser, ResponseCode.SUCCESS_SEARCH_USER);
     }
 
@@ -123,8 +127,8 @@ public class UserService {
      */
     @Transactional
     public ResponseStatusDto updateUser(HttpServletRequest req, int userId, ModifyUserRequestDto requestDto) throws ResponseException {
-        User updateUser = findBySeq(userId);
-        validateMatchUser(req, updateUser);
+        User updateUser = CommonFunction.findBySeq(userRepository, userId);
+        CommonFunction.matchCookie(req, updateUser);
         updateUser.update(requestDto, passwordEncoder.encode(requestDto.getPassword()));
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
     }
@@ -139,38 +143,28 @@ public class UserService {
      */
     @Transactional
     public ResponseStatusDto deleteUser(HttpServletRequest req, int userId) throws ResponseException {
-        User deleteUser = findBySeq(userId);
-        validateMatchUser(req, deleteUser);
+        User deleteUser = CommonFunction.findBySeq(userRepository, userId);
+        CommonFunction.matchCookie(req, deleteUser);
         userRepository.delete(deleteUser);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);
     }
 
     /**
-     * JWT 토큰과 사용자 정보를 검증합니다.
+     * 사용자 정보를 토큰으로 만들어 쿠키에 저장합니다.
      *
-     * @param req       HttpServletRequest 객체
-     * @param matchUser 검증할 사용자 정보
-     * @throws ResponseException 토큰이 유효하지 않거나, 사용자가 존재하지 않거나, 권한이 부족한 경우 예외 발생
-     * @since 2024-10-17
+     * @param user 사용자 정보 객체 (User)
+     * @param res  HTTP 응답 객체 (HttpServletResponse)
+     * @throws UnsupportedEncodingException 인코딩 실패 시 발생하는 예외
+     * @since 2024-10-18
      */
-    private void validateMatchUser(HttpServletRequest req, User matchUser) throws ResponseException {
-        User loginUser = (User) req.getAttribute("user");
-        if (!loginUser.getEmail().equals(matchUser.getEmail()))
-            throw new ResponseException(ResponseCode.INVALID_PERMISSION);
-    }
+    public void addJwtToCookie(User user, HttpServletResponse res) throws UnsupportedEncodingException {
+        String token = jwtUtil.createToken(user.getEmail(), user.getAuth());
+        token = URLEncoder.encode(token, StandardCharsets.UTF_8).replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
 
-    /**
-     * 멤버 번호로 유저를 조회합니다.
-     *
-     * @param seq 유저 seq
-     * @return 검색된 회원
-     * @throws ResponseException 검색된 유저가 없을시 발생하는 예외
-     * @since 2024-10-23
-     */
-    private User findBySeq(int seq) throws ResponseException {
-        User user = userRepository.findById(seq).orElse(null);
-        if (user == null)
-            throw new ResponseException(ResponseCode.USER_NOT_FOUND);
-        return user;
+        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token); // Name-Value
+        cookie.setPath("/");
+
+        // Response 객체에 Cookie 추가
+        res.addCookie(cookie);
     }
 }

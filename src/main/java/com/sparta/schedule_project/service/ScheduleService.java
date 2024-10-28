@@ -1,7 +1,6 @@
 package com.sparta.schedule_project.service;
 
 import com.sparta.schedule_project.cookie.AuthType;
-import com.sparta.schedule_project.cookie.CookieManager;
 import com.sparta.schedule_project.dto.request.schedule.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.ModifyScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.schedule.RemoveScheduleRequestDto;
@@ -14,7 +13,6 @@ import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.infra.WeatherApiService;
 import com.sparta.schedule_project.repository.ScheduleRepository;
-import com.sparta.schedule_project.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
