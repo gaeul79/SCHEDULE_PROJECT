@@ -1,20 +1,20 @@
 package com.sparta.schedule_project.dto.request.user;
 
 import com.sparta.schedule_project.entity.User;
-import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 유저 삭제 요청 DTO 클래스
+ * 유저 정보 조회 요청 DTO 클래스
  *
- * @since 2024-10-03
+ * @since 2024-10-18
  */
 @Getter
 @NoArgsConstructor
-public class RemoveUserRequestDto {
-    @Positive(message = "유저번호는 0이상의 숫자입니다.")
+public class LoginRequestDto {
     private int userSeq;
+    private String email;
+    private String password;
 
     /**
      * DTO 객체를 User 엔티티 객체로 변환합니다.
@@ -23,8 +23,10 @@ public class RemoveUserRequestDto {
      * @return 생성된 User 엔티티 객체
      * @since 2024-10-18
      */
-    public User convertDtoToEntity(RemoveUserRequestDto userDto) {
+    public User convertDtoToEntity(LoginRequestDto userDto) {
         return User.builder()
-                .seq(userDto.getUserSeq()).build();
+                .seq(userDto.getUserSeq())
+                .email(userDto.getEmail())
+                .password(userDto.getPassword()).build();
     }
 }

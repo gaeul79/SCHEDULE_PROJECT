@@ -2,12 +2,12 @@ package com.sparta.schedule_project.controller;
 
 import com.sparta.schedule_project.dto.request.user.CreateUserRequestDto;
 import com.sparta.schedule_project.dto.request.user.ModifyUserRequestDto;
-import com.sparta.schedule_project.dto.request.user.RemoveUserRequestDto;
-import com.sparta.schedule_project.dto.request.user.SearchUserRequestDto;
+import com.sparta.schedule_project.dto.request.user.LoginRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.user.UserResponseDto;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
+import com.sparta.schedule_project.service.LoginService;
 import com.sparta.schedule_project.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 @RequiredArgsConstructor // UserService 객체를 의존성 주입 방식으로 받아오는 코드 생략 가능
 @RequestMapping("/api.sparta.com")
 public class UserController {
+    private final LoginService loginService;
     private final UserService userService;
 
     /**
@@ -38,11 +39,11 @@ public class UserController {
      * @since 2023-10-03
      */
     @PostMapping("/login")
-    public ResponseEntity<ResponseStatusDto> login(HttpServletResponse res, @RequestBody SearchUserRequestDto createUserRequestDto) {
+    public ResponseEntity<ResponseStatusDto> login(HttpServletResponse res, @RequestBody LoginRequestDto createUserRequestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.login(res, createUserRequestDto));
+                    .body(loginService.login(res, createUserRequestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -70,7 +71,7 @@ public class UserController {
             // TODO. khj 쿠키 해제 필요
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.logout());
+                    .body(loginService.logout());
         } catch (Exception ex) {
             return ResponseEntity
                     .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
