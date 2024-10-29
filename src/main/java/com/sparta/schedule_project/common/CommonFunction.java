@@ -1,9 +1,9 @@
 package com.sparta.schedule_project.common;
 
 import com.sparta.schedule_project.common.entity.User;
+import com.sparta.schedule_project.common.repository.UserRepository;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.common.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -49,7 +49,7 @@ public class CommonFunction {
     /**
      * 쿠키에 저장된 사용자 정보를 추출합니다.
      *
-     * @param req       HttpServletRequest 객체
+     * @param req HttpServletRequest 객체
      * @return 사용자 정보 객체 (User)
      * @since 2024-10-18
      */

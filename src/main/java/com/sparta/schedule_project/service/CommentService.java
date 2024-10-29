@@ -5,7 +5,6 @@ import com.sparta.schedule_project.jwt.AuthType;
 import com.sparta.schedule_project.dto.request.CreateCommentRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyCommentRequestDto;
 import com.sparta.schedule_project.dto.request.RemoveCommentRequestDto;
-import com.sparta.schedule_project.dto.request.SearchCommentRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.CommentResponseDto;
 import com.sparta.schedule_project.entity.Comment;
@@ -16,6 +15,7 @@ import com.sparta.schedule_project.repository.CommentRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,15 +42,15 @@ public class CommentService {
     /**
      * 댓글 조회
      *
-     * @param requestDto 댓글 조회 요청 정보
+     * @param scheduleSeq 댓글을 검색할 일정 번호
+     * @param page        페이지 번호 (기본값: 1)
+     * @param size        페이지당 항목 수 (기본값: 10)
      * @return 조회 결과 (ScheduleResponseDto)
      * @since 2024-10-15
      */
-    public CommentResponseDto searchComment(SearchCommentRequestDto requestDto) {
-        Page<Comment> comments = commentRepository.findAllByScheduleSeqOrderByUpdateDateDesc(
-                requestDto.getScheduleSeq(),
-                requestDto.convertDtoToPageable()
-        );
+    public CommentResponseDto searchComment(int scheduleSeq, int page, int size) {
+        Page<Comment> comments = commentRepository
+                .findAllByScheduleSeqOrderByUpdateDateDesc(scheduleSeq, PageRequest.of(page, size));
         return CommentResponseDto.createResponseDto(comments, ResponseCode.SUCCESS_SEARCH_COMMENT);
     }
 

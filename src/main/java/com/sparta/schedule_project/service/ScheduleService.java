@@ -1,22 +1,22 @@
 package com.sparta.schedule_project.service;
 
 import com.sparta.schedule_project.common.CommonFunction;
-import com.sparta.schedule_project.jwt.AuthType;
+import com.sparta.schedule_project.common.entity.User;
 import com.sparta.schedule_project.dto.request.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.RemoveScheduleRequestDto;
-import com.sparta.schedule_project.dto.request.SearchScheduleRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.ScheduleResponseDto;
 import com.sparta.schedule_project.entity.Schedule;
-import com.sparta.schedule_project.common.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.infra.WeatherApiService;
+import com.sparta.schedule_project.jwt.AuthType;
 import com.sparta.schedule_project.repository.ScheduleRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +40,7 @@ public class ScheduleService {
      * @return 생성 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
-    public ResponseStatusDto createSchedule(HttpServletRequest req, CreateScheduleRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto createSchedule(HttpServletRequest req, CreateScheduleRequestDto requestDto) {
         String weather = weatherApiService.getTodayWeather();
         User user = CommonFunction.getUserFromCookie(req);
         Schedule schedule = requestDto.convertDtoToEntity(user.getSeq(), weather);
@@ -51,12 +51,13 @@ public class ScheduleService {
     /**
      * 일정을 조회
      *
-     * @param requestDto 일정 조회 요청 정보
+     * @param page 페이지 번호 (기본값: 1)
+     * @param size 페이지당 항목 수 (기본값: 10)
      * @return 조회 결과 (ScheduleResponseDto)
      * @since 2024-10-03
      */
-    public ScheduleResponseDto searchSchedule(SearchScheduleRequestDto requestDto) {
-        Page<Schedule> schedules = scheduleRepository.findAllByOrderByUpdateDateDesc(requestDto.convertDtoToPageable());
+    public ScheduleResponseDto searchSchedule(int page, int size) {
+        Page<Schedule> schedules = scheduleRepository.findAllByOrderByUpdateDateDesc(PageRequest.of(page, size));
         return ScheduleResponseDto.createResponseDto(schedules, ResponseCode.SUCCESS_SEARCH_SCHEDULE);
     }
 
@@ -88,7 +89,7 @@ public class ScheduleService {
      */
     public ResponseStatusDto deleteSchedule(HttpServletRequest req, RemoveScheduleRequestDto requestDto) throws ResponseException {
         User user = CommonFunction.getUserFromCookie(req);
-        Schedule schedule = scheduleRepository.findBySeq(user.getSeq());
+        Schedule schedule = scheduleRepository.findBySeq(requestDto.getScheduleSeq());
         checkAuth(user, schedule);
         scheduleRepository.delete(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE);

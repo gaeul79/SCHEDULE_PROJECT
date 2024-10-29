@@ -1,6 +1,5 @@
 package com.sparta.schedule_project.dto.response;
 
-import com.sparta.schedule_project.dto.PageDto;
 import com.sparta.schedule_project.entity.Comment;
 import com.sparta.schedule_project.exception.ResponseCode;
 import lombok.Data;

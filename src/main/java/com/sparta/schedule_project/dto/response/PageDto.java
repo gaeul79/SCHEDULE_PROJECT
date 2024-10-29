@@ -1,6 +1,5 @@
-package com.sparta.schedule_project.dto;
+package com.sparta.schedule_project.dto.response;
 
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,8 +18,8 @@ import org.springframework.data.domain.Pageable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PageDto {
-    private int page;
-    private int size;
+    private int page = 0;
+    private int size = 10;
     private int totalPage;
 
     /**
@@ -43,11 +42,18 @@ public class PageDto {
      * @since 2024-10-03
      */
     public Pageable convertDtoToPageable() {
-        if(page <= 0 || size <= 0) {
-            return PageRequest.of(0, 10);
-        }
-        else  {
-            return PageRequest.of(page - 1, size);
-        }
+        return PageRequest.of(page - 1, size);
+    }
+
+    /**
+     * 페이지 번호와 페이지 크기를 설정합니다.
+     *
+     * @param page 설정할 페이지 번호 (1부터 시작)
+     * @param size 한 페이지에 표시할 항목 수
+     * @since 2024-10-29
+     */
+    public void setPage(int page, int size) {
+        this.page = page;
+        this.size = size;
     }
 }

@@ -38,7 +38,9 @@ public class UserController {
      * @since 2023-10-03
      */
     @PostMapping("/login")
-    public ResponseEntity<ResponseStatusDto> login(HttpServletResponse res, @RequestBody LoginRequestDto createUserRequestDto) throws ResponseException, UnsupportedEncodingException {
+    public ResponseEntity<ResponseStatusDto> login(
+            HttpServletResponse res,
+            @RequestBody LoginRequestDto createUserRequestDto) throws ResponseException, UnsupportedEncodingException {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(loginService.login(res, createUserRequestDto));
@@ -66,7 +68,8 @@ public class UserController {
      * @since 2023-10-03
      */
     @PostMapping("/signup")
-    public ResponseEntity<ResponseStatusDto> createUser(@RequestBody CreateUserRequestDto createUserRequestDto) throws ResponseException {
+    public ResponseEntity<ResponseStatusDto> createUser(
+            @RequestBody CreateUserRequestDto createUserRequestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(userService.createUser(createUserRequestDto));
@@ -80,7 +83,8 @@ public class UserController {
      * @since 2023-10-03
      */
     @PostMapping("/users/{userSeq}")
-    public ResponseEntity<UserResponseDto> getUserInfo(@PathVariable int userSeq) throws ResponseException {
+    public ResponseEntity<UserResponseDto> getUserInfo(
+            @PathVariable int userSeq) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.searchUser(userSeq));
@@ -95,7 +99,9 @@ public class UserController {
      * @since 2023-10-03
      */
     @PutMapping("/users/{userSeq}")
-    public ResponseEntity<ResponseStatusDto> updateUser(HttpServletRequest req, @RequestBody ModifyUserRequestDto createUserRequestDto) throws ResponseException {
+    public ResponseEntity<ResponseStatusDto> updateUser(
+            HttpServletRequest req,
+            @RequestBody ModifyUserRequestDto createUserRequestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.updateUser(req, createUserRequestDto));
@@ -110,7 +116,9 @@ public class UserController {
      * @since 2023-10-03
      */
     @DeleteMapping("/users/{userSeq}")
-    public ResponseEntity<ResponseStatusDto> deleteUser(HttpServletRequest req, @PathVariable int userSeq) throws ResponseException {
+    public ResponseEntity<ResponseStatusDto> deleteUser(
+            HttpServletRequest req,
+            @PathVariable int userSeq) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.deleteUser(req, userSeq));

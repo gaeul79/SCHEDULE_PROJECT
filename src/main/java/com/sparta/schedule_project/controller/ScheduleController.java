@@ -3,7 +3,6 @@ package com.sparta.schedule_project.controller;
 import com.sparta.schedule_project.dto.request.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.RemoveScheduleRequestDto;
-import com.sparta.schedule_project.dto.request.SearchScheduleRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.ScheduleResponseDto;
 import com.sparta.schedule_project.exception.ResponseException;
@@ -35,24 +34,29 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @PostMapping("/schedules")
-    public ResponseEntity<ResponseStatusDto> createSchedule(HttpServletRequest req, @RequestBody CreateScheduleRequestDto requestDto) throws ResponseException {
+    public ResponseEntity<ResponseStatusDto> createSchedule(
+            HttpServletRequest req,
+            @RequestBody CreateScheduleRequestDto requestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(scheduleService.createSchedule(req, requestDto));
     }
 
     /**
-     * 일정 조회 API
+     * 일정 검색 API
      *
-     * @param requestDto 일정 조회 정보 (JSON 형태)
-     * @return 조회 결과 (ScheduleResponseDto)
-     * @since 2024-10-03
+     * @param page 페이지 번호 (기본값: 1)
+     * @param size 페이지당 항목 수 (기본값: 10)
+     * @return 일정 목록을 포함하는 ResponseEntity
+     * @since 2024-10-29
      */
     @GetMapping("/schedules")
-    public ResponseEntity<ScheduleResponseDto> searchSchedules(@RequestBody SearchScheduleRequestDto requestDto) {
+    public ResponseEntity<ScheduleResponseDto> searchSchedules(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(scheduleService.searchSchedule(requestDto));
+                .body(scheduleService.searchSchedule(page, size));
     }
 
     /**
@@ -64,7 +68,9 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @PutMapping("/schedules/{scheduleSeq}")
-    public ResponseEntity<ResponseStatusDto> updateSchedule(HttpServletRequest req, @RequestBody ModifyScheduleRequestDto requestDto) throws ResponseException {
+    public ResponseEntity<ResponseStatusDto> updateSchedule(
+            HttpServletRequest req,
+            @RequestBody ModifyScheduleRequestDto requestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(scheduleService.updateSchedule(req, requestDto));
@@ -79,7 +85,9 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @DeleteMapping("/schedules/{scheduleSeq}")
-    public ResponseEntity<ResponseStatusDto> deleteSchedule(HttpServletRequest req, @RequestBody RemoveScheduleRequestDto requestDto) throws ResponseException {
+    public ResponseEntity<ResponseStatusDto> deleteSchedule(
+            HttpServletRequest req,
+            @RequestBody RemoveScheduleRequestDto requestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(scheduleService.deleteSchedule(req, requestDto));
