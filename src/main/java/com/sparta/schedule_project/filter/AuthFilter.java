@@ -95,16 +95,13 @@ public class AuthFilter extends OncePerRequestFilter {
      * @since 2024-10-18
      */
     private boolean ignorePage(String url) {
-        // 회원가입, 로그인 관련 API 는 인증 필요없이 요청 진행
+        // 회원 가입, 로그인 관련 API 는 인증 필요 없이 요청 진행
         if (!StringUtils.hasText(url))
             return true;
-        else if (url.contains("/api.sparta.com/login") ||
-                url.contains("/api.sparta.com/signup") ||
+        return url.contains("/api/login") ||
+                url.contains("/api/signup") ||
                 url.startsWith("/css") ||
-                url.startsWith("/js"))
-            return true;
-        else
-            return false;
+                url.startsWith("/js");
     }
 
     /**

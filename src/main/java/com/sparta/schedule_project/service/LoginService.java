@@ -66,8 +66,6 @@ public class LoginService {
         Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token); // Name-Value
         cookie.setPath("/");
 
-        // Response 객체에 Cookie 추가
-        res.addCookie(cookie);
-        // res.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+        res.addCookie(cookie); // Response 객체에 Cookie 추가
     }
 }
