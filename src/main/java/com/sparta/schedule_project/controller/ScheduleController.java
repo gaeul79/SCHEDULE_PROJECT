@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api.sparta.com/{userId}")
+@RequestMapping("/api/{userId}")
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
@@ -50,12 +50,12 @@ public class ScheduleController {
      * @since 2024-10-29
      */
     @GetMapping("/schedules")
-    public ResponseEntity<ScheduleResponseDto> searchSchedules(
+    public ResponseEntity<ScheduleResponseDto> searchSchedule(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(scheduleService.searchSchedule(page, size));
+                .body(scheduleService.searchSchedule(page - 1, size));
     }
 
     /**

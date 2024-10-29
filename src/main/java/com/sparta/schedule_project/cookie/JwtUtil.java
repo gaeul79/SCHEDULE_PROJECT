@@ -1,5 +1,7 @@
 package com.sparta.schedule_project.cookie;
 
+import com.sparta.schedule_project.exception.ResponseCode;
+import com.sparta.schedule_project.exception.ResponseException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -74,12 +76,12 @@ public class JwtUtil {
      * @return 토큰 자체 값 (String)
      * @throws NullPointerException 토큰 값이 유효하지 않거나 없는 경우 발생
      */
-    public String substringToken(String tokenValue) {
+    public String substringToken(String tokenValue) throws ResponseException {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(7);
         }
         logger.error("Not Found Token");
-        throw new NullPointerException("Not Found Token");
+        throw new ResponseException(ResponseCode.TOKEN_INVALID);
     }
 
     /**

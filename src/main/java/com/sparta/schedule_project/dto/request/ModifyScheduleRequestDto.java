@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ModifyScheduleRequestDto {
-    @Positive(message = "일정번호는 0이상 숫자입니다.")
+    @Positive(message = "일정 번호는 0이상 숫자입니다.")
     private int scheduleId;
 
     @NotBlank(message = "제목을 입력해주세요.")

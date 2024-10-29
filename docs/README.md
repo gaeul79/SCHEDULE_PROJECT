@@ -56,6 +56,7 @@
  │        │    └── WeatherApiService.java                       # 현재 날씨를 외부 API로부터 받아도는 서비스 class
  │        │
  │        ├── 'config'                                          # 프로젝트 설정 관련 class들을 모아놓은 폴더
+ │        │    ├── PasswordEncoder.java                         # 비밀번호에 대한 암호화 및 대조 기능을 지원하는 class
  │        │    └── PasswordConfig.java                          # 비밀번호 관련 설정 (암호화 등)을 담당하는 class
  │        │
  │        ├── 'cookie'                                          # 쿠키 관련 클래스들을 모아놓은 폴더
@@ -74,38 +75,23 @@
  │        │
  │        ├── 'dto'                                             # 데이터를 주고받기 위한 객체를 모아놓은 폴더 
  │        │   ├── 'request'                                     # 서버에 무언가 요청할때 사용되는 폴더 및 class들을 모아놓은 폴더
- │        │   │    ├── 'user'                                   # 서버에 유저관련 요청할 때 사용하는 dto 
- │        │   │    │    ├── CreateUserRequestDto.java           # 사용자를 등록 요청할 때 사용하는 dto 
- │        │   │    │    ├── SearchUserRequestDto.java           # 사용자 정보를 요청할 때 사용하는 dto 
- │        │   │    │    ├── ModifyUserRequestDto.java           # 사용자를 수정할 때 사용하는 dto 
- │        │   │    │    └── RemoveUserRequestDto.java           # 사용자를 삭제할 때 사용하는 dto 
- │        │   │    │  
- │        │   │    ├── 'schedule'                               # 서버에 일정관련 요청할 때 사용하는 dto 
- │        │   │    │    ├── CreateScheduleRequestDto.java       # 일정 정보를 등록 요청할 때 사용하는 dto 
- │        │   │    │    ├── SearchScheduleRequesthDto.java      # 일정 정보를 요청할 때 사용하는 dto 
- │        │   │    │    ├── ModifyScheduleRequesthDto.java      # 일정을 수정할 때 사용하는 dto 
- │        │   │    │    └── RemoveScheduleRequesthDto.java      # 일정을 삭제할 때 사용하는 dto 
- │        │   │    │
- │        │   │    └── 'comment'                                # 서버에 댓글 관련 요청할 때 사용하는 dto 
- │        │   │         ├── CreateCommentRequesthDto.java       # 댓글을 등록 요청할 때 사용하는 dto  
- │        │   │         ├── SearchCommentRequesthDto.java       # 댓글 정보를 요청할 때 사용하는 dto 
- │        │   │         ├── ModifyCommentRequesthDto.java       # 댓글을 수정할 때 사용하는 dto
- │        │   │         └── RemoveCommentRequesthDto.java       # 댓글을 삭제할 때 사용하는 dto 
+ │        │   │    ├── CreateUserRequestDto.java                # 사용자를 등록 요청할 때 사용하는 dto 
+ │        │   │    ├── LoginRequestDto.java                     # 로그인을 요청할 때 사용하는 dto 
+ │        │   │    ├── ModifyUserRequestDto.java                # 사용자를 수정할 때 사용하는 dto 
+ │        │   │    ├── CreateScheduleRequestDto.java            # 일정 정보를 등록 요청할 때 사용하는 dto 
+ │        │   │    ├── ModifyScheduleRequesthDto.java           # 일정을 수정할 때 사용하는 dto 
+ │        │   │    ├── CreateCommentRequesthDto.java            # 댓글을 등록 요청할 때 사용하는 dto  
+ │        │   │    └── ModifyCommentRequesthDto.java            # 댓글을 수정할 때 사용하는 dto
  │        │   │
  │        │   └── 'response'                                    # 서버에서 응답할때 사용되는 폴더 및 class들을 모아놓은 폴더
- │        │       ├── ResponseStatusDto.java                    # API응답 상태에 대한 정보를 제공하는 dto    
- │        │       │
- │        │       ├── 'user'                                    # 서버로부터 사용자 관련 정보를 받을 때 사용하는 class들을 모아놓은 폴더
- │        │       │    ├── UserResponseDto.java                 # 서버로부터 사용자 요청 처리 결과를 받을 때 사용하는 class
- │        │       │    └── UserDto.java                         # 사용자 dto 
- │        │       │        
- │        │       ├── 'schedule'                                # 서버로부터 일정 관련 정보를 받을 때 사용하는 class들을 모아놓은 폴더
- │        │       │    ├── ScheduleResponseDto.java             # 서버로부터 일정 요청 처리 결과를 받을 때 사용하는 class
- │        │       │    └── ScheduleDto.java                     # 일정 dto
- │        │       │         
- │        │       └── 'comment'                                 # 서버로부터 댓글 요청 처리 결과를 받을 때 사용하는 class들을 모아놓은 폴더
- │        │            ├── CommentResponseDto.java              # 서버로부터 댓글 요청 처리 결과를 받을 때 사용하는 class    
- │        │            └── CommentDto.java                      # 댓글 dto  
+ │        │        ├── ResponseStatusDto.java                   # API응답 상태에 대한 정보를 제공하는 dto    
+ │        │        ├── UserResponseDto.java                     # 서버로부터 사용자 요청 처리 결과를 받을 때 사용하는 class
+ │        │        ├── UserDto.java                             # 사용자 dto class
+ │        │        ├── ScheduleResponseDto.java                 # 서버로부터 일정 요청 처리 결과를 받을 때 사용하는 class
+ │        │        ├── ScheduleDto.java                         # 일정 dto class
+ │        │        ├── CommentResponseDto.java                  # 서버로부터 댓글 요청 처리 결과를 받을 때 사용하는 class    
+ │        │        ├── CommentDto.java                          # 댓글 dto class
+ │        │        └── PageDto.java                             # 페이징 정보를 담는 dto class 
  │        │         
  │        ├── 'entity'                                          # DB와 매핑되는 엔티티 클래스들을 모아놓은 폴더 
  │        │    ├── Comment.java                                 # 댓글 entity 
@@ -115,6 +101,7 @@
  │        │         
  │        ├── 'exception'                                       # 사용자 요청을 처리하기 위한 컨트롤러를 모아놓은 폴더 
  │        │    ├── ResponseCode.java                            # API 응답 시 사용되는 상태 코드와 메시지를 정의하는 enum 
+ │        │    ├── GlobalExceptionHandler.java                  # 예외 처리 class
  │        │    └── ResponseException.java                       # API 응답 시 발생하는 예외를 나타내는 class 
  │        │         
  │        ├── 'repository'                                      # DB와 상호작용하는 레포지토리를 모아놓은 폴더 
@@ -136,67 +123,65 @@
 <details><summary><b>API 명세서(펼치기/접기)</b></summary>
 <table>
     <tr>
-        <th>기능</th>
+        <th>api&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
         <th>Method</th>
         <th>URL</th>
+        <th>request header</th>
         <th>request</th>
-        <th>response</th>
-        <th>상태코드</th>
+        <th>response header</th>
+        <th>response</th>                               
+<th>status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </th>
     </tr>
     <tr>
         <td><b>회원 가입</b></td>
         <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
-        <td>/api.sparta.com/signup</td>
+        <td><span>/api/signup</span></td>
+        <td>RequestBody</td>
         <td><pre lang="json">{     
     "email": "hong@gmail.com",
     "password": "1q2w3e4r#",
     "name": "홍길동",
     "auth": "ADMIN"
 }</pre></td>
+        <td>application/json</td>
         <td><pre lang="json">{
     "message": "create user success",
     "status": 200
 }</pre></td>
-        <td><span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 사용자 정상등록</td>
+        <td>
+            <span style=background-color:yellow;font-weight:bold;color:black;>201</span>: 사용자 정상등록</br>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>409</span>: 중복된 이메일
+        </td>
     </tr>
     <tr>
         <td><b>로그인</b></td>
         <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
-        <td>/api.sparta.com/login</td>
+        <td><span>/api/login</span></td>
+        <td>RequestBody</td>
         <td><pre lang="json">{
     "email" : "hong@email.com",
     "password" : "1q2w3e4r#"
 }</pre></td>
+        <td>application/json</td>
         <td><pre lang="json">{
     "message": "login success",
-    "status": 200
+    "status": 201
 }</pre></td>
         <td>
             <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 로그인 성공<br/>
-            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 토큰이 없습니다.<br/>
-            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 토큰 유효기간이 만료되었습니다.
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 잘못된 값 입력<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 일치하지 않는 비밀번호<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 존재하지 않는 유저
         </td>
     </tr>
     <tr>
-        <td><b>로그 아웃</b></td>
-        <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
-        <td>/api.sparta.com/logout</td>
-        <td><pre lang="json">{
-    "id" : 1
-}</pre></td>
-        <td><pre lang="json">{
-    "message": "logout success",
-    "status": 200
-}</pre></td>
-        <td><span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 로그아웃 성공</td>
-    </tr>
-    <tr>
-        <td><b>사용자 정보 조회</b></td>
+        <td><b>사용자<br/>정보 조회</b></td>
         <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
-        <td>/api.sparta.com/users</td>
-        <td><pre lang="json">{
-    "userId" : 1
-}</pre></td>
+        <td><span>/api<br/>/users/{userId}</span></td>
+        <td>PathVariable</td>
+        <td><code>N/A</code></td>
+        <td>application/json</td>
         <td><pre lang="json">{
     "user": {
         "id": 1,
@@ -210,58 +195,94 @@
         "status": 200
     }
 }</pre></td>
-        <td><span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 사용자 정보 조회 성공</td>
+        <td>
+            <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 사용자 정보 조회 성공<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 토큰이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 토큰 유효기간 만료<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 지원하지 않는 토큰 형식<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>403</span>: 권한이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 존재하지 않는 유저<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 잘못된 JWT 토큰
+        </td>
     </tr>
     <tr>
-        <td><b>사용자 수정</b></td>
+        <td><b>사용자<br/>수정</b></td>
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
-        <td>/api.sparta.com/users/{userId}</td>
+        <td><span>/api<br/>/users/{userId}</span></td>
+        <td>PathVariable<br/>RequestBody</td>
         <td><pre lang="json">{    
     "userId": 1,        
     "password": "1q2w3e4r#",
     "name": "김길동"
 }</pre></td>
+        <td>application/json</td>
         <td><pre lang="json">{
     "message": "update user success",
     "status": 200
 }</pre></td>
-        <td><span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 사용자 정상수정</td>
+        <td>
+            <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 사용자 정상수정<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 잘못된 값 입력<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 토큰이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 토큰 유효기간 만료<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 지원하지 않는 토큰 형식<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>403</span>: 수정 권한이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 존재하지 않는 유저<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 잘못된 JWT 토큰
+        </td>
     </tr>
     <tr>
-        <td><b>사용자 삭제</b></td>
+        <td><b>사용자<br/>삭제</b></td>
         <td><span style=background-color:#CE3636AA;font-weight:bold;>DELETE</span></td>
-        <td>/api.sparta.com/users/{userId}</td>
-        <td><pre lang="json">{
-    "userId": 1
-}</pre></td>
+        <td><span>/api<br/>/users/{userId}</span></td>
+        <td>PathVariable</td>
+        <td><code>N/A</code></td>
+        <td>application/json</td>
         <td><pre lang="json">{
     "message": "delete user success",
-    "status": 200
+    "status": 204
 }</pre></td>
-        <td><span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 사용자 정상삭제</td>
+        <td>
+            <span style=background-color:yellow;font-weight:bold;color:black;>204</span>: 사용자 정상삭제<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 토큰이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 토큰 유효기간 만료<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 지원하지 않는 토큰 형식<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>403</span>: 삭제 권한이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 존재하지 않는 유저<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 잘못된 JWT 토큰
+        </td>
+        </td>
     </tr>
     <tr>
         <td><b>일정 등록</b></td>
         <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
-        <td>/api.sparta.com/schedules</td>
+        <td><span>/api/{userId}<br/>/schedules</span></td>
+        <td>PathVariable<br/>RequestBody</td>
         <td><pre lang="json">{
     "title": "제목제목제목",
     "content": "내용내용내용"
 }</pre></td>
+        <td>application/json</td>
         <td><pre lang="json">{
     "message": "create schedule success",
-    "status": 200
+    "status": 201
 }</pre></td>
-        <td><span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 일정 정상등록</td>
+        <td>
+            <span style=background-color:yellow;font-weight:bold;color:black;>201</span>: 일정 정상등록<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 토큰이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 잘못된 내용 입력<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 토큰 유효기간 만료<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 지원하지 않는 토큰 형식<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 잘못된 JWT 토큰
+        </td>
     </tr>
     <tr>
         <td><b>일정 조회</b></td>
         <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
-        <td>/api.sparta.com/schedules</td>
-        <td><pre lang="json">{
-    "page": 1,
-    "size": 2
-}</pre></td>
+        <td><span>/api/{userId}<br/>/schedules</span></td>
+        <td>PathVariable<br/>RequestParam</td>
+        <td><code>N/A</code></td>
+        <td>allpication/json</td>
         <td><pre lang="json">{
     "schedules": [
         {
@@ -295,68 +316,92 @@
         "message": "일정 조회 성공"
     }
 }</pre></td>
-        <td><span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 일정 정상조회</td>
+        <td>
+            <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 일정 정상조회<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 토큰이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 토큰 유효기간 만료<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 지원하지 않는 토큰 형식<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 잘못된 JWT 토큰
+        </td>
     </tr>
     <tr>
         <td><b>일정 수정</b></td>
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
-        <td>/api.sparta.com/schedules/{scheduleId}</td>
+        <td><span>/api/{userId}<br/>/schedules/{scheduleId}</span></td>
+        <td>PathVariable<br/>RequestBody</td>
         <td><pre lang="json">{
-    "id": 1,
-    "userId": 1,
+    "scheduleId": 1,
     "title" : "제목제목제목",
     "content" : "수정수정수정"
 }</pre></td>
+        <td>application/json</td>
         <td><pre lang="json">{
     "message": "update schedule success",
     "status": 200
 }</pre></td>
         <td>
             <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 일정 정상수정<br/>
-            <span style=background-color:skyblue;font-weight:bold;color:black;>403</span>: 권한이 없습니다.
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 토큰이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 잘못된 값 입력<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 토큰 유효기간 만료<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 지원하지 않는 토큰 형식<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>403</span>: 권한이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 잘못된 JWT 토큰<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 삭제된 일정
         </td>
     </tr>
     <tr>
         <td><b>일정 삭제</b></td>
         <td><span style=background-color:#CE3636AA;font-weight:bold;>DELETE</span></td>
-        <td>/api.sparta.com/schedules/{scheduleId}</td>
-        <td><pre lang="json">{ 
-    "secheduleId" : 1,
-    "userId": 1
-}</pre></td>
+        <td><span>/api/{userId}<br/>/schedules/{scheduleId}</span></td>
+        <td>PathVariable</td>
+        <td><code>N/A</code></td>
+        <td>application/json</td>
         <td><pre lang="json">{
     "message": "delete schedule success",
     "status": 200
 }</pre></td>
         <td>
             <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 일정 정상삭제<br/>
-            <span style=background-color:skyblue;font-weight:bold;color:black;>403</span>: 권한이 없습니다.
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 토큰이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 토큰 유효기간 만료<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 지원하지 않는 토큰 형식<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>403</span>: 권한이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 잘못된 JWT 토큰<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 삭제된 일정
         </td>
     </tr>
     <tr>
         <td><b>댓글 등록</b></td>
         <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
-        <td>/api.sparta.com/schedule/{scheduleId}/comments</td>
+        <td><span>/api/{userId}<br/>/schedule/{scheduleId}<br/>/comments</span></td>
+        <td>PathVariable<br/>RequestBody</td>
         <td><pre lang="json">{     
-    "userId": 1,
-    "schedlueId": 1,
+    "scheduleId": 1,
     "content": "댓글댓글댓글"
 }</pre></td>
+        <td>application/json</td>
         <td><pre lang="json">{
     "message": "create comment success",
-    "status": 200
+    "status": 201
 }</pre></td>
-        <td><span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 댓글 정상등록</td>
+        <td>
+            <span style=background-color:yellow;font-weight:bold;color:black;>201</span>: 댓글 정상등록<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 토큰이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 잘못된 값 입력<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 토큰 유효기간 만료<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 지원하지 않는 토큰 형식<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>403</span>: 권한이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 잘못된 JWT 토큰
+        </td>
     </tr>
         <tr>
         <td><b>일정 댓글 조회</b></td>
         <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
-        <td>/api.sparta.com/schedule/{scheduleId}/comments</td>
-        <td><pre lang="json">{
-    "scheduleId": 1,        
-    "page": 1,
-    "size": 2
-}</pre></td>
+        <td><span>/api/{userId}<br/>/schedule/{scheduleId}<br/>/comments</span></td>
+        <td>PathVariable<br/>RequestParam</td>
+        <td><code>N/A</code></td>
+        <td>application/json</td>
         <td><pre lang="json">{
     "comment": [{
         "id": 1,
@@ -384,46 +429,68 @@
         "status": 200
     },
 }</pre></td>
-        <td><span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 댓글 정상조회</td>
+        <td>
+            <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 댓글 정상조회<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 토큰이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 토큰 유효기간 만료<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 지원하지 않는 토큰 형식<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 잘못된 JWT 토큰
+        </td>
     </tr>
     <tr>
         <td><b>댓글 수정</b></td>
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
-        <td>/api.sparta.com/schedule/{scheduleId}/comments/{commentId}</td>
+        <td><span>/api/{userId}<br/>/schedule/{scheduleId}<br/>/comments/{commentId}</span></td>
+        <td>PathVariable<br/>RequestBody</td>
         <td><pre lang="json">{
     "commentId": 1,
-    "userId": 1,
     "content" : "댓글 수정수정수정"
 }</pre></td>
+        <td>application/json</td>
         <td><pre lang="json">{
     "message": "update comment success",
     "status": 200
 }</pre></td>
         <td>
-            <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 댓글 정상수정
+            <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 댓글 정상수정<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 토큰이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 잘못된 값 입력<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 토큰 유효기간 만료<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 지원하지 않는 토큰 형식<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>403</span>: 권한이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 잘못된 JWT 토큰<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 삭제된 댓글
         </td>
     </tr>
     <tr>
         <td><b>댓글 삭제</b></td>
         <td><span style=background-color:#CE3636AA;font-weight:bold;>DELETE</span></td>
-        <td>/api.sparta.com/schedule/{scheduleId}/comments/{commentId}</td>
-        <td><pre lang="json">{
-    "userId": 1,
-    "id" : 1
-}</pre></td>
+        <td><span>/api/{userId}<br/>/schedule/{scheduleId}<br/>/comments/{commentId}</span></td>
+        <td>PathVariable</td>
+        <td><code>N/A</code></td>
+        <td>application/json</td>
         <td><pre lang="json">{
     "message": "delete comment success",
-    "status": 200
+    "status": 204
 }</pre></td>
         <td>
-            <span style=background-color:yellow;font-weight:bold;color:black;>200</span>: 댓글 정상삭제
+            <span style=background-color:yellow;font-weight:bold;color:black;>204</span>: 댓글 정상삭제<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>400</span>: 토큰이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 토큰 유효기간 만료<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>401</span>: 지원하지 않는 토큰 형식<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>403</span>: 권한이 없음<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 잘못된 JWT 토큰<br/>
+            <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 삭제된 댓글
         </td>
     </tr>          
 </table>
 </details>
 
 ### 📋ERD
+<details><summary><b>ERD (펼치기/접기)</b></summary>
 <img src="images/erd.png">
+</details>
+
 
 ### 🖥️개발환경
 - `Window 11`
@@ -433,19 +500,16 @@
 
 ### 💫Denpendencies
 - `Lombok`
-- `thymeleaf`
 - `Spring Web`
 - `JDBC API`
 - `Spring Data JPA`
 - `MySQL Driver`
 - `Validation`
-- `Spring Security`
+- `CycloneDX SBOM support`
 
 ### 🔨개발 툴
 - `Intellij`
-- `Git`
-    - `Github`
-    - `Github Desktop`
+- `Github`
 
 ### 🧑‍💻사용언어
 - `Java`

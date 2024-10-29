@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api.sparta.com/{userId}/schedules/{scheduleId}")
+@RequestMapping("/api/{userId}/schedules/{scheduleId}")
 public class CommentController {
     private final CommentService commentService;
 
@@ -29,7 +29,7 @@ public class CommentController {
     @PostMapping("/comments")
     public ResponseEntity<ResponseStatusDto> createComment(
             HttpServletRequest req,
-            @RequestBody CreateCommentRequestDto requestDto) throws ResponseException {
+            @RequestBody CreateCommentRequestDto requestDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(commentService.createComment(req, requestDto));
@@ -45,12 +45,12 @@ public class CommentController {
      */
     @GetMapping("/comments")
     public ResponseEntity<CommentResponseDto> searchComment(
-            @RequestParam int scheduleId,
+            @PathVariable int scheduleId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(commentService.searchComment(page, size, scheduleId));
+                .body(commentService.searchComment(scheduleId, page - 1, size));
     }
 
     /**

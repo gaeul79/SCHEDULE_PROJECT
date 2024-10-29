@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequiredArgsConstructor // UserService 객체를 의존성 주입 방식으로 받아오는 코드 생략 가능
-@RequestMapping("/api.sparta.com")
+@RequestMapping("/api")
 public class UserController {
     private final LoginService loginService;
     private final UserService userService;
@@ -66,7 +66,7 @@ public class UserController {
      * @return 회원 정보 조회 결과
      * @since 2023-10-03
      */
-    @PostMapping("/users/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<UserResponseDto> getUserInfo(
             @PathVariable int userId) throws ResponseException {
         return ResponseEntity
@@ -77,18 +77,18 @@ public class UserController {
     /**
      * 회원 정보 수정 API
      *
-     * @param req                  HttpServletRequest 객체
-     * @param createUserRequestDto 회원 정보 수정 정보 (JSON 형태)
+     * @param req        HttpServletRequest 객체
+     * @param requestDto 회원 정보 수정 정보 (JSON 형태)
      * @return 회원 정보 수정 결과
      * @since 2023-10-03
      */
     @PutMapping("/users/{userId}")
     public ResponseEntity<ResponseStatusDto> updateUser(
             HttpServletRequest req,
-            @RequestBody ModifyUserRequestDto createUserRequestDto) throws ResponseException {
+            @RequestBody ModifyUserRequestDto requestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.updateUser(req, createUserRequestDto));
+                .body(userService.updateUser(req, requestDto));
     }
 
     /**

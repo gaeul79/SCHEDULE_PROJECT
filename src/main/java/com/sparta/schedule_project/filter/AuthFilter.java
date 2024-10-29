@@ -1,11 +1,13 @@
 package com.sparta.schedule_project.filter;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.cookie.JwtUtil;
+import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -114,7 +116,7 @@ public class AuthFilter extends OncePerRequestFilter {
      * @throws IllegalArgumentException 토큰이 없는 경우 발생
      * @since 2024-10-18
      */
-    private User getUserInfoFromToken(String tokenValue) {
+    private User getUserInfoFromToken(String tokenValue) throws ResponseException {
         // 토큰 확인
         if (StringUtils.hasText(tokenValue)) { // 토큰이 존재하면 검증 시작
             // JWT 토큰 substring

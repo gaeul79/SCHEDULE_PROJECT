@@ -3,7 +3,7 @@ package com.sparta.schedule_project.config;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
 /**
- * 비밀번호에 대한 단방향 해시 암호화 및 대조 기능을 지원하는 컴포넌트 클래스입니다.
+ * 비밀번호에 대한 암호화 및 대조 기능을 지원하는 클래스
  *
  * @since 2024-10-21
  */
