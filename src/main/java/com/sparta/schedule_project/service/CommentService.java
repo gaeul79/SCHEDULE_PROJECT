@@ -31,7 +31,7 @@ public class CommentService {
      * @return 생성 결과 (ResponseStatusDto)
      * @since 2024-10-15
      */
-    public ResponseStatusDto createComment(HttpServletRequest req, CreateCommentRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto createComment(HttpServletRequest req, CreateCommentRequestDto requestDto) {
         User user = CookieManager.getUserFromCookie(req);
         Comment comment = requestDto.convertDtoToEntity(user);
         commentRepository.save(comment);

@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -32,7 +31,7 @@ public class LoginService {
      * @return 로그인 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
-    public ResponseStatusDto login(HttpServletResponse res, LoginRequestDto requestDto) throws ResponseException, UnsupportedEncodingException {
+    public ResponseStatusDto login(HttpServletResponse res, LoginRequestDto requestDto) throws ResponseException {
         User user = userRepository.findByEmail(requestDto.getEmail());
         validateLoginInfo(requestDto, user);
         addJwtToCookie(user, res);
@@ -59,10 +58,9 @@ public class LoginService {
      *
      * @param user 사용자 정보 객체 (User)
      * @param res  HTTP 응답 객체 (HttpServletResponse)
-     * @throws UnsupportedEncodingException 인코딩 실패 시 발생하는 예외
      * @since 2024-10-18
      */
-    public void addJwtToCookie(User user, HttpServletResponse res) throws UnsupportedEncodingException {
+    public void addJwtToCookie(User user, HttpServletResponse res) {
         String token = jwtUtil.createToken(user.getEmail(), user.getAuth());
         token = URLEncoder.encode(token, StandardCharsets.UTF_8).replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
 

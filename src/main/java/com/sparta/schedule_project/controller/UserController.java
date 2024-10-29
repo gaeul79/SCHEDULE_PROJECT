@@ -15,8 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
-
 /**
  * 회원 관리 컨트롤러 클래스입니다.
  *
@@ -40,7 +38,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<ResponseStatusDto> login(
             HttpServletResponse res,
-            @RequestBody LoginRequestDto createUserRequestDto) throws ResponseException, UnsupportedEncodingException {
+            @RequestBody LoginRequestDto createUserRequestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(loginService.login(res, createUserRequestDto));
