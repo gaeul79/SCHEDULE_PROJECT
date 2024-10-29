@@ -1,7 +1,7 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.common.CookieManager;
-import com.sparta.schedule_project.common.entity.User;
+import com.sparta.schedule_project.cookie.CookieManager;
+import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.dto.request.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyScheduleRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
@@ -9,8 +9,8 @@ import com.sparta.schedule_project.dto.response.ScheduleResponseDto;
 import com.sparta.schedule_project.entity.Schedule;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.infra.WeatherApiService;
-import com.sparta.schedule_project.jwt.AuthType;
+import com.sparta.schedule_project.infra.WeatherApi;
+import com.sparta.schedule_project.cookie.AuthType;
 import com.sparta.schedule_project.repository.ScheduleRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
-    private final WeatherApiService weatherApiService;
+    private final WeatherApi weatherApi;
     private final ScheduleRepository scheduleRepository;
 
     /**
@@ -40,7 +40,7 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ResponseStatusDto createSchedule(HttpServletRequest req, CreateScheduleRequestDto requestDto) {
-        String weather = weatherApiService.getTodayWeather();
+        String weather = weatherApi.getTodayWeather();
         User user = CookieManager.getUserFromCookie(req);
         Schedule schedule = requestDto.convertDtoToEntity(user.getId(), weather);
         scheduleRepository.save(schedule);
@@ -70,10 +70,10 @@ public class ScheduleService {
      */
     @Transactional
     public ResponseStatusDto updateSchedule(HttpServletRequest req, ModifyScheduleRequestDto requestDto) throws ResponseException {
-        String weather = weatherApiService.getTodayWeather();
+        String weather = weatherApi.getTodayWeather();
         User user = CookieManager.getUserFromCookie(req);
         Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId());
-        checkAuth(user, schedule);
+        validateAuth(user, schedule);
         schedule.update(requestDto, weather);
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE);
     }
@@ -89,7 +89,7 @@ public class ScheduleService {
     public ResponseStatusDto deleteSchedule(HttpServletRequest req, int scheduleId) throws ResponseException {
         User user = CookieManager.getUserFromCookie(req);
         Schedule schedule = scheduleRepository.findById(scheduleId);
-        checkAuth(user, schedule);
+        validateAuth(user, schedule);
         scheduleRepository.delete(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE);
     }
@@ -102,10 +102,10 @@ public class ScheduleService {
      * @throws ResponseException 권한이 없는 경우 예외를 발생시킵니다.
      * @since 2024-10-15
      */
-    private void checkAuth(User loginUser, Schedule schedule) throws ResponseException {
+    private void validateAuth(User loginUser, Schedule schedule) throws ResponseException {
         if (schedule == null)
             throw new ResponseException(ResponseCode.SCHEDULE_NOT_FOUND);
-        else if (loginUser.getAuth() != AuthType.ADMIN && loginUser.getId() != schedule.getUser().getId())
+        if (loginUser.getAuth() != AuthType.ADMIN && loginUser.getId() != schedule.getUser().getId())
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }

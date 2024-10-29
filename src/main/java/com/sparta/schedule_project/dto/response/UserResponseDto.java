@@ -1,6 +1,6 @@
 package com.sparta.schedule_project.dto.response;
 
-import com.sparta.schedule_project.common.entity.User;
+import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import lombok.Data;
 import lombok.NoArgsConstructor;

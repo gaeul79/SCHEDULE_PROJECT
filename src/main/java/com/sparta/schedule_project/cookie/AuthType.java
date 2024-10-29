@@ -1,4 +1,4 @@
-package com.sparta.schedule_project.jwt;
+package com.sparta.schedule_project.cookie;
 
 /**
  * 사용자 권한 종류를 나타내는 열거형입니다.

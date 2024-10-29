@@ -1,7 +1,7 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.common.CookieManager;
-import com.sparta.schedule_project.common.entity.User;
+import com.sparta.schedule_project.cookie.CookieManager;
+import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.dto.request.CreateCommentRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyCommentRequestDto;
 import com.sparta.schedule_project.dto.response.CommentResponseDto;
@@ -9,7 +9,7 @@ import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.entity.Comment;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.jwt.AuthType;
+import com.sparta.schedule_project.cookie.AuthType;
 import com.sparta.schedule_project.repository.CommentRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +65,7 @@ public class CommentService {
     public ResponseStatusDto updateComment(HttpServletRequest req, ModifyCommentRequestDto requestDto) throws ResponseException {
         User user = CookieManager.getUserFromCookie(req);
         Comment comment = commentRepository.findById(requestDto.getCommentId());
-        checkAuth(user, comment);
+        validateAuth(user, comment);
         comment.update(requestDto);
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_COMMENT);
     }
@@ -81,7 +81,7 @@ public class CommentService {
     public ResponseStatusDto deleteComment(HttpServletRequest req, int commintId) throws ResponseException {
         User loginUser = CookieManager.getUserFromCookie(req);
         Comment comment = commentRepository.findById(commintId);
-        checkAuth(loginUser, comment);
+        validateAuth(loginUser, comment);
         commentRepository.delete(comment);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_COMMENT);
     }
@@ -94,10 +94,10 @@ public class CommentService {
      * @throws ResponseException 권한이 없는 경우 예외를 발생시킵니다.
      * @since 2024-10-15
      */
-    private void checkAuth(User user, Comment comment) throws ResponseException {
+    private void validateAuth(User user, Comment comment) throws ResponseException {
         if (comment == null)
             throw new ResponseException(ResponseCode.COMMENT_NOT_FOUND);
-        else if (user.getAuth() != AuthType.ADMIN && user.getId() != comment.getUser().getId())
+        if (user.getAuth() != AuthType.ADMIN && user.getId() != comment.getUser().getId())
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }

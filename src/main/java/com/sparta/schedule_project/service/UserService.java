@@ -1,7 +1,7 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.common.CookieManager;
-import com.sparta.schedule_project.common.entity.User;
+import com.sparta.schedule_project.cookie.CookieManager;
+import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.config.PasswordEncoder;
 import com.sparta.schedule_project.dto.request.CreateUserRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyUserRequestDto;

@@ -20,10 +20,10 @@ import java.time.format.DateTimeFormatter;
  * @since 2024-10-17
  */
 @Service
-public class WeatherApiService {
+public class WeatherApi {
     private final RestTemplate restTemplate;
 
-    public WeatherApiService(RestTemplateBuilder builder) {
+    public WeatherApi(RestTemplateBuilder builder) {
         this.restTemplate = builder.build();
     }
 
