@@ -1,12 +1,11 @@
 package com.sparta.schedule_project.filter;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.schedule_project.entity.User;
-import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.cookie.JwtUtil;
+import com.sparta.schedule_project.dto.response.ResponseStatusDto;
+import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
 import io.jsonwebtoken.Claims;
