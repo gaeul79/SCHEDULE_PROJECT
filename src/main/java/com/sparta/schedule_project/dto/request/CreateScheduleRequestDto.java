@@ -1,4 +1,4 @@
-package com.sparta.schedule_project.dto.request.schedule;
+package com.sparta.schedule_project.dto.request;
 
 import com.sparta.schedule_project.entity.Schedule;
 import com.sparta.schedule_project.common.entity.User;

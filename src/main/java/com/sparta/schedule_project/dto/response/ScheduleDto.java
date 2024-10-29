@@ -1,4 +1,4 @@
-package com.sparta.schedule_project.dto.response.schedule;
+package com.sparta.schedule_project.dto.response;
 
 import com.sparta.schedule_project.entity.Schedule;
 import lombok.AllArgsConstructor;

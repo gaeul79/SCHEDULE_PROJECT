@@ -1,12 +1,11 @@
 package com.sparta.schedule_project.controller;
 
-import com.sparta.schedule_project.dto.request.comment.CreateCommentRequestDto;
-import com.sparta.schedule_project.dto.request.comment.ModifyCommentRequestDto;
-import com.sparta.schedule_project.dto.request.comment.RemoveCommentRequestDto;
-import com.sparta.schedule_project.dto.request.comment.SearchCommentRequestDto;
+import com.sparta.schedule_project.dto.request.CreateCommentRequestDto;
+import com.sparta.schedule_project.dto.request.ModifyCommentRequestDto;
+import com.sparta.schedule_project.dto.request.RemoveCommentRequestDto;
+import com.sparta.schedule_project.dto.request.SearchCommentRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.dto.response.comment.CommentResponseDto;
-import com.sparta.schedule_project.exception.ResponseCode;
+import com.sparta.schedule_project.dto.response.CommentResponseDto;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.service.CommentService;
 import jakarta.servlet.http.HttpServletRequest;

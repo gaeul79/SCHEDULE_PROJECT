@@ -1,13 +1,13 @@
 package com.sparta.schedule_project.service;
 
 import com.sparta.schedule_project.common.CommonFunction;
-import com.sparta.schedule_project.cookie.AuthType;
-import com.sparta.schedule_project.dto.request.comment.CreateCommentRequestDto;
-import com.sparta.schedule_project.dto.request.comment.ModifyCommentRequestDto;
-import com.sparta.schedule_project.dto.request.comment.RemoveCommentRequestDto;
-import com.sparta.schedule_project.dto.request.comment.SearchCommentRequestDto;
+import com.sparta.schedule_project.jwt.AuthType;
+import com.sparta.schedule_project.dto.request.CreateCommentRequestDto;
+import com.sparta.schedule_project.dto.request.ModifyCommentRequestDto;
+import com.sparta.schedule_project.dto.request.RemoveCommentRequestDto;
+import com.sparta.schedule_project.dto.request.SearchCommentRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.dto.response.comment.CommentResponseDto;
+import com.sparta.schedule_project.dto.response.CommentResponseDto;
 import com.sparta.schedule_project.entity.Comment;
 import com.sparta.schedule_project.common.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;

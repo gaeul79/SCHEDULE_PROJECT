@@ -1,6 +1,5 @@
-package com.sparta.schedule_project.dto.request.user;
+package com.sparta.schedule_project.dto.request;
 
-import com.sparta.schedule_project.common.entity.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -26,17 +25,4 @@ public class ModifyUserRequestDto {
     @NotBlank(message = "닉네임을 입력해주세요.")
     @Max(value = 20, message = "닉네임은 20자까지 입력할 수 있습니다.")
     private String name;
-
-    /**
-     * DTO 객체를 User 엔티티 객체로 변환합니다.
-     *
-     * @return 생성된 User 엔티티 객체
-     * @since 2024-10-18
-     */
-    public User convertDtoToEntity(String password) {
-        return User.builder()
-                .seq(userSeq)
-                .password(password)
-                .name(name).build();
-    }
 }

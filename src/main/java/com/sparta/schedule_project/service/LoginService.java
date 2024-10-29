@@ -1,7 +1,7 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.cookie.JwtUtil;
-import com.sparta.schedule_project.dto.request.user.LoginRequestDto;
+import com.sparta.schedule_project.jwt.JwtUtil;
+import com.sparta.schedule_project.dto.request.LoginRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.common.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;

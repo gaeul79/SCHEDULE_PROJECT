@@ -1,10 +1,10 @@
 package com.sparta.schedule_project.controller;
 
-import com.sparta.schedule_project.dto.request.user.CreateUserRequestDto;
-import com.sparta.schedule_project.dto.request.user.LoginRequestDto;
-import com.sparta.schedule_project.dto.request.user.ModifyUserRequestDto;
+import com.sparta.schedule_project.dto.request.CreateUserRequestDto;
+import com.sparta.schedule_project.dto.request.LoginRequestDto;
+import com.sparta.schedule_project.dto.request.ModifyUserRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.dto.response.user.UserResponseDto;
+import com.sparta.schedule_project.dto.response.UserResponseDto;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.service.LoginService;
 import com.sparta.schedule_project.service.UserService;

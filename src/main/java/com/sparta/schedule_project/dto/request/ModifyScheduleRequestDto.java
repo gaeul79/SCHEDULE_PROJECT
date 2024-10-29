@@ -1,7 +1,5 @@
-package com.sparta.schedule_project.dto.request.schedule;
+package com.sparta.schedule_project.dto.request;
 
-import com.sparta.schedule_project.entity.Schedule;
-import com.sparta.schedule_project.common.entity.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -29,20 +27,4 @@ public class ModifyScheduleRequestDto {
     @NotBlank(message = "제목을 입력해주세요.")
     @Max(value = 300, message = "내용은 300자 이상 입력할 수 없습니다.")
     private String content;
-
-    /**
-     * DTO 객체를 Schedule 엔티티 객체로 변환
-     *
-     * @param weather     날씨 정보
-     * @return 생성된 Schedule 엔티티 객체
-     * @since 2024-10-18
-     */
-    public Schedule convertDtoToEntity(String weather) {
-        return Schedule.builder()
-                .seq(scheduleSeq)
-                .user(User.builder().seq(userSeq).build())
-                .title(title)
-                .weather(weather)
-                .content(content).build();
-    }
 }
