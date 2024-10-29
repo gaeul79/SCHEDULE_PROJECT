@@ -27,10 +27,10 @@ import java.util.List;
 public class Schedule extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int seq;
+    private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_seq")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "schedule",

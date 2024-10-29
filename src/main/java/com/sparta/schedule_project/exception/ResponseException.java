@@ -18,10 +18,4 @@ public class ResponseException extends Exception {
         this.responseCode = responseCode;
         this.message = responseCode.getMessage();
     }
-
-    public ResponseException(ResponseCode responseCode, String message) {
-        this.result = "ERROR";
-        this.responseCode = responseCode;
-        this.message = message;
-    }
 }

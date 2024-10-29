@@ -1,10 +1,10 @@
 package com.sparta.schedule_project.common.entity;
 
-import com.sparta.schedule_project.jwt.AuthType;
 import com.sparta.schedule_project.dto.request.ModifyUserRequestDto;
 import com.sparta.schedule_project.entity.Comment;
 import com.sparta.schedule_project.entity.Schedule;
 import com.sparta.schedule_project.entity.Timestamped;
+import com.sparta.schedule_project.jwt.AuthType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +28,7 @@ import java.util.List;
 public class User extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int seq;
+    private int id;
 
     @Column(nullable = false, length = 50)
     private String email;

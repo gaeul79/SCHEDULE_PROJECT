@@ -23,14 +23,14 @@ import org.springframework.data.domain.Pageable;
 public class Comment extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int seq;
+    private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_seq")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "schedule_seq")
+    @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
     @Column(name = "content", nullable = false, length = 300)

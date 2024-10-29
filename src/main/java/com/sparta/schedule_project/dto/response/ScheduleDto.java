@@ -19,8 +19,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScheduleDto {
-    private int seq;
-    private int userSeq;
+    private int id;
+    private int userId;
     private String userName;
     private String title;
     private String content;
@@ -36,13 +36,13 @@ public class ScheduleDto {
      * @since 2024-10-18
      */
     public static ScheduleDto from(Schedule schedule) {
-        return ScheduleDto.builder().seq(schedule.getSeq())
-                .userSeq(schedule.getUser().getSeq())
+        return ScheduleDto.builder().id(schedule.getId())
+                .userId(schedule.getUser().getId())
                 .userName(schedule.getUser().getName())
                 .title(schedule.getTitle())
                 .content(schedule.getContent())
                 .weather(schedule.getWeather())
-                .createDate(schedule.getCreateDate())
-                .updateDate(schedule.getUpdateDate()).build();
+                .createDate(schedule.getCreatedAt())
+                .updateDate(schedule.getUpdatedAt()).build();
     }
 }

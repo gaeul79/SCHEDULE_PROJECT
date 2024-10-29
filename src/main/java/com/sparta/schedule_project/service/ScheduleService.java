@@ -4,7 +4,6 @@ import com.sparta.schedule_project.common.CookieManager;
 import com.sparta.schedule_project.common.entity.User;
 import com.sparta.schedule_project.dto.request.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyScheduleRequestDto;
-import com.sparta.schedule_project.dto.request.RemoveScheduleRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.ScheduleResponseDto;
 import com.sparta.schedule_project.entity.Schedule;
@@ -43,7 +42,7 @@ public class ScheduleService {
     public ResponseStatusDto createSchedule(HttpServletRequest req, CreateScheduleRequestDto requestDto) {
         String weather = weatherApiService.getTodayWeather();
         User user = CookieManager.getUserFromCookie(req);
-        Schedule schedule = requestDto.convertDtoToEntity(user.getSeq(), weather);
+        Schedule schedule = requestDto.convertDtoToEntity(user.getId(), weather);
         scheduleRepository.save(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
     }
@@ -57,7 +56,7 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ScheduleResponseDto searchSchedule(int page, int size) {
-        Page<Schedule> schedules = scheduleRepository.findAllByOrderByUpdateDateDesc(PageRequest.of(page, size));
+        Page<Schedule> schedules = scheduleRepository.findAllByOrderByUpdatedAtDesc(PageRequest.of(page, size));
         return ScheduleResponseDto.createResponseDto(schedules, ResponseCode.SUCCESS_SEARCH_SCHEDULE);
     }
 
@@ -73,7 +72,7 @@ public class ScheduleService {
     public ResponseStatusDto updateSchedule(HttpServletRequest req, ModifyScheduleRequestDto requestDto) throws ResponseException {
         String weather = weatherApiService.getTodayWeather();
         User user = CookieManager.getUserFromCookie(req);
-        Schedule schedule = scheduleRepository.findBySeq(requestDto.getScheduleSeq());
+        Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId());
         checkAuth(user, schedule);
         schedule.update(requestDto, weather);
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE);
@@ -83,13 +82,13 @@ public class ScheduleService {
      * 일정 삭제
      *
      * @param req        HttpServletRequest 객체
-     * @param requestDto 일정 삭제 요청 정보
+     * @param scheduleId 삭제할 일정 id
      * @return 삭제 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
-    public ResponseStatusDto deleteSchedule(HttpServletRequest req, RemoveScheduleRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto deleteSchedule(HttpServletRequest req, int scheduleId) throws ResponseException {
         User user = CookieManager.getUserFromCookie(req);
-        Schedule schedule = scheduleRepository.findBySeq(requestDto.getScheduleSeq());
+        Schedule schedule = scheduleRepository.findById(scheduleId);
         checkAuth(user, schedule);
         scheduleRepository.delete(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE);
@@ -106,7 +105,7 @@ public class ScheduleService {
     private void checkAuth(User loginUser, Schedule schedule) throws ResponseException {
         if (schedule == null)
             throw new ResponseException(ResponseCode.SCHEDULE_NOT_FOUND);
-        else if (loginUser.getAuth() != AuthType.ADMIN && loginUser.getSeq() != schedule.getUser().getSeq())
+        else if (loginUser.getAuth() != AuthType.ADMIN && loginUser.getId() != schedule.getUser().getId())
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }

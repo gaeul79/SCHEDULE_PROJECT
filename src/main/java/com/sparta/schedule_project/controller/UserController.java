@@ -47,20 +47,6 @@ public class UserController {
     }
 
     /**
-     * 로그아웃 API
-     *
-     * @return 로그아웃 처리 결과
-     * @since 2023-10-03
-     */
-    @PostMapping("/logout")
-    public ResponseEntity<ResponseStatusDto> logout() {
-        // TODO. khj 쿠키 해제 필요
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(loginService.logout());
-    }
-
-    /**
      * 회원가입 API
      *
      * @param createUserRequestDto 회원가입 정보 (JSON 형태)
@@ -78,16 +64,16 @@ public class UserController {
     /**
      * 회원 정보 조회 API
      *
-     * @param userSeq 조회할 회원 번호
+     * @param userId 조회할 회원 번호
      * @return 회원 정보 조회 결과
      * @since 2023-10-03
      */
-    @PostMapping("/users/{userSeq}")
+    @PostMapping("/users/{userId}")
     public ResponseEntity<UserResponseDto> getUserInfo(
-            @PathVariable int userSeq) throws ResponseException {
+            @PathVariable int userId) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.searchUser(userSeq));
+                .body(userService.searchUser(userId));
     }
 
     /**
@@ -98,7 +84,7 @@ public class UserController {
      * @return 회원 정보 수정 결과
      * @since 2023-10-03
      */
-    @PutMapping("/users/{userSeq}")
+    @PutMapping("/users/{userId}")
     public ResponseEntity<ResponseStatusDto> updateUser(
             HttpServletRequest req,
             @RequestBody ModifyUserRequestDto createUserRequestDto) throws ResponseException {
@@ -110,17 +96,17 @@ public class UserController {
     /**
      * 회원 정보 삭제 API
      *
-     * @param req     HttpServletRequest 객체
-     * @param userSeq 삭제할 회원 번호
+     * @param req    HttpServletRequest 객체
+     * @param userId 삭제할 회원 번호
      * @return 회원 정보 삭제 결과
      * @since 2023-10-03
      */
-    @DeleteMapping("/users/{userSeq}")
+    @DeleteMapping("/users/{userId}")
     public ResponseEntity<ResponseStatusDto> deleteUser(
             HttpServletRequest req,
-            @PathVariable int userSeq) throws ResponseException {
+            @PathVariable int userId) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.deleteUser(req, userSeq));
+                .body(userService.deleteUser(req, userId));
     }
 }

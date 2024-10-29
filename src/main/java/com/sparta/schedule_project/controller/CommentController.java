@@ -2,7 +2,6 @@ package com.sparta.schedule_project.controller;
 
 import com.sparta.schedule_project.dto.request.CreateCommentRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyCommentRequestDto;
-import com.sparta.schedule_project.dto.request.RemoveCommentRequestDto;
 import com.sparta.schedule_project.dto.response.CommentResponseDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.exception.ResponseException;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api.sparta.com/{userSeq}/schedules/{scheduleSeq}")
+@RequestMapping("/api.sparta.com/{userId}/schedules/{scheduleId}")
 public class CommentController {
     private final CommentService commentService;
 
@@ -39,19 +38,19 @@ public class CommentController {
     /**
      * 일정 댓글 검색 API
      *
-     * @param scheduleSeq 댓글을 검색할 일정 번호
-     * @param page        페이지 번호 (기본값: 1)
-     * @param size        페이지당 항목 수 (기본값: 10)
+     * @param scheduleId 댓글을 검색할 일정 번호
+     * @param page       페이지 번호 (기본값: 1)
+     * @param size       페이지당 항목 수 (기본값: 10)
      * @return 댓글 목록을 포함하는 ResponseEntity
      */
     @GetMapping("/comments")
     public ResponseEntity<CommentResponseDto> searchComment(
-            @RequestParam int scheduleSeq,
+            @RequestParam int scheduleId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(commentService.searchComment(page, size, scheduleSeq));
+                .body(commentService.searchComment(page, size, scheduleId));
     }
 
     /**
@@ -62,7 +61,7 @@ public class CommentController {
      * @return 수정 결과 (ResponseStatusDto)
      * @since 2024-10-15
      */
-    @PutMapping("/comments/{commentSeq}")
+    @PutMapping("/comments/{commentId}")
     public ResponseEntity<ResponseStatusDto> updateComment(
             HttpServletRequest req,
             @RequestBody ModifyCommentRequestDto requestDto) throws ResponseException {
@@ -74,17 +73,17 @@ public class CommentController {
     /**
      * 댓글 삭제 API
      *
-     * @param req        HttpServletRequest 객체
-     * @param requestDto 댓글 삭제 정보 (JSON 형태)
+     * @param req       HttpServletRequest 객체
+     * @param commentId 삭제할 댓글 id
      * @return 삭제 결과 (ResponseStatusDto)
      * @since 2024-10-15
      */
-    @DeleteMapping("/comments/{commentSeq}")
+    @DeleteMapping("/comments/{commentId}")
     public ResponseEntity<ResponseStatusDto> deleteComment(
             HttpServletRequest req,
-            @RequestBody RemoveCommentRequestDto requestDto) throws ResponseException {
+            @PathVariable int commentId) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(commentService.deleteComment(req, requestDto));
+                .body(commentService.deleteComment(req, commentId));
     }
 }

@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-    private int seq;
+    private int id;
     private String email;
     private String password;
     private String name;
@@ -32,8 +32,8 @@ public class UserDto {
      * @since 2024-10-18
      */
     public static UserDto from(User user) {
-        return UserDto.builder().seq(user.getSeq())
-                .seq(user.getSeq())
+        return UserDto.builder().id(user.getId())
+                .id(user.getId())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .name(user.getName())

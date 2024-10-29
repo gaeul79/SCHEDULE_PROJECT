@@ -6,8 +6,12 @@ package com.sparta.schedule_project.jwt;
  * @since 2024-10-17
  */
 public enum AuthType {
-    /** 일반 사용자 권한 */
+    /**
+     * 일반 사용자 권한
+     */
     USER,
-    /** 관리자 권한 */
+    /**
+     * 관리자 권한
+     */
     ADMIN;
 }

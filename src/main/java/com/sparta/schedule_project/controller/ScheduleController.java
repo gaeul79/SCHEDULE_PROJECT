@@ -2,7 +2,6 @@ package com.sparta.schedule_project.controller;
 
 import com.sparta.schedule_project.dto.request.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyScheduleRequestDto;
-import com.sparta.schedule_project.dto.request.RemoveScheduleRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.ScheduleResponseDto;
 import com.sparta.schedule_project.exception.ResponseException;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api.sparta.com/{userSeq}")
+@RequestMapping("/api.sparta.com/{userId}")
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
@@ -36,7 +35,7 @@ public class ScheduleController {
     @PostMapping("/schedules")
     public ResponseEntity<ResponseStatusDto> createSchedule(
             HttpServletRequest req,
-            @RequestBody CreateScheduleRequestDto requestDto) throws ResponseException {
+            @RequestBody CreateScheduleRequestDto requestDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(scheduleService.createSchedule(req, requestDto));
@@ -67,7 +66,7 @@ public class ScheduleController {
      * @return 수정 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
-    @PutMapping("/schedules/{scheduleSeq}")
+    @PutMapping("/schedules/{scheduleId}")
     public ResponseEntity<ResponseStatusDto> updateSchedule(
             HttpServletRequest req,
             @RequestBody ModifyScheduleRequestDto requestDto) throws ResponseException {
@@ -80,16 +79,16 @@ public class ScheduleController {
      * 일정 삭제 API
      *
      * @param req        HttpServletRequest 객체
-     * @param requestDto 일정 삭제 정보 (JSON 형태)
+     * @param scheduleId 삭제할 일정 id
      * @return 삭제 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
-    @DeleteMapping("/schedules/{scheduleSeq}")
+    @DeleteMapping("/schedules/{scheduleId}")
     public ResponseEntity<ResponseStatusDto> deleteSchedule(
             HttpServletRequest req,
-            @RequestBody RemoveScheduleRequestDto requestDto) throws ResponseException {
+            @PathVariable int scheduleId) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(scheduleService.deleteSchedule(req, requestDto));
+                .body(scheduleService.deleteSchedule(req, scheduleId));
     }
 }

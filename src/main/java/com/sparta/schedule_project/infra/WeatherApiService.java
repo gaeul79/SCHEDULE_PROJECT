@@ -1,6 +1,5 @@
 package com.sparta.schedule_project.infra;
 
-import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.boot.web.client.RestTemplateBuilder;

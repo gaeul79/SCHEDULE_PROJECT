@@ -38,19 +38,4 @@ public class ScheduleResponseDto {
         responseScheduleDto.setStatus(responseStatusDto);
         return responseScheduleDto;
     }
-
-    /**
-     * 응답 코드와 에러 메시지를 포함하는 응답 DTO를 생성합니다.
-     *
-     * @param responseCode 응답 코드
-     * @param errorMsg     에러 메시지
-     * @return 생성된 응답 DTO 객체 (ScheduleResponseDto)
-     * @since 2024-10-18
-     */
-    public static ScheduleResponseDto createResponseDto(ResponseCode responseCode, String errorMsg) {
-        ScheduleResponseDto responseScheduleDto = new ScheduleResponseDto();
-        ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode, errorMsg);
-        responseScheduleDto.setStatus(responseStatusDto);
-        return responseScheduleDto;
-    }
 }

@@ -34,26 +34,4 @@ public class PageDto {
         this.size = page.getPageSize();
         this.totalPage = totalPage;
     }
-
-    /**
-     * PageDto 객체를 Pageable 객체로 변환합니다.
-     *
-     * @return 변환된 Pageable 객체
-     * @since 2024-10-03
-     */
-    public Pageable convertDtoToPageable() {
-        return PageRequest.of(page - 1, size);
-    }
-
-    /**
-     * 페이지 번호와 페이지 크기를 설정합니다.
-     *
-     * @param page 설정할 페이지 번호 (1부터 시작)
-     * @param size 한 페이지에 표시할 항목 수
-     * @since 2024-10-29
-     */
-    public void setPage(int page, int size) {
-        this.page = page;
-        this.size = size;
-    }
 }

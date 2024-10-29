@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ModifyUserRequestDto {
     @Positive(message = "유저번호는 0이상의 숫자입니다.")
-    private int userSeq;
+    private int userId;
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
     @Size(min = 8, max = 20, message = "비밀번호는 8~20자 사이입니다.")

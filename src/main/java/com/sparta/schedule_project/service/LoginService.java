@@ -1,13 +1,13 @@
 package com.sparta.schedule_project.service;
 
+import com.sparta.schedule_project.common.entity.User;
 import com.sparta.schedule_project.config.PasswordEncoder;
-import com.sparta.schedule_project.jwt.JwtUtil;
 import com.sparta.schedule_project.dto.request.LoginRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.common.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.common.repository.UserRepository;
+import com.sparta.schedule_project.jwt.JwtUtil;
+import com.sparta.schedule_project.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -71,5 +71,6 @@ public class LoginService {
 
         // Response 객체에 Cookie 추가
         res.addCookie(cookie);
+        // res.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
     }
 }

@@ -23,7 +23,7 @@ public class LoggingFilter implements Filter {
      * @param request  요청 객체
      * @param response 응답 객체
      * @param chain    필터 체인
-     * @throws IOException 입출력 관련 예외
+     * @throws IOException      입출력 관련 예외
      * @throws ServletException 서블릿 관련 예외
      * @since 2024-10-18
      */

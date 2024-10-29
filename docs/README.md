@@ -182,7 +182,7 @@
         <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
         <td>/api.sparta.com/logout</td>
         <td><pre lang="json">{
-    "seq" : 1
+    "id" : 1
 }</pre></td>
         <td><pre lang="json">{
     "message": "logout success",
@@ -195,11 +195,11 @@
         <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
         <td>/api.sparta.com/users</td>
         <td><pre lang="json">{
-    "userSeq" : 1
+    "userId" : 1
 }</pre></td>
         <td><pre lang="json">{
     "user": {
-        "seq": 1,
+        "id": 1,
         "email": "hong@gmail.com",
         "password": "1q2w3e4r#",
         "name": "홍길동",
@@ -215,9 +215,9 @@
     <tr>
         <td><b>사용자 수정</b></td>
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
-        <td>/api.sparta.com/users/{userSeq}</td>
+        <td>/api.sparta.com/users/{userId}</td>
         <td><pre lang="json">{    
-    "userSeq": 1,        
+    "userId": 1,        
     "password": "1q2w3e4r#",
     "name": "김길동"
 }</pre></td>
@@ -230,9 +230,9 @@
     <tr>
         <td><b>사용자 삭제</b></td>
         <td><span style=background-color:#CE3636AA;font-weight:bold;>DELETE</span></td>
-        <td>/api.sparta.com/users/{userSeq}</td>
+        <td>/api.sparta.com/users/{userId}</td>
         <td><pre lang="json">{
-    "userSeq": 1
+    "userId": 1
 }</pre></td>
         <td><pre lang="json">{
     "message": "delete user success",
@@ -265,8 +265,8 @@
         <td><pre lang="json">{
     "schedules": [
         {
-            "seq": 3,
-            "userSeq": 1,
+            "id": 3,
+            "userId": 1,
             "userName": "홍길동",
             "title": "제목제목제목",
             "content": "내용내용내용",
@@ -275,8 +275,8 @@
             "updateDate": "2024-10-16T09:31:05.4463"
         },
         {
-            "seq": 2,
-            "userSeq": 1,
+            "id": 2,
+            "userId": 1,
             "userName": "이길동",
             "title": "제목제목제목22",
             "content": "내용내용내용22",
@@ -300,10 +300,10 @@
     <tr>
         <td><b>일정 수정</b></td>
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
-        <td>/api.sparta.com/schedules/{scheduleSeq}</td>
+        <td>/api.sparta.com/schedules/{scheduleId}</td>
         <td><pre lang="json">{
-    "seq": 1,
-    "userSeq": 1,
+    "id": 1,
+    "userId": 1,
     "title" : "제목제목제목",
     "content" : "수정수정수정"
 }</pre></td>
@@ -319,10 +319,10 @@
     <tr>
         <td><b>일정 삭제</b></td>
         <td><span style=background-color:#CE3636AA;font-weight:bold;>DELETE</span></td>
-        <td>/api.sparta.com/schedules/{scheduleSeq}</td>
+        <td>/api.sparta.com/schedules/{scheduleId}</td>
         <td><pre lang="json">{ 
-    "secheduleSeq" : 1,
-    "userSeq": 1
+    "secheduleId" : 1,
+    "userId": 1
 }</pre></td>
         <td><pre lang="json">{
     "message": "delete schedule success",
@@ -336,10 +336,10 @@
     <tr>
         <td><b>댓글 등록</b></td>
         <td><span style=background-color:#786E12AA;font-weight:bold;>POST</span></td>
-        <td>/api.sparta.com/schedule/{scheduleSeq}/comments</td>
+        <td>/api.sparta.com/schedule/{scheduleId}/comments</td>
         <td><pre lang="json">{     
-    "userSeq": 1,
-    "schedlueSeq": 1,
+    "userId": 1,
+    "schedlueId": 1,
     "content": "댓글댓글댓글"
 }</pre></td>
         <td><pre lang="json">{
@@ -351,25 +351,25 @@
         <tr>
         <td><b>일정 댓글 조회</b></td>
         <td><span style=background-color:#22741CAA;font-weight:bold;>GET</span></td>
-        <td>/api.sparta.com/schedule/{scheduleSeq}/comments</td>
+        <td>/api.sparta.com/schedule/{scheduleId}/comments</td>
         <td><pre lang="json">{
-    "scheduleSeq": 1,        
+    "scheduleId": 1,        
     "page": 1,
     "size": 2
 }</pre></td>
         <td><pre lang="json">{
     "comment": [{
-        "seq": 1,
-        "userSeq": 1,
-        "scheduleSeq" : 1,
+        "id": 1,
+        "userId": 1,
+        "scheduleId" : 1,
         "content" : "댓글댓글댓글",
         "createDate": "2022-10-16",
         "updateDate": "2022-10-20"
     },
     {
-        "seq": 2,
-        "userSeq": 1,
-        "scheduleSeq" : 1,
+        "id": 2,
+        "userId": 1,
+        "scheduleId" : 1,
         "content" : "댓글댓글댓글22",
         "createDate": "2022-10-16",
         "updateDate": "2022-10-20"
@@ -389,10 +389,10 @@
     <tr>
         <td><b>댓글 수정</b></td>
         <td><span style=background-color:#3B36CFAA;font-weight:bold;>PUT</span></td>
-        <td>/api.sparta.com/schedule/{scheduleSeq}/comments/{commentSeq}</td>
+        <td>/api.sparta.com/schedule/{scheduleId}/comments/{commentId}</td>
         <td><pre lang="json">{
-    "commentSeq": 1,
-    "userSeq": 1,
+    "commentId": 1,
+    "userId": 1,
     "content" : "댓글 수정수정수정"
 }</pre></td>
         <td><pre lang="json">{
@@ -406,10 +406,10 @@
     <tr>
         <td><b>댓글 삭제</b></td>
         <td><span style=background-color:#CE3636AA;font-weight:bold;>DELETE</span></td>
-        <td>/api.sparta.com/schedule/{scheduleSeq}/comments/{commentSeq}</td>
+        <td>/api.sparta.com/schedule/{scheduleId}/comments/{commentId}</td>
         <td><pre lang="json">{
-    "userSeq": 1,
-    "seq" : 1
+    "userId": 1,
+    "id" : 1
 }</pre></td>
         <td><pre lang="json">{
     "message": "delete comment success",

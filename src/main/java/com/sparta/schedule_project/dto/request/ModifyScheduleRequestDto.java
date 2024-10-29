@@ -15,10 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ModifyScheduleRequestDto {
     @Positive(message = "일정번호는 0이상 숫자입니다.")
-    private int scheduleSeq;
-
-    @Positive(message = "유저번호는 0이상 숫자입니다.")
-    private int userSeq;
+    private int scheduleId;
 
     @NotBlank(message = "제목을 입력해주세요.")
     @Max(value = 50, message = "제목은 50자 이상 입력할 수 없습니다.")

@@ -1,16 +1,15 @@
 package com.sparta.schedule_project.service;
 
 import com.sparta.schedule_project.common.CookieManager;
-import com.sparta.schedule_project.jwt.AuthType;
+import com.sparta.schedule_project.common.entity.User;
 import com.sparta.schedule_project.dto.request.CreateCommentRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyCommentRequestDto;
-import com.sparta.schedule_project.dto.request.RemoveCommentRequestDto;
-import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.CommentResponseDto;
+import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.entity.Comment;
-import com.sparta.schedule_project.common.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
+import com.sparta.schedule_project.jwt.AuthType;
 import com.sparta.schedule_project.repository.CommentRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -42,15 +41,15 @@ public class CommentService {
     /**
      * 댓글 조회
      *
-     * @param scheduleSeq 댓글을 검색할 일정 번호
-     * @param page        페이지 번호 (기본값: 1)
-     * @param size        페이지당 항목 수 (기본값: 10)
+     * @param scheduleId 댓글을 검색할 일정 번호
+     * @param page       페이지 번호 (기본값: 1)
+     * @param size       페이지당 항목 수 (기본값: 10)
      * @return 조회 결과 (ScheduleResponseDto)
      * @since 2024-10-15
      */
-    public CommentResponseDto searchComment(int scheduleSeq, int page, int size) {
+    public CommentResponseDto searchComment(int scheduleId, int page, int size) {
         Page<Comment> comments = commentRepository
-                .findAllByScheduleSeqOrderByUpdateDateDesc(scheduleSeq, PageRequest.of(page, size));
+                .findAllByScheduleIdOrderByUpdatedAtDesc(scheduleId, PageRequest.of(page, size));
         return CommentResponseDto.createResponseDto(comments, ResponseCode.SUCCESS_SEARCH_COMMENT);
     }
 
@@ -65,7 +64,7 @@ public class CommentService {
     @Transactional
     public ResponseStatusDto updateComment(HttpServletRequest req, ModifyCommentRequestDto requestDto) throws ResponseException {
         User user = CookieManager.getUserFromCookie(req);
-        Comment comment = commentRepository.findBySeq(requestDto.getCommentSeq());
+        Comment comment = commentRepository.findById(requestDto.getCommentId());
         checkAuth(user, comment);
         comment.update(requestDto);
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_COMMENT);
@@ -74,14 +73,14 @@ public class CommentService {
     /**
      * 댓글 삭제
      *
-     * @param req        HttpServletRequest 객체
-     * @param requestDto 댓글 삭제 요청 정보
+     * @param req       HttpServletRequest 객체
+     * @param commintId 삭제할 댓글 id
      * @return 삭제 결과 (ResponseStatusDto)
      * @since 2024-10-15
      */
-    public ResponseStatusDto deleteComment(HttpServletRequest req, RemoveCommentRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto deleteComment(HttpServletRequest req, int commintId) throws ResponseException {
         User loginUser = CookieManager.getUserFromCookie(req);
-        Comment comment = commentRepository.findBySeq(requestDto.getCommentSeq());
+        Comment comment = commentRepository.findById(commintId);
         checkAuth(loginUser, comment);
         commentRepository.delete(comment);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_COMMENT);
@@ -98,7 +97,7 @@ public class CommentService {
     private void checkAuth(User user, Comment comment) throws ResponseException {
         if (comment == null)
             throw new ResponseException(ResponseCode.COMMENT_NOT_FOUND);
-        else if (user.getAuth() != AuthType.ADMIN && user.getSeq() != comment.getUser().getSeq())
+        else if (user.getAuth() != AuthType.ADMIN && user.getId() != comment.getUser().getId())
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }

@@ -19,12 +19,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentDto {
-    private int seq;
-    private int userSeq;
+    private int id;
+    private int userId;
     private String userName;
     private String content;
-    private LocalDateTime createDate;
-    private LocalDateTime updateDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     /**
      * Comment 엔티티 객체를 CommentDto 객체로 변환합니다.
@@ -34,11 +34,11 @@ public class CommentDto {
      * @since 2024-10-18
      */
     public static CommentDto from(Comment comment) {
-        return CommentDto.builder().seq(comment.getSeq())
-                .userSeq(comment.getUser().getSeq())
+        return CommentDto.builder().id(comment.getId())
+                .userId(comment.getUser().getId())
                 .userName(comment.getUser().getName())
                 .content(comment.getContent())
-                .createDate(comment.getCreateDate())
-                .updateDate(comment.getUpdateDate()).build();
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt()).build();
     }
 }
