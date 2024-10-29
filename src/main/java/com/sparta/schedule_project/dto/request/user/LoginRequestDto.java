@@ -1,6 +1,6 @@
 package com.sparta.schedule_project.dto.request.user;
 
-import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.common.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,14 +19,13 @@ public class LoginRequestDto {
     /**
      * DTO 객체를 User 엔티티 객체로 변환합니다.
      *
-     * @param userDto 회원가입 요청 DTO
      * @return 생성된 User 엔티티 객체
      * @since 2024-10-18
      */
-    public User convertDtoToEntity(LoginRequestDto userDto) {
+    public User convertDtoToEntity() {
         return User.builder()
-                .seq(userDto.getUserSeq())
-                .email(userDto.getEmail())
-                .password(userDto.getPassword()).build();
+                .seq(userSeq)
+                .email(email)
+                .password(password).build();
     }
 }

@@ -1,11 +1,10 @@
 package com.sparta.schedule_project.dto.request.user;
 
-import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.common.entity.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +16,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ModifyUserRequestDto {
+    @Positive(message = "유저번호는 0이상의 숫자입니다.")
+    private int userSeq;
+
     @NotBlank(message = "비밀번호를 입력해주세요.")
     @Size(min = 8, max = 20, message = "비밀번호는 8~20자 사이입니다.")
     private String password;
@@ -28,13 +30,13 @@ public class ModifyUserRequestDto {
     /**
      * DTO 객체를 User 엔티티 객체로 변환합니다.
      *
-     * @param userDto 회원가입 요청 DTO
      * @return 생성된 User 엔티티 객체
      * @since 2024-10-18
      */
-    public User convertDtoToEntity(ModifyUserRequestDto userDto, String password) {
+    public User convertDtoToEntity(String password) {
         return User.builder()
+                .seq(userSeq)
                 .password(password)
-                .name(userDto.getName()).build();
+                .name(name).build();
     }
 }

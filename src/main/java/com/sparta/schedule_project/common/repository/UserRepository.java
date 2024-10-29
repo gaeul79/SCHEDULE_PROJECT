@@ -1,6 +1,6 @@
-package com.sparta.schedule_project.repository;
+package com.sparta.schedule_project.common.repository;
 
-import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.common.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

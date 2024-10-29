@@ -137,11 +137,11 @@ public class UserController {
      * @since 2023-10-03
      */
     @PutMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> updateUser(HttpServletRequest req, @PathVariable int userId, @RequestBody ModifyUserRequestDto createUserRequestDto) {
+    public ResponseEntity<ResponseStatusDto> updateUser(HttpServletRequest req, @RequestBody ModifyUserRequestDto createUserRequestDto) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.updateUser(req, userId, createUserRequestDto));
+                    .body(userService.updateUser(req, createUserRequestDto));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())

@@ -1,7 +1,10 @@
-package com.sparta.schedule_project.entity;
+package com.sparta.schedule_project.common.entity;
 
 import com.sparta.schedule_project.cookie.AuthType;
 import com.sparta.schedule_project.dto.request.user.ModifyUserRequestDto;
+import com.sparta.schedule_project.entity.Comment;
+import com.sparta.schedule_project.entity.Schedule;
+import com.sparta.schedule_project.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

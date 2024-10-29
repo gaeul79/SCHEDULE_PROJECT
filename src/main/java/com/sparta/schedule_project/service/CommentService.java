@@ -8,7 +8,7 @@ import com.sparta.schedule_project.dto.request.comment.SearchCommentRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.comment.CommentResponseDto;
 import com.sparta.schedule_project.entity.Comment;
-import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.common.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.CommentRepository;

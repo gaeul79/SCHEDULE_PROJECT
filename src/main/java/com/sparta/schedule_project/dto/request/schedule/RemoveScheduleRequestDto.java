@@ -1,8 +1,7 @@
 package com.sparta.schedule_project.dto.request.schedule;
 
 import com.sparta.schedule_project.entity.Schedule;
-import com.sparta.schedule_project.entity.User;
-import jakarta.validation.constraints.NotBlank;
+import com.sparta.schedule_project.common.entity.User;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,13 +23,12 @@ public class RemoveScheduleRequestDto {
     /**
      * DTO 객체를 Schedule 엔티티 객체로 변환
      *
-     * @param scheduleDto 일정 생성 요청 DTO
      * @return 생성된 Schedule 엔티티 객체
      * @since 2024-10-18
      */
-    public Schedule convertDtoToEntity(RemoveScheduleRequestDto scheduleDto) {
+    public Schedule convertDtoToEntity() {
         return Schedule.builder()
-                .seq(scheduleDto.getScheduleSeq())
-                .user(User.builder().seq(scheduleDto.getUserSeq()).build()).build();
+                .seq(scheduleSeq)
+                .user(User.builder().seq(userSeq).build()).build();
     }
 }

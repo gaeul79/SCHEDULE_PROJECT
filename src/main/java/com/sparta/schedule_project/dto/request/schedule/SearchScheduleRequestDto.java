@@ -16,12 +16,11 @@ public class SearchScheduleRequestDto extends PageDto {
     /**
      * DTO 객체를 Schedule 엔티티 객체로 변환
      *
-     * @param scheduleDto 일정 생성 요청 DTO
      * @return 생성된 Schedule 엔티티 객체
      * @since 2024-10-18
      */
-    public Schedule convertDtoToEntity(SearchScheduleRequestDto scheduleDto) {
+    public Schedule convertDtoToEntity() {
         return Schedule.builder()
-                .page(scheduleDto.convertDtoToPageable()).build();
+                .page(this.convertDtoToPageable()).build();
     }
 }

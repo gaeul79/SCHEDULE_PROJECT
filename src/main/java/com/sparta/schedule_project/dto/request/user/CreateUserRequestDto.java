@@ -1,12 +1,11 @@
 package com.sparta.schedule_project.dto.request.user;
 
 import com.sparta.schedule_project.cookie.AuthType;
-import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.common.entity.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,15 +36,15 @@ public class CreateUserRequestDto {
     /**
      * DTO 객체를 User 엔티티 객체로 변환합니다.
      *
-     * @param userDto 회원가입 요청 DTO
+     * @param password 암호화된 비밀번호
      * @return 생성된 User 엔티티 객체
      * @since 2024-10-18
      */
-    public User convertDtoToEntity(CreateUserRequestDto userDto, String password) {
+    public User convertDtoToEntity(String password) {
         return User.builder()
                 .password(password)
-                .email(userDto.getEmail())
-                .name(userDto.getName())
-                .auth(userDto.getAuth()).build();
+                .email(email)
+                .name(name)
+                .auth(auth).build();
     }
 }

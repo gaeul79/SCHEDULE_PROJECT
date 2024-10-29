@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api.sparta.com")
+@RequestMapping("/api.sparta.com/{userId}")
 public class ScheduleController {
     private final ScheduleService scheduleService;
 

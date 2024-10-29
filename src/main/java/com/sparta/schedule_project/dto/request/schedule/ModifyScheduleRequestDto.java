@@ -1,7 +1,7 @@
 package com.sparta.schedule_project.dto.request.schedule;
 
 import com.sparta.schedule_project.entity.Schedule;
-import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.common.entity.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -33,17 +33,16 @@ public class ModifyScheduleRequestDto {
     /**
      * DTO 객체를 Schedule 엔티티 객체로 변환
      *
-     * @param scheduleDto 일정 생성 요청 DTO
      * @param weather     날씨 정보
      * @return 생성된 Schedule 엔티티 객체
      * @since 2024-10-18
      */
-    public Schedule convertDtoToEntity(ModifyScheduleRequestDto scheduleDto, String weather) {
+    public Schedule convertDtoToEntity(String weather) {
         return Schedule.builder()
-                .seq(scheduleDto.getScheduleSeq())
-                .user(User.builder().seq(scheduleDto.getUserSeq()).build())
-                .title(scheduleDto.getTitle())
+                .seq(scheduleSeq)
+                .user(User.builder().seq(userSeq).build())
+                .title(title)
                 .weather(weather)
-                .content(scheduleDto.getContent()).build();
+                .content(content).build();
     }
 }

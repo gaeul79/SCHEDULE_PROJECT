@@ -1,5 +1,6 @@
 package com.sparta.schedule_project.entity;
 
+import com.sparta.schedule_project.common.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

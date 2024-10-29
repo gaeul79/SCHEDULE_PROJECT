@@ -1,5 +1,7 @@
 package com.sparta.schedule_project.entity;
 
+import com.sparta.schedule_project.common.entity.User;
+import com.sparta.schedule_project.dto.request.schedule.ModifyScheduleRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,9 +56,9 @@ public class Schedule extends Timestamped {
     @Transient
     private Pageable page;
 
-    public void update(Schedule schedule) {
-        this.title = schedule.getTitle();
-        this.content = schedule.getContent();
-        this.weather = schedule.getWeather();
+    public void update(ModifyScheduleRequestDto requestDto, String weather) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.weather = weather;
     }
 }

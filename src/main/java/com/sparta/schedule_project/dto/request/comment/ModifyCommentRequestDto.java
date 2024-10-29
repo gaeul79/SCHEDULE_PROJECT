@@ -1,7 +1,7 @@
 package com.sparta.schedule_project.dto.request.comment;
 
 import com.sparta.schedule_project.entity.Comment;
-import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.common.entity.User;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;

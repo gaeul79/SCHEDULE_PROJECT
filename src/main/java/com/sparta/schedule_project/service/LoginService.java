@@ -3,10 +3,10 @@ package com.sparta.schedule_project.service;
 import com.sparta.schedule_project.cookie.JwtUtil;
 import com.sparta.schedule_project.dto.request.user.LoginRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.common.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.repository.UserRepository;
+import com.sparta.schedule_project.common.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +33,9 @@ public class LoginService {
      * @since 2024-10-03
      */
     public ResponseStatusDto login(HttpServletResponse res, LoginRequestDto requestDto) throws ResponseException, UnsupportedEncodingException {
-        User findUser = userRepository.findByEmail(requestDto.getEmail());
-        validateLoginInfo(requestDto, findUser);
-        addJwtToCookie(findUser, res);
+        User user = userRepository.findByEmail(requestDto.getEmail());
+        validateLoginInfo(requestDto, user);
+        addJwtToCookie(user, res);
         return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
     }
 
