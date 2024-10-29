@@ -1,6 +1,6 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.common.CommonFunction;
+import com.sparta.schedule_project.common.CookieManager;
 import com.sparta.schedule_project.common.entity.User;
 import com.sparta.schedule_project.dto.request.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyScheduleRequestDto;
@@ -42,7 +42,7 @@ public class ScheduleService {
      */
     public ResponseStatusDto createSchedule(HttpServletRequest req, CreateScheduleRequestDto requestDto) {
         String weather = weatherApiService.getTodayWeather();
-        User user = CommonFunction.getUserFromCookie(req);
+        User user = CookieManager.getUserFromCookie(req);
         Schedule schedule = requestDto.convertDtoToEntity(user.getSeq(), weather);
         scheduleRepository.save(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
@@ -72,7 +72,7 @@ public class ScheduleService {
     @Transactional
     public ResponseStatusDto updateSchedule(HttpServletRequest req, ModifyScheduleRequestDto requestDto) throws ResponseException {
         String weather = weatherApiService.getTodayWeather();
-        User user = CommonFunction.getUserFromCookie(req);
+        User user = CookieManager.getUserFromCookie(req);
         Schedule schedule = scheduleRepository.findBySeq(requestDto.getScheduleSeq());
         checkAuth(user, schedule);
         schedule.update(requestDto, weather);
@@ -88,7 +88,7 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ResponseStatusDto deleteSchedule(HttpServletRequest req, RemoveScheduleRequestDto requestDto) throws ResponseException {
-        User user = CommonFunction.getUserFromCookie(req);
+        User user = CookieManager.getUserFromCookie(req);
         Schedule schedule = scheduleRepository.findBySeq(requestDto.getScheduleSeq());
         checkAuth(user, schedule);
         scheduleRepository.delete(schedule);

@@ -1,6 +1,7 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.common.CommonFunction;
+import com.sparta.schedule_project.common.CookieManager;
+import com.sparta.schedule_project.config.PasswordEncoder;
 import com.sparta.schedule_project.dto.request.CreateUserRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyUserRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
@@ -11,7 +12,6 @@ import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.common.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,7 +62,7 @@ public class UserService {
      * @since 2024-10-03
      */
     public UserResponseDto searchUser(int userId) throws ResponseException {
-        User user = CommonFunction.findUserBySeq(userRepository, userId);
+        User user = findUserBySeq(userId);
         return UserResponseDto.createResponseDto(user, ResponseCode.SUCCESS_SEARCH_USER);
     }
 
@@ -76,8 +76,8 @@ public class UserService {
      */
     @Transactional
     public ResponseStatusDto updateUser(HttpServletRequest req, ModifyUserRequestDto requestDto) throws ResponseException {
-        User user = CommonFunction.findUserBySeq(userRepository, requestDto.getUserSeq());
-        CommonFunction.matchUserFromCookie(req, user);
+        User user = findUserBySeq(requestDto.getUserSeq());
+        CookieManager.matchUserFromCookie(req, user);
         user.update(requestDto, passwordEncoder.encode(requestDto.getPassword()));
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
     }
@@ -92,9 +92,24 @@ public class UserService {
      */
     @Transactional
     public ResponseStatusDto deleteUser(HttpServletRequest req, int userId) throws ResponseException {
-        User deleteUser = CommonFunction.findUserBySeq(userRepository, userId);
-        CommonFunction.matchUserFromCookie(req, deleteUser);
+        User deleteUser = findUserBySeq(userId);
+        CookieManager.matchUserFromCookie(req, deleteUser);
         userRepository.delete(deleteUser);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);
+    }
+
+    /**
+     * 멤버 번호로 유저를 조회합니다.
+     *
+     * @param seq 유저 seq
+     * @return 검색된 회원
+     * @throws ResponseException 검색된 유저가 없을시 발생하는 예외
+     * @since 2024-10-23
+     */
+    public User findUserBySeq(int seq) throws ResponseException {
+        User user = userRepository.findBySeq(seq);
+        if (user == null)
+            throw new ResponseException(ResponseCode.USER_NOT_FOUND);
+        return user;
     }
 }

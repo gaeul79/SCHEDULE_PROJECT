@@ -1,5 +1,6 @@
 package com.sparta.schedule_project.service;
 
+import com.sparta.schedule_project.config.PasswordEncoder;
 import com.sparta.schedule_project.jwt.JwtUtil;
 import com.sparta.schedule_project.dto.request.LoginRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
@@ -10,7 +11,6 @@ import com.sparta.schedule_project.common.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -37,17 +37,6 @@ public class LoginService {
         validateLoginInfo(requestDto, user);
         addJwtToCookie(user, res);
         return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
-    }
-
-    /**
-     * 로그아웃
-     *
-     * @return 로그아웃 결과 (ResponseStatusDto)
-     * @since 2024-10-03
-     */
-    public ResponseStatusDto logout() {
-        // TODO. khj 토큰 해제
-        return new ResponseStatusDto(ResponseCode.SUCCESS_LOGOUT);
     }
 
     /**

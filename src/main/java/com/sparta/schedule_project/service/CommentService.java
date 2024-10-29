@@ -1,6 +1,6 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.common.CommonFunction;
+import com.sparta.schedule_project.common.CookieManager;
 import com.sparta.schedule_project.jwt.AuthType;
 import com.sparta.schedule_project.dto.request.CreateCommentRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyCommentRequestDto;
@@ -33,7 +33,7 @@ public class CommentService {
      * @since 2024-10-15
      */
     public ResponseStatusDto createComment(HttpServletRequest req, CreateCommentRequestDto requestDto) throws ResponseException {
-        User user = CommonFunction.getUserFromCookie(req);
+        User user = CookieManager.getUserFromCookie(req);
         Comment comment = requestDto.convertDtoToEntity(user);
         commentRepository.save(comment);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_COMMENT);
@@ -64,7 +64,7 @@ public class CommentService {
      */
     @Transactional
     public ResponseStatusDto updateComment(HttpServletRequest req, ModifyCommentRequestDto requestDto) throws ResponseException {
-        User user = CommonFunction.getUserFromCookie(req);
+        User user = CookieManager.getUserFromCookie(req);
         Comment comment = commentRepository.findBySeq(requestDto.getCommentSeq());
         checkAuth(user, comment);
         comment.update(requestDto);
@@ -80,7 +80,7 @@ public class CommentService {
      * @since 2024-10-15
      */
     public ResponseStatusDto deleteComment(HttpServletRequest req, RemoveCommentRequestDto requestDto) throws ResponseException {
-        User loginUser = CommonFunction.getUserFromCookie(req);
+        User loginUser = CookieManager.getUserFromCookie(req);
         Comment comment = commentRepository.findBySeq(requestDto.getCommentSeq());
         checkAuth(loginUser, comment);
         commentRepository.delete(comment);
@@ -98,7 +98,7 @@ public class CommentService {
     private void checkAuth(User user, Comment comment) throws ResponseException {
         if (comment == null)
             throw new ResponseException(ResponseCode.COMMENT_NOT_FOUND);
-        else if (user.getAuth() != AuthType.ADMIN || user.getSeq() != comment.getUser().getSeq())
+        else if (user.getAuth() != AuthType.ADMIN && user.getSeq() != comment.getUser().getSeq())
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }
