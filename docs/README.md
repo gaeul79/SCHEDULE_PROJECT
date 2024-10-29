@@ -150,7 +150,7 @@
     "status": 200
 }</pre></td>
         <td>
-            <span style=background-color:yellow;font-weight:bold;color:black;>201</span>: 사용자 정상등록</br>
+            <span style=background-color:yellow;font-weight:bold;color:black;>201</span>: 사용자 정상등록<br/>
             <span style=background-color:skyblue;font-weight:bold;color:black;>409</span>: 중복된 이메일
         </td>
     </tr>
@@ -250,7 +250,6 @@
             <span style=background-color:skyblue;font-weight:bold;color:black;>403</span>: 삭제 권한이 없음<br/>
             <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 존재하지 않는 유저<br/>
             <span style=background-color:skyblue;font-weight:bold;color:black;>404</span>: 잘못된 JWT 토큰
-        </td>
         </td>
     </tr>
     <tr>
@@ -488,7 +487,7 @@
 
 ### 📋ERD
 <details><summary><b>ERD (펼치기/접기)</b></summary>
-<img src="images/erd.png">
+<img src="images/erd.png"/>
 </details>
 
 
