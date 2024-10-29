@@ -1,6 +1,7 @@
 package com.sparta.schedule_project.entity;
 
 import com.sparta.schedule_project.common.entity.User;
+import com.sparta.schedule_project.dto.request.comment.ModifyCommentRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,7 +39,7 @@ public class Comment extends Timestamped {
     @Transient
     private Pageable page;
 
-    public void update(Comment comment) {
-        this.content = comment.getContent();
+    public void update(ModifyCommentRequestDto requestDto) {
+        this.content = requestDto.getContent();
     }
 }

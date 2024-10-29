@@ -77,7 +77,7 @@ public class UserService {
     @Transactional
     public ResponseStatusDto updateUser(HttpServletRequest req, ModifyUserRequestDto requestDto) throws ResponseException {
         User user = CommonFunction.findUserBySeq(userRepository, requestDto.getUserSeq());
-        CommonFunction.matchCookie(req, user);
+        CommonFunction.matchUserFromCookie(req, user);
         user.update(requestDto, passwordEncoder.encode(requestDto.getPassword()));
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
     }
@@ -93,7 +93,7 @@ public class UserService {
     @Transactional
     public ResponseStatusDto deleteUser(HttpServletRequest req, int userId) throws ResponseException {
         User deleteUser = CommonFunction.findUserBySeq(userRepository, userId);
-        CommonFunction.matchCookie(req, deleteUser);
+        CommonFunction.matchUserFromCookie(req, deleteUser);
         userRepository.delete(deleteUser);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);
     }

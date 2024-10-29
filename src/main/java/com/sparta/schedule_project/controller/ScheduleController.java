@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api.sparta.com/{userId}")
+@RequestMapping("/api.sparta.com/{userSeq}")
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
@@ -80,7 +80,7 @@ public class ScheduleController {
      * @return 수정 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
-    @PutMapping("/schedules/{scheduleId}")
+    @PutMapping("/schedules/{scheduleSeq}")
     public ResponseEntity<ResponseStatusDto> updateSchedule(HttpServletRequest req, @RequestBody ModifyScheduleRequestDto requestDto) {
         try {
             return ResponseEntity
@@ -105,7 +105,7 @@ public class ScheduleController {
      * @return 삭제 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
-    @DeleteMapping("/schedules/{scheduleId}")
+    @DeleteMapping("/schedules/{scheduleSeq}")
     public ResponseEntity<ResponseStatusDto> deleteSchedule(HttpServletRequest req, @RequestBody RemoveScheduleRequestDto requestDto) {
         try {
             return ResponseEntity

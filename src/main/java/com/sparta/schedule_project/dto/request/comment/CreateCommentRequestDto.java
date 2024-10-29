@@ -27,15 +27,14 @@ public class CreateCommentRequestDto {
     /**
      * DTO 객체를 엔티티 객체로 변환
      *
-     * @param requestDto 요청 DTO 객체
      * @param user       사용자 정보
      * @return 생성된 댓글 엔티티 객체
      * @since 2024-10-18
      */
-    public Comment convertDtoToEntity(CreateCommentRequestDto requestDto, User user) {
+    public Comment convertDtoToEntity(User user) {
         return Comment.builder()
-                .schedule(Schedule.builder().seq(requestDto.getScheduleSeq()).build())
+                .schedule(Schedule.builder().seq(scheduleSeq).build())
                 .user(user)
-                .content(requestDto.getContent()).build();
+                .content(content).build();
     }
 }

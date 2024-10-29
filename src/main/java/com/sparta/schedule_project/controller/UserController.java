@@ -106,16 +106,16 @@ public class UserController {
     /**
      * 회원 정보 조회 API
      *
-     * @param userId 조회할 회원 번호
+     * @param userSeq 조회할 회원 번호
      * @return 회원 정보 조회 결과
      * @since 2023-10-03
      */
-    @PostMapping("/users/{userId}")
-    public ResponseEntity<UserResponseDto> getUserInfo(@PathVariable int userId) {
+    @PostMapping("/users/{userSeq}")
+    public ResponseEntity<UserResponseDto> getUserInfo(@PathVariable int userSeq) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.searchUser(userId));
+                    .body(userService.searchUser(userSeq));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())
@@ -131,12 +131,11 @@ public class UserController {
      * 회원 정보 수정 API
      *
      * @param req                  HttpServletRequest 객체
-     * @param userId               수정할 회원 번호
      * @param createUserRequestDto 회원 정보 수정 정보 (JSON 형태)
      * @return 회원 정보 수정 결과
      * @since 2023-10-03
      */
-    @PutMapping("/users/{userId}")
+    @PutMapping("/users/{userSeq}")
     public ResponseEntity<ResponseStatusDto> updateUser(HttpServletRequest req, @RequestBody ModifyUserRequestDto createUserRequestDto) {
         try {
             return ResponseEntity
@@ -157,16 +156,16 @@ public class UserController {
      * 회원 정보 삭제 API
      *
      * @param req    HttpServletRequest 객체
-     * @param userId 삭제할 회원 번호
+     * @param userSeq 삭제할 회원 번호
      * @return 회원 정보 삭제 결과
      * @since 2023-10-03
      */
-    @DeleteMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> deleteUser(HttpServletRequest req, @PathVariable int userId) {
+    @DeleteMapping("/users/{userSeq}")
+    public ResponseEntity<ResponseStatusDto> deleteUser(HttpServletRequest req, @PathVariable int userSeq) {
         try {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(userService.deleteUser(req, userId));
+                    .body(userService.deleteUser(req, userSeq));
         } catch (ResponseException ex) {
             return ResponseEntity
                     .status(ex.getResponseCode().getHttpStatus())

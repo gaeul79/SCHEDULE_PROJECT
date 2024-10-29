@@ -23,13 +23,12 @@ public class RemoveCommentRequestDto {
     /**
      * DTO 객체를 엔티티 객체로 변환
      *
-     * @param commentDto 요청 DTO 객체
      * @return 생성된 댓글 엔티티 객체
      * @since 2024-10-18
      */
-    public Comment convertDtoToEntity(RemoveCommentRequestDto commentDto) {
+    public Comment convertDtoToEntity() {
         return Comment.builder()
-                .seq(commentDto.getCommentSeq())
-                .user(User.builder().seq(commentDto.getUserSeq()).build()).build();
+                .seq(commentSeq)
+                .user(User.builder().seq(userSeq).build()).build();
     }
 }

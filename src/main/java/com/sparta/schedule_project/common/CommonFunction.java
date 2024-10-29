@@ -40,7 +40,7 @@ public class CommonFunction {
      * @throws ResponseException 토큰이 유효하지 않거나, 사용자가 존재하지 않거나, 권한이 부족한 경우 예외 발생
      * @since 2024-10-17
      */
-    public static void matchCookie(HttpServletRequest req, User matchUser) throws ResponseException {
+    public static void matchUserFromCookie(HttpServletRequest req, User matchUser) throws ResponseException {
         User loginUser = (User) req.getAttribute("user");
         if (!loginUser.getEmail().equals(matchUser.getEmail()))
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);

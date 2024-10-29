@@ -43,7 +43,7 @@ public class ScheduleService {
     public ResponseStatusDto createSchedule(HttpServletRequest req, CreateScheduleRequestDto requestDto) throws ResponseException {
         String weather = weatherApiService.getTodayWeather();
         User user = CommonFunction.getUserFromCookie(req);
-        Schedule schedule = requestDto.convertDtoToEntity(requestDto, user.getSeq(), weather);
+        Schedule schedule = requestDto.convertDtoToEntity(user.getSeq(), weather);
         scheduleRepository.save(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
     }
@@ -56,8 +56,7 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ScheduleResponseDto searchSchedule(SearchScheduleRequestDto requestDto) {
-        Schedule schedule = requestDto.convertDtoToEntity(requestDto);
-        Page<Schedule> schedules = scheduleRepository.findAllByOrderByUpdateDateDesc(schedule.getPage());
+        Page<Schedule> schedules = scheduleRepository.findAllByOrderByUpdateDateDesc(requestDto.convertDtoToPageable());
         return ScheduleResponseDto.createResponseDto(schedules, ResponseCode.SUCCESS_SEARCH_SCHEDULE);
     }
 
@@ -106,8 +105,7 @@ public class ScheduleService {
     private void checkAuth(User loginUser, Schedule schedule) throws ResponseException {
         if (schedule == null)
             throw new ResponseException(ResponseCode.SCHEDULE_NOT_FOUND);
-        else if (loginUser.getAuth() != AuthType.ADMIN &&
-                 loginUser.getSeq() != schedule.getUser().getSeq())
+        else if (loginUser.getAuth() != AuthType.ADMIN && loginUser.getSeq() != schedule.getUser().getSeq())
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }

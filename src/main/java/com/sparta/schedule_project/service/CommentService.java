@@ -1,5 +1,6 @@
 package com.sparta.schedule_project.service;
 
+import com.sparta.schedule_project.common.CommonFunction;
 import com.sparta.schedule_project.cookie.AuthType;
 import com.sparta.schedule_project.dto.request.comment.CreateCommentRequestDto;
 import com.sparta.schedule_project.dto.request.comment.ModifyCommentRequestDto;
@@ -32,8 +33,8 @@ public class CommentService {
      * @since 2024-10-15
      */
     public ResponseStatusDto createComment(HttpServletRequest req, CreateCommentRequestDto requestDto) throws ResponseException {
-        User loginUser = (User) req.getAttribute("user");
-        Comment comment = requestDto.convertDtoToEntity(requestDto, loginUser);
+        User user = CommonFunction.getUserFromCookie(req);
+        Comment comment = requestDto.convertDtoToEntity(user);
         commentRepository.save(comment);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_COMMENT);
     }
@@ -46,8 +47,10 @@ public class CommentService {
      * @since 2024-10-15
      */
     public CommentResponseDto searchComment(SearchCommentRequestDto requestDto) {
-        Comment comment = requestDto.convertDtoToEntity(requestDto);
-        Page<Comment> comments = commentRepository.findAllByScheduleSeqOrderByUpdateDateDesc(comment.getSchedule().getSeq(), comment.getPage());
+        Page<Comment> comments = commentRepository.findAllByScheduleSeqOrderByUpdateDateDesc(
+                requestDto.getScheduleSeq(),
+                requestDto.convertDtoToPageable()
+        );
         return CommentResponseDto.createResponseDto(comments, ResponseCode.SUCCESS_SEARCH_COMMENT);
     }
 
@@ -61,11 +64,10 @@ public class CommentService {
      */
     @Transactional
     public ResponseStatusDto updateComment(HttpServletRequest req, ModifyCommentRequestDto requestDto) throws ResponseException {
-        User logiUser = (User) req.getAttribute("user");
-        Comment updateComment = requestDto.convertDtoToEntity(requestDto);
-        Comment comment = commentRepository.findBySeq(updateComment.getSeq());
-        checkAuth(logiUser, comment);
-        comment.update(updateComment);
+        User user = CommonFunction.getUserFromCookie(req);
+        Comment comment = commentRepository.findBySeq(requestDto.getCommentSeq());
+        checkAuth(user, comment);
+        comment.update(requestDto);
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_COMMENT);
     }
 
@@ -78,8 +80,8 @@ public class CommentService {
      * @since 2024-10-15
      */
     public ResponseStatusDto deleteComment(HttpServletRequest req, RemoveCommentRequestDto requestDto) throws ResponseException {
-        User loginUser = (User) req.getAttribute("user");
-        Comment comment = requestDto.convertDtoToEntity(requestDto);
+        User loginUser = CommonFunction.getUserFromCookie(req);
+        Comment comment = commentRepository.findBySeq(requestDto.getCommentSeq());
         checkAuth(loginUser, comment);
         commentRepository.delete(comment);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_COMMENT);
@@ -88,16 +90,15 @@ public class CommentService {
     /**
      * 댓글 수정/삭제 요청에 대한 권한을 검사합니다.
      *
-     * @param loginUser 로그인한 사용자 정보
-     * @param comment   요청이 들어온 댓글 정보
+     * @param user    로그인한 사용자 정보
+     * @param comment 요청이 들어온 댓글 정보
      * @throws ResponseException 권한이 없는 경우 예외를 발생시킵니다.
      * @since 2024-10-15
      */
-    private void checkAuth(User loginUser, Comment comment) throws ResponseException {
+    private void checkAuth(User user, Comment comment) throws ResponseException {
         if (comment == null)
             throw new ResponseException(ResponseCode.COMMENT_NOT_FOUND);
-        else if (loginUser.getAuth() != AuthType.ADMIN ||
-                loginUser.getSeq() != comment.getUser().getSeq())
+        else if (user.getAuth() != AuthType.ADMIN || user.getSeq() != comment.getUser().getSeq())
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 }
