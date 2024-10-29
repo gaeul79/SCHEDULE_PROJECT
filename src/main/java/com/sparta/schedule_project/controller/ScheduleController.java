@@ -36,20 +36,10 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @PostMapping("/schedules")
-    public ResponseEntity<ResponseStatusDto> createSchedule(HttpServletRequest req, @RequestBody CreateScheduleRequestDto requestDto) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(scheduleService.createSchedule(req, requestDto));
-        } catch (ResponseException ex) {
-            return ResponseEntity
-                    .status(ex.getResponseCode().getHttpStatus())
-                    .body(new ResponseStatusDto(ex.getResponseCode()));
-        } catch (Exception ex) {
-            return ResponseEntity
-                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
-                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
-        }
+    public ResponseEntity<ResponseStatusDto> createSchedule(HttpServletRequest req, @RequestBody CreateScheduleRequestDto requestDto) throws ResponseException {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(scheduleService.createSchedule(req, requestDto));
     }
 
     /**
@@ -61,15 +51,9 @@ public class ScheduleController {
      */
     @GetMapping("/schedules")
     public ResponseEntity<ScheduleResponseDto> searchSchedules(@RequestBody SearchScheduleRequestDto requestDto) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(scheduleService.searchSchedule(requestDto));
-        } catch (Exception ex) {
-            return ResponseEntity
-                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
-                    .body(ScheduleResponseDto.createResponseDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
-        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(scheduleService.searchSchedule(requestDto));
     }
 
     /**
@@ -81,20 +65,10 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @PutMapping("/schedules/{scheduleSeq}")
-    public ResponseEntity<ResponseStatusDto> updateSchedule(HttpServletRequest req, @RequestBody ModifyScheduleRequestDto requestDto) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(scheduleService.updateSchedule(req, requestDto));
-        } catch (ResponseException ex) {
-            return ResponseEntity
-                    .status(ex.getResponseCode().getHttpStatus())
-                    .body(new ResponseStatusDto(ex.getResponseCode()));
-        } catch (Exception ex) {
-            return ResponseEntity
-                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
-                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
-        }
+    public ResponseEntity<ResponseStatusDto> updateSchedule(HttpServletRequest req, @RequestBody ModifyScheduleRequestDto requestDto) throws ResponseException {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(scheduleService.updateSchedule(req, requestDto));
     }
 
     /**
@@ -106,19 +80,9 @@ public class ScheduleController {
      * @since 2024-10-03
      */
     @DeleteMapping("/schedules/{scheduleSeq}")
-    public ResponseEntity<ResponseStatusDto> deleteSchedule(HttpServletRequest req, @RequestBody RemoveScheduleRequestDto requestDto) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(scheduleService.deleteSchedule(req, requestDto));
-        } catch (ResponseException ex) {
-            return ResponseEntity
-                    .status(ex.getResponseCode().getHttpStatus())
-                    .body(new ResponseStatusDto(ex.getResponseCode()));
-        } catch (Exception ex) {
-            return ResponseEntity
-                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
-                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
-        }
+    public ResponseEntity<ResponseStatusDto> deleteSchedule(HttpServletRequest req, @RequestBody RemoveScheduleRequestDto requestDto) throws ResponseException {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(scheduleService.deleteSchedule(req, requestDto));
     }
 }

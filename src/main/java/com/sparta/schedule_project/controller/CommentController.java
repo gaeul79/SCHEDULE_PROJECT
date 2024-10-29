@@ -30,20 +30,10 @@ public class CommentController {
      * @since 2024-10-15
      */
     @PostMapping("/comments")
-    public ResponseEntity<ResponseStatusDto> createComment(HttpServletRequest req, @RequestBody CreateCommentRequestDto requestDto) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(commentService.createComment(req, requestDto));
-        } catch (ResponseException ex) {
-            return ResponseEntity
-                    .status(ex.getResponseCode().getHttpStatus())
-                    .body(new ResponseStatusDto(ex.getResponseCode()));
-        } catch (Exception ex) {
-            return ResponseEntity
-                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
-                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
-        }
+    public ResponseEntity<ResponseStatusDto> createComment(HttpServletRequest req, @RequestBody CreateCommentRequestDto requestDto) throws ResponseException {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(commentService.createComment(req, requestDto));
     }
 
     /**
@@ -56,15 +46,9 @@ public class CommentController {
      */
     @GetMapping("/comments")
     public ResponseEntity<CommentResponseDto> searchComment(@RequestBody SearchCommentRequestDto requestDto) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(commentService.searchComment(requestDto));
-        } catch (Exception ex) {
-            return ResponseEntity
-                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
-                    .body(CommentResponseDto.createResponseDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
-        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(commentService.searchComment(requestDto));
     }
 
     /**
@@ -76,20 +60,10 @@ public class CommentController {
      * @since 2024-10-15
      */
     @PutMapping("/comments/{commentSeq}")
-    public ResponseEntity<ResponseStatusDto> updateComment(HttpServletRequest req, @RequestBody ModifyCommentRequestDto requestDto) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(commentService.updateComment(req, requestDto));
-        } catch (ResponseException ex) {
-            return ResponseEntity
-                    .status(ex.getResponseCode().getHttpStatus())
-                    .body(new ResponseStatusDto(ex.getResponseCode()));
-        } catch (Exception ex) {
-            return ResponseEntity
-                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
-                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
-        }
+    public ResponseEntity<ResponseStatusDto> updateComment(HttpServletRequest req, @RequestBody ModifyCommentRequestDto requestDto) throws ResponseException {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(commentService.updateComment(req, requestDto));
     }
 
     /**
@@ -101,19 +75,9 @@ public class CommentController {
      * @since 2024-10-15
      */
     @DeleteMapping("/comments/{commentSeq}")
-    public ResponseEntity<ResponseStatusDto> deleteComment(HttpServletRequest req, @RequestBody RemoveCommentRequestDto requestDto) {
-        try {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(commentService.deleteComment(req, requestDto));
-        } catch (ResponseException ex) {
-            return ResponseEntity
-                    .status(ex.getResponseCode().getHttpStatus())
-                    .body(new ResponseStatusDto(ex.getResponseCode()));
-        } catch (Exception ex) {
-            return ResponseEntity
-                    .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
-                    .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, ex.getMessage()));
-        }
+    public ResponseEntity<ResponseStatusDto> deleteComment(HttpServletRequest req, @RequestBody RemoveCommentRequestDto requestDto) throws ResponseException {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(commentService.deleteComment(req, requestDto));
     }
 }
