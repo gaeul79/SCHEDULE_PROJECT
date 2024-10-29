@@ -53,12 +53,11 @@ public class AuthFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
-        String url = request.getRequestURI();
-
         try {
-            if (ignorePage(url))
+            String url = request.getRequestURI();
+            if (ignorePage(url)) {
                 log.info("인증 처리를 하지 않는 URL : {}", url);
-            else {
+            } else {
                 String tokenValue = getTokenFromRequest(request);
                 User user = getUserInfoFromToken(tokenValue);
                 request.setAttribute("user", user);
