@@ -78,7 +78,7 @@ public class AuthFilter extends OncePerRequestFilter {
             response.setCharacterEncoding("UTF-8");
             String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSUPPORTED));
             response.getWriter().write(json);
-        }  catch (ResponseException ex) {
+        } catch (ResponseException ex) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             String json = objectMapper.writeValueAsString(new ResponseStatusDto(ex.getResponseCode()));
