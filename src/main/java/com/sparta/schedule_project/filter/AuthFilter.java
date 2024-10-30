@@ -2,18 +2,16 @@ package com.sparta.schedule_project.filter;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.schedule_project.cookie.JwtUtil;
+import com.sparta.schedule_project.cookie.JwtTokenManager;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +22,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 
 /**
  * JWT 기반 인증 처리 필터
@@ -37,9 +33,9 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 @Component
 public class AuthFilter extends OncePerRequestFilter {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
+    private final JwtTokenManager jwtTokenManager;
 
     /**
      * 요청 URI에 따라 인증 처리 여부를 판단하고,
@@ -58,8 +54,7 @@ public class AuthFilter extends OncePerRequestFilter {
             if (ignorePage(url)) {
                 log.info("인증 처리를 하지 않는 URL : {}", url);
             } else {
-                // String tokenValue = getTokenFromCookie(request);
-                String tokenValue = getTokenFromHeader(request);
+                String tokenValue = jwtTokenManager.getToken(request);
                 User user = getUserInfoFromToken(tokenValue);
                 request.setAttribute("user", user);
             }
@@ -118,52 +113,7 @@ public class AuthFilter extends OncePerRequestFilter {
      * @since 2024-10-18
      */
     private User getUserInfoFromToken(String tokenValue) throws ResponseException {
-        // 토큰 확인
-        if (StringUtils.hasText(tokenValue)) { // 토큰이 존재하면 검증 시작
-            // JWT 토큰 substring
-            String token = jwtUtil.substringToken(tokenValue);
-
-            // 토큰 검증
-            if (jwtUtil.validateToken(token)) {
-                Claims info = jwtUtil.getUserInfoFromToken(token); // 토큰에서 사용자 정보 가져오기
-                return userRepository.findByEmail(info.getSubject());
-            }
-
-            return null;
-        } else {
-            throw new ResponseException(ResponseCode.TOKEN_NOT_FOUND);
-        }
-    }
-
-    /**
-     * HTTP 요청에서 쿠키 값으로 JWT 토큰을 가져옵니다.
-     *
-     * @param req HTTP 요청 객체
-     * @return JWT 토큰 값, 없으면 null
-     * @since 2024-10-18
-     */
-    private String getTokenFromCookie(HttpServletRequest req) {
-        // HttpServletRequest 에서 Cookie Value : JWT 가져오기
-        Cookie[] cookies = req.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(JwtUtil.AUTHORIZATION_HEADER)) {
-                    return URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8); // Encode 되어 넘어간 Value 다시 Decode
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * HTTP 요청에서 쿠키 값으로 JWT 토큰을 가져옵니다.
-     *
-     * @param req HTTP 요청 객체
-     * @return JWT 토큰 값, 없으면 null
-     * @since 2024-10-18
-     */
-    private String getTokenFromHeader(HttpServletRequest req) {
-        String token = req.getHeader(JwtUtil.AUTHORIZATION_HEADER);
-        return URLDecoder.decode(token, StandardCharsets.UTF_8); // Encode 되어 넘어간 Value 다시 Decode
+        String email = jwtTokenManager.getSubject(tokenValue);
+        return userRepository.findByEmail(email);
     }
 }

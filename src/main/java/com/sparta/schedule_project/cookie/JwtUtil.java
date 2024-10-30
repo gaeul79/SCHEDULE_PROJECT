@@ -83,25 +83,23 @@ public class JwtUtil {
     }
 
     /**
-     * 토큰을 검증합니다. (서명 확인 및 만료 시간 검사)
-     *
-     * @param token 검증할 JWT 토큰 (String)
-     * @return 토큰이 유효한 경우 true, 유효하지 않은 경우 false
-     * @since 2024-10-18
-     */
-    public boolean validateToken(String token) {
-        Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-        return true;
-    }
-
-    /**
      * 유효한 토큰에서 사용자 정보를 추출합니다.
      *
      * @param token 유효한 JWT 토큰 (String)
      * @return 토큰에 포함된 사용자 정보 (Claims 객체)
      * @since 2024-10-18
      */
-    public Claims getUserInfoFromToken(String token) {
+    private Claims parseClaimsJws(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    }
+
+    public String getSubject(String token) {
+        if (!StringUtils.hasText(token)) // 토큰 확인
+            throw new ResponseException(ResponseCode.TOKEN_NOT_FOUND);
+
+        token = substringToken(token); // JWT 토큰 substring
+        Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+        Claims info = parseClaimsJws(token); // 토큰에서 사용자 정보 가져오기
+        return info.getSubject();
     }
 }

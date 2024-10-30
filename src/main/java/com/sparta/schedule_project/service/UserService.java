@@ -1,12 +1,12 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.cookie.CookieManager;
-import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.config.PasswordEncoder;
+import com.sparta.schedule_project.cookie.JwtTokenManager;
 import com.sparta.schedule_project.dto.request.CreateUserRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyUserRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.UserResponseDto;
+import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenManager tokenManager;
 
     /**
      * 회원가입을 처리합니다.
@@ -77,7 +78,7 @@ public class UserService {
     @Transactional
     public ResponseStatusDto updateUser(HttpServletRequest req, ModifyUserRequestDto requestDto) throws ResponseException {
         User user = findUserById(requestDto.getUserId());
-        CookieManager.matchUserFromCookie(req, user);
+        tokenManager.matchUserFromToken(req, user);
         user.update(requestDto, passwordEncoder.encode(requestDto.getPassword()));
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
     }
@@ -93,7 +94,7 @@ public class UserService {
     @Transactional
     public ResponseStatusDto deleteUser(HttpServletRequest req, int userId) throws ResponseException {
         User deleteUser = findUserById(userId);
-        CookieManager.matchUserFromCookie(req, deleteUser);
+        tokenManager.matchUserFromToken(req, deleteUser);
         userRepository.delete(deleteUser);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);
     }

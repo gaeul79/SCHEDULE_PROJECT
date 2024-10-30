@@ -1,7 +1,7 @@
 package com.sparta.schedule_project.service;
 
 import com.sparta.schedule_project.config.PasswordEncoder;
-import com.sparta.schedule_project.cookie.CookieManager;
+import com.sparta.schedule_project.cookie.JwtTokenManager;
 import com.sparta.schedule_project.dto.request.LoginRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.entity.User;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final CookieManager cookieManager;
+    private final JwtTokenManager jwtTokenManager;
 
     /**
      * 로그인을 처리합니다.
@@ -30,8 +30,7 @@ public class LoginService {
     public ResponseStatusDto login(HttpServletResponse res, LoginRequestDto requestDto) throws ResponseException {
         User user = userRepository.findByEmail(requestDto.getEmail());
         validateLoginInfo(requestDto, user);
-        // cookieManager.addJwtToCookie(res, user);
-        cookieManager.addJwtToHeader(res, user);
+        jwtTokenManager.addToken(res, user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
     }
 

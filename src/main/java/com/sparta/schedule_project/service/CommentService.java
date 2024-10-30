@@ -1,15 +1,15 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.cookie.CookieManager;
-import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.cookie.AuthType;
+import com.sparta.schedule_project.cookie.JwtTokenManager;
 import com.sparta.schedule_project.dto.request.CreateCommentRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyCommentRequestDto;
 import com.sparta.schedule_project.dto.response.CommentResponseDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.entity.Comment;
+import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.cookie.AuthType;
 import com.sparta.schedule_project.repository.CommentRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class CommentService {
      * @since 2024-10-15
      */
     public ResponseStatusDto createComment(HttpServletRequest req, CreateCommentRequestDto requestDto) {
-        User user = CookieManager.getUserFromToken(req);
+        User user = JwtTokenManager.getUser(req);
         Comment comment = requestDto.convertDtoToEntity(user);
         commentRepository.save(comment);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_COMMENT);
@@ -63,7 +63,7 @@ public class CommentService {
      */
     @Transactional
     public ResponseStatusDto updateComment(HttpServletRequest req, ModifyCommentRequestDto requestDto) throws ResponseException {
-        User user = CookieManager.getUserFromToken(req);
+        User user = JwtTokenManager.getUser(req);
         Comment comment = commentRepository.findById(requestDto.getCommentId());
         validateAuth(user, comment);
         comment.update(requestDto);
@@ -79,7 +79,7 @@ public class CommentService {
      * @since 2024-10-15
      */
     public ResponseStatusDto deleteComment(HttpServletRequest req, int commintId) throws ResponseException {
-        User loginUser = CookieManager.getUserFromToken(req);
+        User loginUser = JwtTokenManager.getUser(req);
         Comment comment = commentRepository.findById(commintId);
         validateAuth(loginUser, comment);
         commentRepository.delete(comment);
