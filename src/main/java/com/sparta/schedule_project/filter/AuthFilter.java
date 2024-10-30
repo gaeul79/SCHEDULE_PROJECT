@@ -111,7 +111,7 @@ public class AuthFilter extends OncePerRequestFilter {
      * @since 2024-10-31
      */
     private void setAttribute(HttpServletRequest req) {
-        TokenProvider provider = tokenManager.getTokenProvider(req.getRequestURI());
+        TokenProvider provider = tokenManager.getTokenProvider(req);
         Claims claims = provider.getClaims(req);
         String email = claims.getSubject();
         User user = userRepository.findByEmail(email);
