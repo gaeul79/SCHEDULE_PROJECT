@@ -1,5 +1,6 @@
 package com.sparta.schedule_project.exception;
 
+import com.sparta.schedule_project.emums.ResponseCode;
 import lombok.Getter;
 
 /**

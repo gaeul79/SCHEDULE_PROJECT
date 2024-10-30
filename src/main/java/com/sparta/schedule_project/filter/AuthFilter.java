@@ -2,12 +2,14 @@ package com.sparta.schedule_project.filter;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.schedule_project.cookie.JwtTokenManager;
+import com.sparta.schedule_project.token.TokenProvider;
+import com.sparta.schedule_project.token.TokenProviderManager;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.entity.User;
-import com.sparta.schedule_project.exception.ResponseCode;
+import com.sparta.schedule_project.emums.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -35,7 +37,7 @@ import java.io.IOException;
 public class AuthFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final UserRepository userRepository;
-    private final JwtTokenManager jwtTokenManager;
+    private final TokenProviderManager tokenManager;
 
     /**
      * 요청 URI에 따라 인증 처리 여부를 판단하고,
@@ -54,9 +56,7 @@ public class AuthFilter extends OncePerRequestFilter {
             if (ignorePage(url)) {
                 log.info("인증 처리를 하지 않는 URL : {}", url);
             } else {
-                String tokenValue = jwtTokenManager.getToken(request);
-                User user = getUserInfoFromToken(tokenValue);
-                request.setAttribute("user", user);
+                setAttribute(request);
             }
             filterChain.doFilter(request, response); // 다음 Filter 로 이동
         } catch (SecurityException | MalformedJwtException | IllegalArgumentException ex) {
@@ -98,8 +98,8 @@ public class AuthFilter extends OncePerRequestFilter {
         // 회원 가입, 로그인 관련 API 는 인증 필요 없이 요청 진행
         if (!StringUtils.hasText(url))
             return true;
-        return url.contains("/api/login") ||
-                url.contains("/api/signup") ||
+        return url.contains("api/login") ||
+                url.contains("api/signup") ||
                 url.startsWith("/css") ||
                 url.startsWith("/js");
     }
@@ -107,13 +107,15 @@ public class AuthFilter extends OncePerRequestFilter {
     /**
      * JWT 토큰에서 사용자 정보를 추출합니다.
      *
-     * @param tokenValue JWT 토큰 값
-     * @return 토큰에서 추출된 사용자 정보, 없으면 null
+     * @param req 요청 객체
      * @throws IllegalArgumentException 토큰이 없는 경우 발생
      * @since 2024-10-18
      */
-    private User getUserInfoFromToken(String tokenValue) throws ResponseException {
-        String email = jwtTokenManager.getSubject(tokenValue);
-        return userRepository.findByEmail(email);
+    private void setAttribute(HttpServletRequest req) {
+        TokenProvider provider = tokenManager.getTokenProvider(req.getRequestURI());
+        Claims claims = provider.getClaims(req);
+        String email = claims.getSubject();
+        User user = userRepository.findByEmail(email);
+        req.setAttribute("user", user);
     }
 }

@@ -1,6 +1,7 @@
-package com.sparta.schedule_project.cookie;
+package com.sparta.schedule_project.token;
 
-import com.sparta.schedule_project.exception.ResponseCode;
+import com.sparta.schedule_project.emums.AuthType;
+import com.sparta.schedule_project.emums.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -10,7 +11,6 @@ import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.security.Key;
@@ -23,7 +23,6 @@ import java.util.Base64;
  *
  * @since 2024-10-18
  */
-@Component
 public class JwtUtil {
     // Header KEY 값
     public static final String AUTHORIZATION_HEADER = "Authorization";
@@ -93,13 +92,17 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    public String getSubject(String token) {
+    public Claims getClaims(String token) {
         if (!StringUtils.hasText(token)) // 토큰 확인
             throw new ResponseException(ResponseCode.TOKEN_NOT_FOUND);
 
         token = substringToken(token); // JWT 토큰 substring
         Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-        Claims info = parseClaimsJws(token); // 토큰에서 사용자 정보 가져오기
-        return info.getSubject();
+        return parseClaimsJws(token); // 토큰에서 사용자 정보 가져오기
+    }
+
+    public String getSubject(String token) {
+        Claims claims = getClaims(token);
+        return claims.getSubject();
     }
 }

@@ -1,7 +1,7 @@
 package com.sparta.schedule_project.dto.response;
 
 import com.sparta.schedule_project.entity.Comment;
-import com.sparta.schedule_project.exception.ResponseCode;
+import com.sparta.schedule_project.emums.ResponseCode;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -1,6 +1,7 @@
 package com.sparta.schedule_project.exception;
 
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
+import com.sparta.schedule_project.emums.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

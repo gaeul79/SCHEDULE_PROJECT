@@ -30,18 +30,20 @@ public class UserController {
     /**
      * 로그인 API
      *
-     * @param res                  HttpServletResponse 객체
-     * @param createUserRequestDto 로그인 정보 (JSON 형태)
+     * @param req        HttpServletRequest 객체
+     * @param res        HttpServletResponse 객체
+     * @param requestDto 로그인 정보 (JSON 형태)
      * @return 로그인 처리 결과
      * @since 2023-10-03
      */
     @PostMapping("/login")
     public ResponseEntity<ResponseStatusDto> login(
+            HttpServletRequest req,
             HttpServletResponse res,
-            @RequestBody LoginRequestDto createUserRequestDto) throws ResponseException {
+            @RequestBody LoginRequestDto requestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(loginService.login(res, createUserRequestDto));
+                .body(loginService.login(req, res, requestDto));
     }
 
     /**

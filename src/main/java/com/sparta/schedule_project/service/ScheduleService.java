@@ -1,14 +1,14 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.cookie.AuthType;
-import com.sparta.schedule_project.cookie.JwtTokenManager;
+import com.sparta.schedule_project.emums.AuthType;
+import com.sparta.schedule_project.token.TokenProviderManager;
 import com.sparta.schedule_project.dto.request.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyScheduleRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.ScheduleResponseDto;
 import com.sparta.schedule_project.entity.Schedule;
 import com.sparta.schedule_project.entity.User;
-import com.sparta.schedule_project.exception.ResponseCode;
+import com.sparta.schedule_project.emums.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.infra.WeatherApi;
 import com.sparta.schedule_project.repository.ScheduleRepository;
@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ScheduleService {
     private final WeatherApi weatherApi;
+    private final TokenProviderManager tokenManager;
     private final ScheduleRepository scheduleRepository;
 
     /**
@@ -41,7 +42,7 @@ public class ScheduleService {
      */
     public ResponseStatusDto createSchedule(HttpServletRequest req, CreateScheduleRequestDto requestDto) {
         String weather = weatherApi.getTodayWeather();
-        User user = JwtTokenManager.getUser(req);
+        User user = tokenManager.getTokenProvider(req).getUser(req);
         Schedule schedule = requestDto.convertDtoToEntity(user.getId(), weather);
         scheduleRepository.save(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
@@ -71,7 +72,7 @@ public class ScheduleService {
     @Transactional
     public ResponseStatusDto updateSchedule(HttpServletRequest req, ModifyScheduleRequestDto requestDto) throws ResponseException {
         String weather = weatherApi.getTodayWeather();
-        User user = JwtTokenManager.getUser(req);
+        User user = tokenManager.getTokenProvider(req).getUser(req);
         Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId());
         validateAuth(user, schedule);
         schedule.update(requestDto, weather);
@@ -87,7 +88,7 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ResponseStatusDto deleteSchedule(HttpServletRequest req, int scheduleId) throws ResponseException {
-        User user = JwtTokenManager.getUser(req);
+        User user = tokenManager.getTokenProvider(req).getUser(req);
         Schedule schedule = scheduleRepository.findById(scheduleId);
         validateAuth(user, schedule);
         scheduleRepository.delete(schedule);

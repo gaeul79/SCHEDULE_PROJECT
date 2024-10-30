@@ -1,4 +1,4 @@
-package com.sparta.schedule_project.exception;
+package com.sparta.schedule_project.emums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

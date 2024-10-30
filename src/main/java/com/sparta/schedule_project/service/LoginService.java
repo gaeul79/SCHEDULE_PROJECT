@@ -1,13 +1,14 @@
 package com.sparta.schedule_project.service;
 
 import com.sparta.schedule_project.config.PasswordEncoder;
-import com.sparta.schedule_project.cookie.JwtTokenManager;
+import com.sparta.schedule_project.token.TokenProviderManager;
 import com.sparta.schedule_project.dto.request.LoginRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.entity.User;
-import com.sparta.schedule_project.exception.ResponseCode;
+import com.sparta.schedule_project.emums.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,20 +18,21 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenManager jwtTokenManager;
+    private final TokenProviderManager tokenManager;
 
     /**
      * 로그인을 처리합니다.
      *
+     * @param req        HttpServletRequest 객체
      * @param res        HttpServletResponse 객체
      * @param requestDto 로그인 요청 정보
      * @return 로그인 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
-    public ResponseStatusDto login(HttpServletResponse res, LoginRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto login(HttpServletRequest req, HttpServletResponse res, LoginRequestDto requestDto) throws ResponseException {
         User user = userRepository.findByEmail(requestDto.getEmail());
         validateLoginInfo(requestDto, user);
-        jwtTokenManager.addToken(res, user);
+        tokenManager.getTokenProvider(req.getRequestURL().toString()).setToken(res, user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
     }
 
