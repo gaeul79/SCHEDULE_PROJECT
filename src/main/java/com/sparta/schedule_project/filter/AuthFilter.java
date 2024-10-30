@@ -62,26 +62,31 @@ public class AuthFilter extends OncePerRequestFilter {
         } catch (SecurityException | MalformedJwtException | IllegalArgumentException ex) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+            response.setStatus(ResponseCode.TOKEN_UNSIGNED.getHttpStatus().value());
             String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSIGNED));
             response.getWriter().write(json);
         } catch (ExpiredJwtException e) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+            response.setStatus(ResponseCode.TOKEN_TIMEOUT.getHttpStatus().value());
             String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_TIMEOUT));
             response.getWriter().write(json);
         } catch (UnsupportedJwtException e) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+            response.setStatus(ResponseCode.TOKEN_UNSUPPORTED.getHttpStatus().value());
             String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSUPPORTED));
             response.getWriter().write(json);
         } catch (ResponseException ex) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+            response.setStatus(ex.getResponseCode().getHttpStatus().value());
             String json = objectMapper.writeValueAsString(new ResponseStatusDto(ex.getResponseCode()));
             response.getWriter().write(json);
         } catch (Exception ex) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+            response.setStatus(ResponseCode.UNKNOWN_ERROR.getHttpStatus().value());
             String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR));
             response.getWriter().write(json);
         }

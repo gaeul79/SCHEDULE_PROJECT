@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TokenProviderManager {
     public final String LOGIN_TYPE_HEADER = "LoginType";
-    private final TokenType tokenType = TokenType.HEADER;
+    private final TokenType tokenType = TokenType.COOKIE;
     private final JwtCookieTokenProvider jwtCookieTokenProvider;
     private final JwtHeaderTokenProvider jwtHeaderTokenProvider;
 
