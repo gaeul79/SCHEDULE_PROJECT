@@ -1,15 +1,15 @@
 package com.sparta.schedule_project.service;
 
 import com.sparta.schedule_project.config.PasswordEncoder;
-import com.sparta.schedule_project.token.TokenProviderManager;
 import com.sparta.schedule_project.dto.request.CreateUserRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyUserRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.UserResponseDto;
-import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.emums.ResponseCode;
+import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
+import com.sparta.schedule_project.token.TokenProviderManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

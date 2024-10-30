@@ -12,6 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 댓글 관리 API를 제공하는 컨트롤러 클래스
+ *
+ * @author 김현정
+ * @since 2024-10-03
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/{userId}/schedules/{scheduleId}")

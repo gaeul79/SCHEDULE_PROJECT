@@ -92,6 +92,14 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
+    /**
+     * JWT 토큰을 파싱하여 클레임 정보를 추출합니다.
+     *
+     * @param token JWT 토큰 문자열
+     * @return 토큰의 클레임 정보
+     * @throws ResponseException 토큰이 유효하지 않은 경우 예외 발생
+     * @since 2024-10-31
+     */
     public Claims getClaims(String token) {
         if (!StringUtils.hasText(token)) // 토큰 확인
             throw new ResponseException(ResponseCode.TOKEN_NOT_FOUND);
@@ -99,10 +107,5 @@ public class JwtUtil {
         token = substringToken(token); // JWT 토큰 substring
         Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
         return parseClaimsJws(token); // 토큰에서 사용자 정보 가져오기
-    }
-
-    public String getSubject(String token) {
-        Claims claims = getClaims(token);
-        return claims.getSubject();
     }
 }

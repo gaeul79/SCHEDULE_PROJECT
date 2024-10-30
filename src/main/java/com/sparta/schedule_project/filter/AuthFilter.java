@@ -105,11 +105,10 @@ public class AuthFilter extends OncePerRequestFilter {
     }
 
     /**
-     * JWT 토큰에서 사용자 정보를 추출합니다.
+     * 인증된 사용자 정보를 요청 속성에 설정합니다.
      *
-     * @param req 요청 객체
-     * @throws IllegalArgumentException 토큰이 없는 경우 발생
-     * @since 2024-10-18
+     * @param req HTTP 서블릿 요청 객체
+     * @since 2024-10-31
      */
     private void setAttribute(HttpServletRequest req) {
         TokenProvider provider = tokenManager.getTokenProvider(req.getRequestURI());

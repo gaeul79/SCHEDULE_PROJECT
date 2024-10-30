@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class PasswordConfig {
-
     /**
      * Spring Security에서 사용되는 비밀번호 암호화 객체를 생성하여 Bean으로 등록합니다.
      * BCryptPasswordEncoder 클래스를 사용하여 비밀번호를 암호화합니다.

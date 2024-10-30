@@ -1,16 +1,16 @@
 package com.sparta.schedule_project.service;
 
-import com.sparta.schedule_project.emums.AuthType;
-import com.sparta.schedule_project.token.TokenProviderManager;
 import com.sparta.schedule_project.dto.request.CreateCommentRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyCommentRequestDto;
 import com.sparta.schedule_project.dto.response.CommentResponseDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
+import com.sparta.schedule_project.emums.AuthType;
+import com.sparta.schedule_project.emums.ResponseCode;
 import com.sparta.schedule_project.entity.Comment;
 import com.sparta.schedule_project.entity.User;
-import com.sparta.schedule_project.emums.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.CommentRepository;
+import com.sparta.schedule_project.token.TokenProviderManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

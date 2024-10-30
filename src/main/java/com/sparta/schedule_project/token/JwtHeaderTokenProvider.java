@@ -13,6 +13,11 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * JWT(JSON Web Token)를 이용하여 헤더에 사용자 정보를 저장하고 인증을 처리하는 클래스입니다.
+ *
+ * @since 2024-10-31
+ */
 @RequiredArgsConstructor
 @Component
 public class JwtHeaderTokenProvider extends JwtUtil implements TokenProvider {
@@ -59,12 +64,26 @@ public class JwtHeaderTokenProvider extends JwtUtil implements TokenProvider {
             throw new ResponseException(ResponseCode.INVALID_PERMISSION);
     }
 
+    /**
+     * HTTP 요청에서 JWT 토큰을 추출하고, 토큰의 클레임을 가져옵니다.
+     *
+     * @param req HTTP 요청 객체
+     * @return JWT 토큰의 클레임 정보
+     * @since 2024-10-31
+     */
     @Override
     public Claims getClaims(HttpServletRequest req) {
         String token = getToken(req);
         return this.getClaims(token); // JWT 토큰 substring
     }
 
+    /**
+     * HTTP 요청에서 인증된 사용자 정보를 가져옵니다.
+     *
+     * @param req HTTP 요청 객체
+     * @return 인증된 사용자 정보
+     * @since 2024-10-31
+     */
     @Override
     public User getUser(HttpServletRequest req) {
         return (User) req.getAttribute("user");
