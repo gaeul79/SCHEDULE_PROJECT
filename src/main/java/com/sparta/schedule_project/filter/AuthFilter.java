@@ -78,6 +78,11 @@ public class AuthFilter extends OncePerRequestFilter {
             response.setCharacterEncoding("UTF-8");
             String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSUPPORTED));
             response.getWriter().write(json);
+        }  catch (ResponseException ex) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ex.getResponseCode()));
+            response.getWriter().write(json);
         } catch (Exception ex) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
@@ -125,7 +130,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
             return null;
         } else {
-            throw new IllegalArgumentException("Not Found Token");
+            throw new ResponseException(ResponseCode.TOKEN_NOT_FOUND);
         }
     }
 

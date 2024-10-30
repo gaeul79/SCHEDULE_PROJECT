@@ -1,27 +1,23 @@
 package com.sparta.schedule_project.service;
 
 import com.sparta.schedule_project.config.PasswordEncoder;
-import com.sparta.schedule_project.cookie.JwtUtil;
+import com.sparta.schedule_project.cookie.CookieManager;
 import com.sparta.schedule_project.dto.request.LoginRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 @Service
 @RequiredArgsConstructor
 public class LoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
+    private final CookieManager cookieManager;
 
     /**
      * 로그인을 처리합니다.
@@ -34,7 +30,7 @@ public class LoginService {
     public ResponseStatusDto login(HttpServletResponse res, LoginRequestDto requestDto) throws ResponseException {
         User user = userRepository.findByEmail(requestDto.getEmail());
         validateLoginInfo(requestDto, user);
-        addJwtToCookie(res, user);
+        cookieManager.addJwtToCookie(res, user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
     }
 
@@ -51,21 +47,5 @@ public class LoginService {
             throw new ResponseException(ResponseCode.USER_NOT_FOUND);
         else if (!passwordEncoder.matches(requestDto.getPassword(), findUser.getPassword()))
             throw new ResponseException(ResponseCode.USER_PASSWORD_NOT_MATCH);
-    }
-
-    /**
-     * JWT 토큰을 생성하여 쿠키에 추가하는 메소드입니다.
-     *
-     * @param res  HTTP 응답 객체
-     * @param user 사용자 정보
-     */
-    public void addJwtToCookie(HttpServletResponse res, User user) {
-        String token = jwtUtil.createToken(user.getEmail(), user.getAuth());
-        token = URLEncoder.encode(token, StandardCharsets.UTF_8).replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
-
-        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token); // Name-Value
-        cookie.setPath("/");
-
-        res.addCookie(cookie); // Response 객체에 Cookie 추가
     }
 }

@@ -3,9 +3,14 @@ package com.sparta.schedule_project.cookie;
 import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseCode;
 import com.sparta.schedule_project.exception.ResponseException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * 공통으로 사용할 수 있는 함수들을 모은 클래스
@@ -16,6 +21,24 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CookieManager {
+    private final JwtUtil jwtUtil;
+
+    /**
+     * JWT 토큰을 생성하여 쿠키에 추가하는 메소드입니다.
+     *
+     * @param res  HTTP 응답 객체
+     * @param user 사용자 정보
+     */
+    public void addJwtToCookie(HttpServletResponse res, User user) {
+        String token = jwtUtil.createToken(user.getEmail(), user.getAuth());
+        token = URLEncoder.encode(token, StandardCharsets.UTF_8).replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
+
+        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token); // Name-Value
+        cookie.setPath("/");
+
+        res.addCookie(cookie); // Response 객체에 Cookie 추가
+    }
+
     /**
      * JWT 토큰의 사용자 정보가 본인이 맞는지 검증합니다.
      *

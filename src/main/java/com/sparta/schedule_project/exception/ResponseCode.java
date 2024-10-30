@@ -48,6 +48,7 @@ public enum ResponseCode {
     INVALID_PERMISSION(HttpStatus.FORBIDDEN, "권한이 없습니다"),
 
     // 404
+    TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "JWT 토큰이 없습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
     SCHEDULE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미 삭제된 일정입니다."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "이미 삭제된 댓글입니다."),
