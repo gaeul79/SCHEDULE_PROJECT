@@ -59,8 +59,17 @@
  │        │    ├── PasswordEncoder.java                         # 비밀번호에 대한 암호화 및 대조 기능을 지원하는 class
  │        │    └── PasswordConfig.java                          # 비밀번호 관련 설정 (암호화 등)을 담당하는 class
  │        │
- │        ├── 'cookie'                                          # 쿠키 관련 클래스들을 모아놓은 폴더
- │        │    ├── UserAuth.java                                # 사용자 인증에 필요한 권한 정보를 나타내는 Enum
+ │        ├── 'enums'                                           # 프로젝트에서 사용되는 enum들을 모아놓은 폴더
+ │        │    ├── AuthType.java                                # 용자 권한 종류를 나타내는 enum
+ │        │    ├── LoginType.java                               # 로그인 방식을 나타내는 enum
+ │        │    ├── ResponseCode.java                            # API 응답 시 사용되는 상태 코드와 메시지를 정의하는 enum
+ │        │    └── TokenType.java                               # 큰을 어디에 넣을지 나타내는 enum
+ │        │
+ │        ├── 'token'                                           # 토큰 관련 클래스들을 모아놓은 폴더
+ │        │    ├── TokenProvider.java                           # 상속받아 사용하는 TokenProvider interface
+ │        │    ├── TokenProviderManager.java                    # HTTP 요청에 따라 토큰 제공자를 선택하여 반환하는 class
+ │        │    ├── JwtCookieTokenProvider.java                  # JWT를 이용하여 쿠키에 사용자 정보를 저장하고 인증을 처리하는 class
+ │        │    ├── JwtHeaderTokenProvider.java                  # JWT를 이용하여 헤더에 사용자 정보를 저장하고 인증을 처리하는 class
  │        │    ├── CookieManager.java                           # 쿠키 관련 기능을 제공하는 class
  │        │    └── JwtUtil.java                                 # JWT 토큰 생성 및 검증을 수행하는 class
  │        │ 
@@ -100,7 +109,6 @@
  │        │    └── User.java                                    # 사용자 entity 
  │        │         
  │        ├── 'exception'                                       # 사용자 요청을 처리하기 위한 컨트롤러를 모아놓은 폴더 
- │        │    ├── ResponseCode.java                            # API 응답 시 사용되는 상태 코드와 메시지를 정의하는 enum 
  │        │    ├── GlobalExceptionHandler.java                  # 예외 처리 class
  │        │    └── ResponseException.java                       # API 응답 시 발생하는 예외를 나타내는 class 
  │        │         
