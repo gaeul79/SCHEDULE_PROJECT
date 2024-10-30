@@ -41,7 +41,7 @@ public class ScheduleService {
      */
     public ResponseStatusDto createSchedule(HttpServletRequest req, CreateScheduleRequestDto requestDto) {
         String weather = weatherApi.getTodayWeather();
-        User user = CookieManager.getUserFromCookie(req);
+        User user = CookieManager.getUserFromToken(req);
         Schedule schedule = requestDto.convertDtoToEntity(user.getId(), weather);
         scheduleRepository.save(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
@@ -71,7 +71,7 @@ public class ScheduleService {
     @Transactional
     public ResponseStatusDto updateSchedule(HttpServletRequest req, ModifyScheduleRequestDto requestDto) throws ResponseException {
         String weather = weatherApi.getTodayWeather();
-        User user = CookieManager.getUserFromCookie(req);
+        User user = CookieManager.getUserFromToken(req);
         Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId());
         validateAuth(user, schedule);
         schedule.update(requestDto, weather);
@@ -87,7 +87,7 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ResponseStatusDto deleteSchedule(HttpServletRequest req, int scheduleId) throws ResponseException {
-        User user = CookieManager.getUserFromCookie(req);
+        User user = CookieManager.getUserFromToken(req);
         Schedule schedule = scheduleRepository.findById(scheduleId);
         validateAuth(user, schedule);
         scheduleRepository.delete(schedule);

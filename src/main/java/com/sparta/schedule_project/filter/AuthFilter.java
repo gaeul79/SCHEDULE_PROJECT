@@ -58,7 +58,8 @@ public class AuthFilter extends OncePerRequestFilter {
             if (ignorePage(url)) {
                 log.info("인증 처리를 하지 않는 URL : {}", url);
             } else {
-                String tokenValue = getTokenFromRequest(request);
+                // String tokenValue = getTokenFromCookie(request);
+                String tokenValue = getTokenFromHeader(request);
                 User user = getUserInfoFromToken(tokenValue);
                 request.setAttribute("user", user);
             }
@@ -141,7 +142,7 @@ public class AuthFilter extends OncePerRequestFilter {
      * @return JWT 토큰 값, 없으면 null
      * @since 2024-10-18
      */
-    private String getTokenFromRequest(HttpServletRequest req) {
+    private String getTokenFromCookie(HttpServletRequest req) {
         // HttpServletRequest 에서 Cookie Value : JWT 가져오기
         Cookie[] cookies = req.getCookies();
         if (cookies != null) {
@@ -152,5 +153,17 @@ public class AuthFilter extends OncePerRequestFilter {
             }
         }
         return null;
+    }
+
+    /**
+     * HTTP 요청에서 쿠키 값으로 JWT 토큰을 가져옵니다.
+     *
+     * @param req HTTP 요청 객체
+     * @return JWT 토큰 값, 없으면 null
+     * @since 2024-10-18
+     */
+    private String getTokenFromHeader(HttpServletRequest req) {
+        String token = req.getHeader(JwtUtil.AUTHORIZATION_HEADER);
+        return URLDecoder.decode(token, StandardCharsets.UTF_8); // Encode 되어 넘어간 Value 다시 Decode
     }
 }

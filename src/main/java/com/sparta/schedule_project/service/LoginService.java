@@ -30,7 +30,8 @@ public class LoginService {
     public ResponseStatusDto login(HttpServletResponse res, LoginRequestDto requestDto) throws ResponseException {
         User user = userRepository.findByEmail(requestDto.getEmail());
         validateLoginInfo(requestDto, user);
-        cookieManager.addJwtToCookie(res, user);
+        // cookieManager.addJwtToCookie(res, user);
+        cookieManager.addJwtToHeader(res, user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN);
     }
 

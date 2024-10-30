@@ -40,6 +40,18 @@ public class CookieManager {
     }
 
     /**
+     * JWT 토큰을 생성하여 헤더에 추가하는 메소드입니다.
+     *
+     * @param res  HTTP 응답 객체
+     * @param user 사용자 정보
+     */
+    public void addJwtToHeader(HttpServletResponse res, User user) {
+        String token = jwtUtil.createToken(user.getEmail(), user.getAuth());
+        token = URLEncoder.encode(token, StandardCharsets.UTF_8).replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
+        res.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+    }
+
+    /**
      * JWT 토큰의 사용자 정보가 본인이 맞는지 검증합니다.
      *
      * @param req       HttpServletRequest 객체
@@ -54,13 +66,13 @@ public class CookieManager {
     }
 
     /**
-     * 쿠키에 저장된 사용자 정보를 추출합니다.
+     * 사용자 정보를 추출합니다.
      *
      * @param req HttpServletRequest 객체
      * @return 사용자 정보 객체 (User)
      * @since 2024-10-18
      */
-    public static User getUserFromCookie(HttpServletRequest req) {
+    public static User getUserFromToken(HttpServletRequest req) {
         return (User) req.getAttribute("user");
     }
 }
