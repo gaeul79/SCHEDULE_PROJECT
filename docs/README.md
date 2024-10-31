@@ -52,12 +52,11 @@
  ├── 'main'
  │   └── 'java.com.sparta.schedule_project'                     # 일정 관리 프로젝트 
  │        ├── ScheduleProjectApplication.java                   # 시작 함수가 있는 class 
- │        ├── 'infra'                                           # 외부 API 연동과 관련된 폴더와 클래스들을 모아놓은 폴더
- │        │    └── WeatherApiService.java                       # 현재 날씨를 외부 API로부터 받아도는 서비스 class
  │        │
  │        ├── 'config'                                          # 프로젝트 설정 관련 class들을 모아놓은 폴더
  │        │    ├── PasswordEncoder.java                         # 비밀번호에 대한 암호화 및 대조 기능을 지원하는 class
- │        │    └── PasswordConfig.java                          # 비밀번호 관련 설정 (암호화 등)을 담당하는 class
+ │        │    ├── RestTemplateConfig.java                      # RestTemplate 설정 class
+ │        │    └── TokenProviderConfig.java                     # TokenProvider 설정 class
  │        │
  │        ├── 'enums'                                           # 프로젝트에서 사용되는 enum들을 모아놓은 폴더
  │        │    ├── AuthType.java                                # 용자 권한 종류를 나타내는 enum
@@ -65,13 +64,14 @@
  │        │    ├── ResponseCode.java                            # API 응답 시 사용되는 상태 코드와 메시지를 정의하는 enum
  │        │    └── TokenType.java                               # 큰을 어디에 넣을지 나타내는 enum
  │        │
- │        ├── 'token'                                           # 토큰 관련 클래스들을 모아놓은 폴더
- │        │    ├── TokenProvider.java                           # 상속받아 사용하는 TokenProvider interface
- │        │    ├── TokenProviderManager.java                    # HTTP 요청에 따라 토큰 제공자를 선택하여 반환하는 class
- │        │    ├── JwtCookieTokenProvider.java                  # JWT를 이용하여 쿠키에 사용자 정보를 저장하고 인증을 처리하는 class
- │        │    ├── JwtHeaderTokenProvider.java                  # JWT를 이용하여 헤더에 사용자 정보를 저장하고 인증을 처리하는 class
- │        │    ├── CookieManager.java                           # 쿠키 관련 기능을 제공하는 class
- │        │    └── JwtUtil.java                                 # JWT 토큰 생성 및 검증을 수행하는 class
+ │        ├── 'util'                                            # 토큰 관련 클래스들을 모아놓은 폴더
+ │        │    ├── 'token'                                      # 토큰 관련 클래스들을 모아놓은 폴더
+ │        │    │     ├── TokenProvider.java                     # 상속받아 사용하는 TokenProvider interface
+ │        │    │     ├── JwtCookieTokenProvider.java            # JWT를 이용하여 쿠키에 사용자 정보를 저장하고 인증을 처리하는 class
+ │        │    │     ├── JwtHeaderTokenProvider.java            # JWT를 이용하여 헤더에 사용자 정보를 저장하고 인증을 처리하는 class
+ │        │    │     └── JwtUtil.java                           # JWT 토큰 생성 및 검증을 수행하는 class
+ │        │    ├── 'PasswordEncoder'                            # 프로젝트 설정 관련 class들을 모아놓은 폴더
+ │        │    └── 'WeatherApiService'                          # 현재 날씨를 외부 API로부터 받아도는 서비스 class
  │        │ 
  │        ├── 'filter'                                          # 필터들을 모아놓은 폴더
  │        │    ├── AuthFilter.java                              # 인증 필터 (로그인 여부 확인 등)
@@ -84,24 +84,24 @@
  │        │    └── UserController.java                          # 사용자 관련 요청을 처리하는 컨트롤러 class 
  │        │
  │        ├── 'dto'                                             # 데이터를 주고받기 위한 객체를 모아놓은 폴더 
- │        │   ├── 'request'                                     # 서버에 무언가 요청할때 사용되는 폴더 및 class들을 모아놓은 폴더
- │        │   │    ├── CreateUserRequestDto.java                # 사용자를 등록 요청할 때 사용하는 dto 
- │        │   │    ├── LoginRequestDto.java                     # 로그인을 요청할 때 사용하는 dto 
- │        │   │    ├── ModifyUserRequestDto.java                # 사용자를 수정할 때 사용하는 dto 
- │        │   │    ├── CreateScheduleRequestDto.java            # 일정 정보를 등록 요청할 때 사용하는 dto 
- │        │   │    ├── ModifyScheduleRequesthDto.java           # 일정을 수정할 때 사용하는 dto 
- │        │   │    ├── CreateCommentRequesthDto.java            # 댓글을 등록 요청할 때 사용하는 dto  
- │        │   │    └── ModifyCommentRequesthDto.java            # 댓글을 수정할 때 사용하는 dto
- │        │   │
- │        │   └── 'response'                                    # 서버에서 응답할때 사용되는 폴더 및 class들을 모아놓은 폴더
- │        │        ├── ResponseStatusDto.java                   # API응답 상태에 대한 정보를 제공하는 dto    
- │        │        ├── UserResponseDto.java                     # 서버로부터 사용자 요청 처리 결과를 받을 때 사용하는 class
- │        │        ├── UserDto.java                             # 사용자 dto class
- │        │        ├── ScheduleResponseDto.java                 # 서버로부터 일정 요청 처리 결과를 받을 때 사용하는 class
- │        │        ├── ScheduleDto.java                         # 일정 dto class
- │        │        ├── CommentResponseDto.java                  # 서버로부터 댓글 요청 처리 결과를 받을 때 사용하는 class    
- │        │        ├── CommentDto.java                          # 댓글 dto class
- │        │        └── PageDto.java                             # 페이징 정보를 담는 dto class 
+ │        │    ├── 'request'                                    # 서버에 무언가 요청할때 사용되는 폴더 및 class들을 모아놓은 폴더
+ │        │    │    ├── LoginRequestDto.java                    # 로그인을 요청할 때 사용하는 dto 
+ │        │    │    ├── CreateUserRequestDto.java               # 사용자를 등록 요청할 때 사용하는 dto 
+ │        │    │    ├── CreateScheduleRequestDto.java           # 일정 정보를 등록 요청할 때 사용하는 dto 
+ │        │    │    ├── CreateCommentRequesthDto.java           # 댓글을 등록 요청할 때 사용하는 dto  
+ │        │    │    ├── ModifyUserRequestDto.java               # 사용자를 수정할 때 사용하는 dto 
+ │        │    │    ├── ModifyScheduleRequesthDto.java          # 일정을 수정할 때 사용하는 dto 
+ │        │    │    └── ModifyCommentRequesthDto.java           # 댓글을 수정할 때 사용하는 dto
+ │        │    │
+ │        │    └── 'response'                                   # 서버에서 응답할때 사용되는 폴더 및 class들을 모아놓은 폴더
+ │        │         ├── ResponseStatusDto.java                  # API응답 상태에 대한 정보를 제공하는 dto    
+ │        │         ├── UserResponseDto.java                    # 서버로부터 사용자 요청 처리 결과를 받을 때 사용하는 class
+ │        │         ├── UserDto.java                            # 사용자 dto class
+ │        │         ├── ScheduleResponseDto.java                # 서버로부터 일정 요청 처리 결과를 받을 때 사용하는 class
+ │        │         ├── ScheduleDto.java                        # 일정 dto class
+ │        │         ├── CommentResponseDto.java                 # 서버로부터 댓글 요청 처리 결과를 받을 때 사용하는 class    
+ │        │         ├── CommentDto.java                         # 댓글 dto class
+ │        │         └── PageDto.java                            # 페이징 정보를 담는 dto class 
  │        │         
  │        ├── 'entity'                                          # DB와 매핑되는 엔티티 클래스들을 모아놓은 폴더 
  │        │    ├── Comment.java                                 # 댓글 entity 
@@ -119,6 +119,11 @@
  │        │    └── UserRepository.java                          # 사용자를 저장하고 조회하는 기능을 제공하는 레포지토리 class 
  │        │         
  │        └── 'service'                                         # 비즈니스 로직을 처리하는 서비스들을 모아놓은 폴더 
+ │             ├── login.java                                   # 로그인 관련 서비스들을 모아놓은 폴더
+ │             │   ├── DefaultLoginService.java                 # 기본 로그인 기능을 제공하는 서비스 class
+ │             │   ├── KakaoLoginService.java                   # Kakao Social Login 기능을 제공하는 서비스 class
+ │             │   ├── SocialLogin.java                         # 소셜 로그인 서비스의 공통적인 기능을 정의한 interface
+ │             │   └── SocialLoginService.java                  # 다양한 소셜 로그인 서비스를 관리하는 class
  │             ├── ScheduleService.java                         # 일정 관련 비즈니스 로직을 처리하는 class 
  │             ├── CommentService.java                          # 댓글 관련 비즈니스 로직을 처리하는 class 
  │             └── UserService.java                             # 사용자 관련 비즈니스 로직을 처리하는 class 

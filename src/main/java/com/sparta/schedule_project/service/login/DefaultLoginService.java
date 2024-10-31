@@ -13,6 +13,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * 기본 로그인 기능을 제공하는 서비스
+ *
+ * @since 2024-10-31
+ */
 @Service
 @RequiredArgsConstructor
 public class DefaultLoginService {
