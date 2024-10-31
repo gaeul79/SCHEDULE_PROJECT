@@ -33,7 +33,7 @@ public class CommentService {
      * @since 2024-10-15
      */
     public ResponseStatusDto createComment(HttpServletRequest req, CreateCommentRequestDto requestDto) {
-        User user = tokenManager.getTokenProvider(req).getUser(req);
+        User user = tokenManager.getTokenProvider().getUser(req);
         Comment comment = requestDto.convertDtoToEntity(user);
         commentRepository.save(comment);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_COMMENT, req.getRequestURI());
@@ -65,7 +65,7 @@ public class CommentService {
      */
     @Transactional
     public ResponseStatusDto updateComment(HttpServletRequest req, ModifyCommentRequestDto requestDto) throws ResponseException {
-        User user = tokenManager.getTokenProvider(req).getUser(req);
+        User user = tokenManager.getTokenProvider().getUser(req);
         Comment comment = commentRepository.findById(requestDto.getCommentId());
         validateAuth(user, comment);
         comment.update(requestDto);
@@ -81,7 +81,7 @@ public class CommentService {
      * @since 2024-10-15
      */
     public ResponseStatusDto deleteComment(HttpServletRequest req, int commentId) throws ResponseException {
-        User user = tokenManager.getTokenProvider(req).getUser(req);
+        User user = tokenManager.getTokenProvider().getUser(req);
         Comment comment = commentRepository.findById(commentId);
         validateAuth(user, comment);
         commentRepository.delete(comment);

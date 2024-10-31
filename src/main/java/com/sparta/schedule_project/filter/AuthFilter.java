@@ -75,7 +75,7 @@ public class AuthFilter implements Filter {
      * @since 2024-10-31
      */
     private void setAttribute(HttpServletRequest req) {
-        TokenProvider provider = tokenManager.getTokenProvider(req);
+        TokenProvider provider = tokenManager.getTokenProvider();
         Claims claims = provider.getClaims(req);
         String email = claims.getSubject();
         User user = userRepository.findByEmail(email);

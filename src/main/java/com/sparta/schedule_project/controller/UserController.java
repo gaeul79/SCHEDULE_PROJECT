@@ -24,27 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor // UserService 객체를 의존성 주입 방식으로 받아오는 코드 생략 가능
 @RequestMapping("/api")
 public class UserController {
-    private final LoginService loginService;
     private final UserService userService;
-
-    /**
-     * 로그인 API
-     *
-     * @param req        HttpServletRequest 객체
-     * @param res        HttpServletResponse 객체
-     * @param requestDto 로그인 정보 (JSON 형태)
-     * @return 로그인 처리 결과
-     * @since 2023-10-03
-     */
-    @PostMapping("/login")
-    public ResponseEntity<ResponseStatusDto> login(
-            HttpServletRequest req,
-            HttpServletResponse res,
-            @RequestBody LoginRequestDto requestDto) throws ResponseException {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(loginService.login(req, res, requestDto));
-    }
 
     /**
      * 회원가입 API

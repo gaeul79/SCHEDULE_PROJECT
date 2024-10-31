@@ -80,7 +80,7 @@ public class UserService {
     @Transactional
     public ResponseStatusDto updateUser(HttpServletRequest req, ModifyUserRequestDto requestDto) throws ResponseException {
         User user = findUserById(requestDto.getUserId());
-        tokenManager.getTokenProvider(req.getRequestURL().toString()).matchToken(req, user);
+        tokenManager.getTokenProvider().matchToken(req, user);
         user.update(requestDto, passwordEncoder.encode(requestDto.getPassword()));
         return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER, req.getRequestURI());
     }
@@ -96,7 +96,7 @@ public class UserService {
     @Transactional
     public ResponseStatusDto deleteUser(HttpServletRequest req, int userId) throws ResponseException {
         User deleteUser = findUserById(userId);
-        tokenManager.getTokenProvider(req.getRequestURL().toString()).matchToken(req, deleteUser);
+        tokenManager.getTokenProvider().matchToken(req, deleteUser);
         userRepository.delete(deleteUser);
         return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER, req.getRequestURI());
     }

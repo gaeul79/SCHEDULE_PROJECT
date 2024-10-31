@@ -32,7 +32,7 @@ public class LoginService {
     public ResponseStatusDto login(HttpServletRequest req, HttpServletResponse res, LoginRequestDto requestDto) throws ResponseException {
         User user = userRepository.findByEmail(requestDto.getEmail());
         validateLoginInfo(requestDto, user);
-        tokenManager.getTokenProvider(req.getRequestURL().toString()).setToken(res, user);
+        tokenManager.getTokenProvider().setToken(res, user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN, req.getRequestURI());
     }
 
