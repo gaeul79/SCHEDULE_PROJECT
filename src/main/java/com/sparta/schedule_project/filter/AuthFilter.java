@@ -1,19 +1,13 @@
 package com.sparta.schedule_project.filter;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.repository.UserRepository;
 import com.sparta.schedule_project.token.TokenProvider;
 import com.sparta.schedule_project.token.TokenProviderManager;
-import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.entity.User;
-import com.sparta.schedule_project.emums.ResponseCode;
-import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.repository.UserRepository;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,12 +24,11 @@ import java.io.IOException;
  *
  * @since 2024-10-18
  */
-@Order(2)
+@Order(3)
 @Slf4j(topic = "AuthFilter")
 @RequiredArgsConstructor
 @Component
 public class AuthFilter extends OncePerRequestFilter {
-    private final ObjectMapper objectMapper = new ObjectMapper();
     private final UserRepository userRepository;
     private final TokenProviderManager tokenManager;
 
@@ -50,46 +43,14 @@ public class AuthFilter extends OncePerRequestFilter {
      * @since 2024-10-18
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
-        try {
-            String url = request.getRequestURI();
-            if (ignorePage(url)) {
-                log.info("인증 처리를 하지 않는 URL : {}", url);
-            } else {
-                setAttribute(request);
-            }
-            filterChain.doFilter(request, response); // 다음 Filter 로 이동
-        } catch (SecurityException | MalformedJwtException | IllegalArgumentException ex) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(ResponseCode.TOKEN_UNSIGNED.getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSIGNED));
-            response.getWriter().write(json);
-        } catch (ExpiredJwtException e) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(ResponseCode.TOKEN_TIMEOUT.getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_TIMEOUT));
-            response.getWriter().write(json);
-        } catch (UnsupportedJwtException e) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(ResponseCode.TOKEN_UNSUPPORTED.getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSUPPORTED));
-            response.getWriter().write(json);
-        } catch (ResponseException ex) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(ex.getResponseCode().getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ex.getResponseCode()));
-            response.getWriter().write(json);
-        } catch (Exception ex) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(ResponseCode.UNKNOWN_ERROR.getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR));
-            response.getWriter().write(json);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        String url = request.getRequestURI();
+        if (ignorePage(url)) {
+            log.info("인증 처리를 하지 않는 URL : {}", url);
+        } else {
+            setAttribute(request);
         }
+        filterChain.doFilter(request, response); // 다음 Filter 로 이동
     }
 
     /**

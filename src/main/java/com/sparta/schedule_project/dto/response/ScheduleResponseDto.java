@@ -1,7 +1,8 @@
 package com.sparta.schedule_project.dto.response;
 
-import com.sparta.schedule_project.entity.Schedule;
 import com.sparta.schedule_project.emums.ResponseCode;
+import com.sparta.schedule_project.entity.Schedule;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,14 +26,15 @@ public class ScheduleResponseDto {
      * 일정 목록 조회 결과를 기반으로 응답 DTO를 생성합니다.
      * 조회된 일정 목록, 페이징 정보, 응답 코드를 포함합니다.
      *
+     * @param req          HttpServletRequest 객체
      * @param schedules    조회된 일정 목록 (Page<Schedule>)
      * @param responseCode 응답 코드
      * @return 생성된 응답 DTO 객체 (ScheduleResponseDto)
      * @since 2024-10-18
      */
-    public static ScheduleResponseDto createResponseDto(Page<Schedule> schedules, ResponseCode responseCode) {
+    public static ScheduleResponseDto createResponseDto(HttpServletRequest req, Page<Schedule> schedules, ResponseCode responseCode) {
         ScheduleResponseDto responseScheduleDto = new ScheduleResponseDto();
-        ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode);
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode, req);
         responseScheduleDto.setPage(new PageDto(schedules.getPageable(), schedules.getTotalPages()));
         responseScheduleDto.setSchedules(schedules.stream().map(ScheduleDto::from).toList());
         responseScheduleDto.setStatus(responseStatusDto);

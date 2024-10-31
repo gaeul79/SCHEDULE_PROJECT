@@ -49,31 +49,35 @@ public class UserController {
     /**
      * 회원가입 API
      *
+     * @param req                  HttpServletRequest 객체
      * @param createUserRequestDto 회원가입 정보 (JSON 형태)
      * @return 회원가입 처리 결과
      * @since 2023-10-03
      */
     @PostMapping("/signup")
     public ResponseEntity<ResponseStatusDto> createUser(
+            HttpServletRequest req,
             @RequestBody CreateUserRequestDto createUserRequestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(userService.createUser(createUserRequestDto));
+                .body(userService.createUser(req, createUserRequestDto));
     }
 
     /**
      * 회원 정보 조회 API
      *
+     * @param req    HttpServletRequest 객체
      * @param userId 조회할 회원 번호
      * @return 회원 정보 조회 결과
      * @since 2023-10-03
      */
     @GetMapping("/users/{userId}")
     public ResponseEntity<UserResponseDto> getUserInfo(
+            HttpServletRequest req,
             @PathVariable int userId) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.searchUser(userId));
+                .body(userService.searchUser(req, userId));
     }
 
     /**

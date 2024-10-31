@@ -44,6 +44,7 @@ public class CommentController {
     /**
      * 일정 댓글 검색 API
      *
+     * @param req        HttpServletRequest 객체
      * @param scheduleId 댓글을 검색할 일정 번호
      * @param page       페이지 번호 (기본값: 1)
      * @param size       페이지당 항목 수 (기본값: 10)
@@ -51,12 +52,13 @@ public class CommentController {
      */
     @GetMapping("/comments")
     public ResponseEntity<CommentResponseDto> searchComment(
+            HttpServletRequest req,
             @PathVariable int scheduleId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(commentService.searchComment(scheduleId, page - 1, size));
+                .body(commentService.searchComment(req, scheduleId, page - 1, size));
     }
 
     /**

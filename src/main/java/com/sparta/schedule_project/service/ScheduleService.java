@@ -45,20 +45,21 @@ public class ScheduleService {
         User user = tokenManager.getTokenProvider(req).getUser(req);
         Schedule schedule = requestDto.convertDtoToEntity(user.getId(), weather);
         scheduleRepository.save(schedule);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE, req);
     }
 
     /**
      * 일정을 조회
      *
+     * @param req  HttpServletRequest 객체
      * @param page 페이지 번호 (기본값: 1)
      * @param size 페이지당 항목 수 (기본값: 10)
      * @return 조회 결과 (ScheduleResponseDto)
      * @since 2024-10-03
      */
-    public ScheduleResponseDto searchSchedule(int page, int size) {
+    public ScheduleResponseDto searchSchedule(HttpServletRequest req, int page, int size) {
         Page<Schedule> schedules = scheduleRepository.findAllByOrderByUpdatedAtDesc(PageRequest.of(page, size));
-        return ScheduleResponseDto.createResponseDto(schedules, ResponseCode.SUCCESS_SEARCH_SCHEDULE);
+        return ScheduleResponseDto.createResponseDto(req, schedules, ResponseCode.SUCCESS_SEARCH_SCHEDULE);
     }
 
     /**
@@ -76,7 +77,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId());
         validateAuth(user, schedule);
         schedule.update(requestDto, weather);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE, req);
     }
 
     /**
@@ -92,7 +93,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(scheduleId);
         validateAuth(user, schedule);
         scheduleRepository.delete(schedule);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE, req);
     }
 
     /**

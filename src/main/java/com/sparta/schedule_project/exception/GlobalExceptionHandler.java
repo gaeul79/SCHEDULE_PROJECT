@@ -2,6 +2,7 @@ package com.sparta.schedule_project.exception;
 
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.emums.ResponseCode;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class GlobalExceptionHandler {
      * @since 2024-10-22
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseStatusDto> BaseException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ResponseStatusDto> BaseException(MethodArgumentNotValidException ex, HttpServletRequest req) {
         // 에러 메시지 추출
         String errorMsg = ex.getBindingResult().
                 getAllErrors()
@@ -34,7 +35,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ResponseStatusDto(ResponseCode.BAD_INPUT, errorMsg));
+                .body(new ResponseStatusDto(ResponseCode.BAD_INPUT, req, errorMsg));
     }
 
     /**
@@ -43,10 +44,10 @@ public class GlobalExceptionHandler {
      * @since 2024-10-22
      */
     @ExceptionHandler(ResponseException.class)
-    public ResponseEntity<ResponseStatusDto> BaseException(ResponseException ex) {
+    public ResponseEntity<ResponseStatusDto> BaseException(ResponseException ex, HttpServletRequest req) {
         return ResponseEntity
                 .status(ex.getResponseCode().getHttpStatus())
-                .body(new ResponseStatusDto(ex.getResponseCode()));
+                .body(new ResponseStatusDto(ex.getResponseCode(), req));
     }
 
     /**
@@ -55,11 +56,11 @@ public class GlobalExceptionHandler {
      * @since 2024-10-29
      */
     @ExceptionHandler(UnsupportedEncodingException.class)
-    public ResponseEntity<ResponseStatusDto> BaseException(UnsupportedEncodingException ex) {
+    public ResponseEntity<ResponseStatusDto> BaseException(UnsupportedEncodingException ex, HttpServletRequest req) {
         log.error(ex.getMessage());
         return ResponseEntity
                 .status(ResponseCode.TOKEN_FAIL_ENCODING.getHttpStatus())
-                .body(new ResponseStatusDto(ResponseCode.TOKEN_FAIL_ENCODING));
+                .body(new ResponseStatusDto(ResponseCode.TOKEN_FAIL_ENCODING, req));
     }
 
     /**
@@ -68,10 +69,10 @@ public class GlobalExceptionHandler {
      * @since 2024-10-22
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ResponseStatusDto> BaseException(Exception ex) {
+    public ResponseEntity<ResponseStatusDto> BaseException(Exception ex, HttpServletRequest req) {
         log.error(ex.getMessage());
         return ResponseEntity
                 .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
-                .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR));
+                .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, req));
     }
 }

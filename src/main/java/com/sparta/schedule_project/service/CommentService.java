@@ -36,22 +36,23 @@ public class CommentService {
         User user = tokenManager.getTokenProvider(req).getUser(req);
         Comment comment = requestDto.convertDtoToEntity(user);
         commentRepository.save(comment);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_COMMENT);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_COMMENT, req);
     }
 
     /**
      * 댓글 조회
      *
      * @param scheduleId 댓글을 검색할 일정 번호
+     * @param req        HttpServletRequest 객체
      * @param page       페이지 번호 (기본값: 1)
      * @param size       페이지당 항목 수 (기본값: 10)
      * @return 조회 결과 (ScheduleResponseDto)
      * @since 2024-10-15
      */
-    public CommentResponseDto searchComment(int scheduleId, int page, int size) {
+    public CommentResponseDto searchComment(HttpServletRequest req, int scheduleId, int page, int size) {
         Page<Comment> comments = commentRepository
                 .findAllByScheduleIdOrderByUpdatedAtDesc(scheduleId, PageRequest.of(page, size));
-        return CommentResponseDto.createResponseDto(comments, ResponseCode.SUCCESS_SEARCH_COMMENT);
+        return CommentResponseDto.createResponseDto(comments, ResponseCode.SUCCESS_SEARCH_COMMENT, req);
     }
 
     /**
@@ -68,23 +69,23 @@ public class CommentService {
         Comment comment = commentRepository.findById(requestDto.getCommentId());
         validateAuth(user, comment);
         comment.update(requestDto);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_COMMENT);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_COMMENT, req);
     }
 
     /**
      * 댓글 삭제
      *
      * @param req       HttpServletRequest 객체
-     * @param commintId 삭제할 댓글 id
+     * @param commentId 삭제할 댓글 id
      * @return 삭제 결과 (ResponseStatusDto)
      * @since 2024-10-15
      */
-    public ResponseStatusDto deleteComment(HttpServletRequest req, int commintId) throws ResponseException {
+    public ResponseStatusDto deleteComment(HttpServletRequest req, int commentId) throws ResponseException {
         User user = tokenManager.getTokenProvider(req).getUser(req);
-        Comment comment = commentRepository.findById(commintId);
+        Comment comment = commentRepository.findById(commentId);
         validateAuth(user, comment);
         commentRepository.delete(comment);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_COMMENT);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_COMMENT, req);
     }
 
     /**

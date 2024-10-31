@@ -44,6 +44,7 @@ public class ScheduleController {
     /**
      * 일정 검색 API
      *
+     * @param req  HttpServletRequest 객체
      * @param page 페이지 번호 (기본값: 1)
      * @param size 페이지당 항목 수 (기본값: 10)
      * @return 일정 목록을 포함하는 ResponseEntity
@@ -51,11 +52,12 @@ public class ScheduleController {
      */
     @GetMapping("/schedules")
     public ResponseEntity<ScheduleResponseDto> searchSchedule(
+            HttpServletRequest req,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(scheduleService.searchSchedule(page - 1, size));
+                .body(scheduleService.searchSchedule(req, page - 1, size));
     }
 
     /**

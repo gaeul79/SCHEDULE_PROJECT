@@ -31,15 +31,16 @@ public class UserService {
     /**
      * 회원가입을 처리합니다.
      *
+     * @param req        HttpServletRequest 객체
      * @param requestDto 회원가입 요청 정보
      * @return 회원가입 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
-    public ResponseStatusDto createUser(CreateUserRequestDto requestDto) throws ResponseException {
+    public ResponseStatusDto createUser(HttpServletRequest req, CreateUserRequestDto requestDto) throws ResponseException {
         validateCreateUserInfo(requestDto);
         User user = requestDto.convertDtoToEntity(passwordEncoder.encode(requestDto.getPassword()));
         userRepository.save(user);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER, req);
     }
 
     /**
@@ -58,13 +59,14 @@ public class UserService {
     /**
      * 회원 정보를 조회합니다.
      *
+     * @param req    HttpServletRequest 객체
      * @param userId 조회할 회원 번호
      * @return 회원 조회 결과 (UserResponseDto)
      * @since 2024-10-03
      */
-    public UserResponseDto searchUser(int userId) throws ResponseException {
+    public UserResponseDto searchUser(HttpServletRequest req, int userId) throws ResponseException {
         User user = findUserById(userId);
-        return UserResponseDto.createResponseDto(user, ResponseCode.SUCCESS_SEARCH_USER);
+        return UserResponseDto.createResponseDto(req, user, ResponseCode.SUCCESS_SEARCH_USER);
     }
 
     /**
@@ -80,7 +82,7 @@ public class UserService {
         User user = findUserById(requestDto.getUserId());
         tokenManager.getTokenProvider(req.getRequestURL().toString()).matchToken(req, user);
         user.update(requestDto, passwordEncoder.encode(requestDto.getPassword()));
-        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER, req);
     }
 
     /**
@@ -96,7 +98,7 @@ public class UserService {
         User deleteUser = findUserById(userId);
         tokenManager.getTokenProvider(req.getRequestURL().toString()).matchToken(req, deleteUser);
         userRepository.delete(deleteUser);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER, req);
     }
 
     /**
