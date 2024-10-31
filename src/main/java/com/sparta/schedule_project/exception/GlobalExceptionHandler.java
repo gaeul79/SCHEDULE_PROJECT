@@ -43,6 +43,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(JsonProcessingException.class)
     public ResponseEntity<ResponseStatusDto> BaseException(JsonProcessingException ex, HttpServletRequest req) {
+        log.error(ex.getMessage());
         return baseException(req, ResponseCode.JSON_INVALID);
     }
 
