@@ -75,6 +75,7 @@
  │        │ 
  │        ├── 'filter'                                          # 필터들을 모아놓은 폴더
  │        │    ├── AuthFilter.java                              # 인증 필터 (로그인 여부 확인 등)
+ │        │    ├── ExceptionFilter.java                         # 예외처리 필터
  │        │    └── LoggingFilter.java                           # 로그 필터 (요청/응답 로그 기록)
  │        │
  │        ├── 'controller'                                      # 사용자 요청을 처리하기 위한 컨트롤러를 모아놓은 폴더 
