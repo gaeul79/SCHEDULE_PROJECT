@@ -1,4 +1,4 @@
-package com.sparta.schedule_project.infra;
+package com.sparta.schedule_project.util;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

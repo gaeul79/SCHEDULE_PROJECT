@@ -5,7 +5,7 @@ package com.sparta.schedule_project.emums;
  *
  * @since 2024-10-31
  */
-public enum LoginType {
-    JWT,
+public enum SocialType {
+    DEFAULT,
     KAKAO
 }

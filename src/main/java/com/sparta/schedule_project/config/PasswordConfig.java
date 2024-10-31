@@ -1,5 +1,6 @@
 package com.sparta.schedule_project.config;
 
+import com.sparta.schedule_project.util.PasswordEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

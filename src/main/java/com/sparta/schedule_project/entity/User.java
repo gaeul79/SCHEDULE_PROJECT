@@ -2,11 +2,13 @@ package com.sparta.schedule_project.entity;
 
 import com.sparta.schedule_project.dto.request.ModifyUserRequestDto;
 import com.sparta.schedule_project.emums.AuthType;
+import com.sparta.schedule_project.emums.SocialType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +39,10 @@ public class User extends Timestamped {
     private String name;
 
     @Enumerated(value = EnumType.STRING)
-    private AuthType auth;
+    private AuthType auth = AuthType.USER;
+
+    @Enumerated(value = EnumType.STRING)
+    private SocialType socialType;
 
     @OneToMany(mappedBy = "user",
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
@@ -51,6 +56,14 @@ public class User extends Timestamped {
 
     public void update(ModifyUserRequestDto userDto, String newPassword) {
         this.name = userDto.getName();
+        this.password = newPassword;
+    }
+
+    public void updateSocialType(SocialType socialType) {
+        this.socialType = socialType;
+    }
+
+    public void updatePassword(String newPassword) {
         this.password = newPassword;
     }
 }

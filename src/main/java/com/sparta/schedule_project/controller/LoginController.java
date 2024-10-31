@@ -1,8 +1,9 @@
 package com.sparta.schedule_project.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.schedule_project.dto.request.LoginRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.emums.LoginType;
+import com.sparta.schedule_project.emums.SocialType;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.service.login.DefaultLoginService;
 import com.sparta.schedule_project.service.login.SocialLoginService;
@@ -47,11 +48,12 @@ public class LoginController {
 
     @GetMapping("/{socialType}/login/callback")
     public ResponseEntity<ResponseStatusDto> socialLogin(
+            HttpServletRequest req,
             HttpServletResponse res,
             @RequestParam String code,
-            @PathVariable LoginType socialType) throws ResponseException {
+            @PathVariable SocialType socialType) throws ResponseException, JsonProcessingException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(socialLoginService.get(socialType).login(res, code));
+                .body(socialLoginService.get(socialType).login(req, res, code));
     }
 }

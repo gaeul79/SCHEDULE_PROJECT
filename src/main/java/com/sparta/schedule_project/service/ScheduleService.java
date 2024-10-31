@@ -9,7 +9,7 @@ import com.sparta.schedule_project.emums.ResponseCode;
 import com.sparta.schedule_project.entity.Schedule;
 import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.infra.WeatherApi;
+import com.sparta.schedule_project.util.WeatherApi;
 import com.sparta.schedule_project.repository.ScheduleRepository;
 import com.sparta.schedule_project.token.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;

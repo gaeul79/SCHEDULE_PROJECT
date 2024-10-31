@@ -1,4 +1,4 @@
-package com.sparta.schedule_project.config;
+package com.sparta.schedule_project.util;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 

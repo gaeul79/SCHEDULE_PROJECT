@@ -1,6 +1,6 @@
 package com.sparta.schedule_project.service.login;
 
-import com.sparta.schedule_project.config.PasswordEncoder;
+import com.sparta.schedule_project.util.PasswordEncoder;
 import com.sparta.schedule_project.dto.request.LoginRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.emums.ResponseCode;
