@@ -40,7 +40,7 @@ public class UserService {
         validateCreateUserInfo(requestDto);
         User user = requestDto.convertDtoToEntity(passwordEncoder.encode(requestDto.getPassword()));
         userRepository.save(user);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER, req);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_USER, req.getRequestURI());
     }
 
     /**
@@ -66,7 +66,7 @@ public class UserService {
      */
     public UserResponseDto searchUser(HttpServletRequest req, int userId) throws ResponseException {
         User user = findUserById(userId);
-        return UserResponseDto.createResponseDto(req, user, ResponseCode.SUCCESS_SEARCH_USER);
+        return UserResponseDto.createResponseDto(req.getRequestURI(), user);
     }
 
     /**
@@ -82,7 +82,7 @@ public class UserService {
         User user = findUserById(requestDto.getUserId());
         tokenManager.getTokenProvider(req.getRequestURL().toString()).matchToken(req, user);
         user.update(requestDto, passwordEncoder.encode(requestDto.getPassword()));
-        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER, req);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_USER, req.getRequestURI());
     }
 
     /**
@@ -98,7 +98,7 @@ public class UserService {
         User deleteUser = findUserById(userId);
         tokenManager.getTokenProvider(req.getRequestURL().toString()).matchToken(req, deleteUser);
         userRepository.delete(deleteUser);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER, req);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_USER, req.getRequestURI());
     }
 
     /**

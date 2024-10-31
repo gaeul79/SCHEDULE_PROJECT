@@ -2,7 +2,6 @@ package com.sparta.schedule_project.dto.response;
 
 import com.sparta.schedule_project.emums.ResponseCode;
 import com.sparta.schedule_project.entity.User;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,15 +20,14 @@ public class UserResponseDto {
     /**
      * 사용자 정보와 응답 코드를 포함하는 응답 DTO를 생성합니다.
      *
-     * @param req          HttpServletRequest 객체
+     * @param requestUrl   요청 url
      * @param user         사용자 정보 (UserDto)
-     * @param responseCode 응답 코드
      * @return 생성된 응답 DTO 객체 (UserResponseDto)
      * @since 2024-10-18
      */
-    public static UserResponseDto createResponseDto(HttpServletRequest req, User user, ResponseCode responseCode) {
+    public static UserResponseDto createResponseDto(String requestUrl, User user) {
         UserResponseDto responseDto = new UserResponseDto();
-        ResponseStatusDto status = new ResponseStatusDto(responseCode, req);
+        ResponseStatusDto status = new ResponseStatusDto(ResponseCode.SUCCESS_SEARCH_USER, requestUrl);
         responseDto.setUser(UserDto.from(user));
         responseDto.setStatus(status);
         return responseDto;

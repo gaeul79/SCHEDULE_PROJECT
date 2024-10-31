@@ -2,7 +2,6 @@ package com.sparta.schedule_project.dto.response;
 
 import com.sparta.schedule_project.emums.ResponseCode;
 import com.sparta.schedule_project.entity.Comment;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,14 +30,13 @@ public class CommentResponseDto {
      * 댓글 목록과 페이징 정보, 응답 코드를 포함합니다.
      *
      * @param comments     조회된 댓글 목록 (Page<Comment>)
-     * @param responseCode 응답 코드
-     * @param req          HttpServletRequest 객체
+     * @param requestUrl   요청 url
      * @return 생성된 응답 DTO 객체 (CommentResponseDto)
      * @since 2024-10-18
      */
-    public static CommentResponseDto createResponseDto(Page<Comment> comments, ResponseCode responseCode, HttpServletRequest req) {
+    public static CommentResponseDto createResponseDto(Page<Comment> comments, String requestUrl) {
         CommentResponseDto responseScheduleDto = new CommentResponseDto();
-        ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode, req);
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto(ResponseCode.SUCCESS_SEARCH_COMMENT, requestUrl);
         responseScheduleDto.setComments(comments.stream().map(CommentDto::from).toList());
         responseScheduleDto.setPage(new PageDto(comments.getPageable(), comments.getTotalPages()));
         responseScheduleDto.setStatus(responseStatusDto);

@@ -26,15 +26,14 @@ public class ScheduleResponseDto {
      * 일정 목록 조회 결과를 기반으로 응답 DTO를 생성합니다.
      * 조회된 일정 목록, 페이징 정보, 응답 코드를 포함합니다.
      *
-     * @param req          HttpServletRequest 객체
-     * @param schedules    조회된 일정 목록 (Page<Schedule>)
-     * @param responseCode 응답 코드
+     * @param requestUrl 요청 url
+     * @param schedules  조회된 일정 목록 (Page<Schedule>)
      * @return 생성된 응답 DTO 객체 (ScheduleResponseDto)
      * @since 2024-10-18
      */
-    public static ScheduleResponseDto createResponseDto(HttpServletRequest req, Page<Schedule> schedules, ResponseCode responseCode) {
+    public static ScheduleResponseDto createResponseDto(String requestUrl, Page<Schedule> schedules) {
         ScheduleResponseDto responseScheduleDto = new ScheduleResponseDto();
-        ResponseStatusDto responseStatusDto = new ResponseStatusDto(responseCode, req);
+        ResponseStatusDto responseStatusDto = new ResponseStatusDto(ResponseCode.SUCCESS_SEARCH_SCHEDULE, requestUrl);
         responseScheduleDto.setPage(new PageDto(schedules.getPageable(), schedules.getTotalPages()));
         responseScheduleDto.setSchedules(schedules.stream().map(ScheduleDto::from).toList());
         responseScheduleDto.setStatus(responseStatusDto);

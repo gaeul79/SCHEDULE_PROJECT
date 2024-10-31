@@ -6,8 +6,7 @@ import com.sparta.schedule_project.repository.UserRepository;
 import com.sparta.schedule_project.token.TokenProvider;
 import com.sparta.schedule_project.token.TokenProviderManager;
 import io.jsonwebtoken.Claims;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
+import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ import java.io.IOException;
 @Slf4j(topic = "AuthFilter")
 @RequiredArgsConstructor
 @Component
-public class AuthFilter extends OncePerRequestFilter {
+public class AuthFilter implements Filter {
     private final UserRepository userRepository;
     private final TokenProviderManager tokenManager;
 
@@ -38,19 +37,20 @@ public class AuthFilter extends OncePerRequestFilter {
      *
      * @param request     요청 객체
      * @param response    응답 객체
-     * @param filterChain 필터 체인
+     * @param chain 필터 체인
      * @throws IOException jwt 관련 에러
      * @since 2024-10-18
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        String url = request.getRequestURI();
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest servletRequest = (HttpServletRequest) request;
+        String url = servletRequest.getRequestURI();
         if (ignorePage(url)) {
             log.info("인증 처리를 하지 않는 URL : {}", url);
         } else {
-            setAttribute(request);
+            setAttribute(servletRequest);
         }
-        filterChain.doFilter(request, response); // 다음 Filter 로 이동
+        chain.doFilter(request, response); // 다음 Filter 로 이동
     }
 
     /**

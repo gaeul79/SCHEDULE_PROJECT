@@ -33,7 +33,7 @@ public class LoginService {
         User user = userRepository.findByEmail(requestDto.getEmail());
         validateLoginInfo(requestDto, user);
         tokenManager.getTokenProvider(req.getRequestURL().toString()).setToken(res, user);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN, req);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN, req.getRequestURI());
     }
 
     /**

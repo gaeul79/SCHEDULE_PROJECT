@@ -34,46 +34,46 @@ public class ExceptionFilter extends OncePerRequestFilter {
      * 요청 URI에 따라 인증 처리 여부를 판단하고,
      * 토큰 검증 후 사용자 정보를 추출하여 다음 필터로 전달합니다.
      *
-     * @param request     요청 객체
-     * @param response    응답 객체
+     * @param req         요청 객체
+     * @param res         응답 객체
      * @param filterChain 필터 체인
      * @throws IOException jwt 관련 에러
      * @since 2024-10-18
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws IOException {
         try {
-            filterChain.doFilter(request, response); // 다음 Filter 로 이동
+            filterChain.doFilter(req, res); // 다음 Filter 로 이동
         } catch (SecurityException | MalformedJwtException | IllegalArgumentException ex) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(ResponseCode.TOKEN_UNSIGNED.getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSIGNED, request));
-            response.getWriter().write(json);
+            res.setContentType("application/json");
+            res.setCharacterEncoding("UTF-8");
+            res.setStatus(ResponseCode.TOKEN_UNSIGNED.getHttpStatus().value());
+            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSIGNED, req.getRequestURI()));
+            res.getWriter().write(json);
         } catch (ExpiredJwtException e) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(ResponseCode.TOKEN_TIMEOUT.getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_TIMEOUT, request));
-            response.getWriter().write(json);
+            res.setContentType("application/json");
+            res.setCharacterEncoding("UTF-8");
+            res.setStatus(ResponseCode.TOKEN_TIMEOUT.getHttpStatus().value());
+            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_TIMEOUT, req.getRequestURI()));
+            res.getWriter().write(json);
         } catch (UnsupportedJwtException e) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(ResponseCode.TOKEN_UNSUPPORTED.getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSUPPORTED, request));
-            response.getWriter().write(json);
+            res.setContentType("application/json");
+            res.setCharacterEncoding("UTF-8");
+            res.setStatus(ResponseCode.TOKEN_UNSUPPORTED.getHttpStatus().value());
+            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSUPPORTED, req.getRequestURI()));
+            res.getWriter().write(json);
         } catch (ResponseException ex) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(ex.getResponseCode().getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ex.getResponseCode(), request));
-            response.getWriter().write(json);
+            res.setContentType("application/json");
+            res.setCharacterEncoding("UTF-8");
+            res.setStatus(ex.getResponseCode().getHttpStatus().value());
+            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ex.getResponseCode(), req.getRequestURI()));
+            res.getWriter().write(json);
         } catch (Exception ex) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(ResponseCode.UNKNOWN_ERROR.getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, request));
-            response.getWriter().write(json);
+            res.setContentType("application/json");
+            res.setCharacterEncoding("UTF-8");
+            res.setStatus(ResponseCode.UNKNOWN_ERROR.getHttpStatus().value());
+            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, req.getRequestURI()));
+            res.getWriter().write(json);
         }
     }
 }

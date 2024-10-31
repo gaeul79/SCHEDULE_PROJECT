@@ -45,7 +45,7 @@ public class ScheduleService {
         User user = tokenManager.getTokenProvider(req).getUser(req);
         Schedule schedule = requestDto.convertDtoToEntity(user.getId(), weather);
         scheduleRepository.save(schedule);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE, req);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE, req.getRequestURI());
     }
 
     /**
@@ -59,7 +59,7 @@ public class ScheduleService {
      */
     public ScheduleResponseDto searchSchedule(HttpServletRequest req, int page, int size) {
         Page<Schedule> schedules = scheduleRepository.findAllByOrderByUpdatedAtDesc(PageRequest.of(page, size));
-        return ScheduleResponseDto.createResponseDto(req, schedules, ResponseCode.SUCCESS_SEARCH_SCHEDULE);
+        return ScheduleResponseDto.createResponseDto(req.getRequestURI(), schedules);
     }
 
     /**
@@ -77,7 +77,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId());
         validateAuth(user, schedule);
         schedule.update(requestDto, weather);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE, req);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE, req.getRequestURI());
     }
 
     /**
@@ -93,7 +93,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(scheduleId);
         validateAuth(user, schedule);
         scheduleRepository.delete(schedule);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE, req);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE, req.getRequestURI());
     }
 
     /**

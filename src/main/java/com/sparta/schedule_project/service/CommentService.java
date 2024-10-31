@@ -36,7 +36,7 @@ public class CommentService {
         User user = tokenManager.getTokenProvider(req).getUser(req);
         Comment comment = requestDto.convertDtoToEntity(user);
         commentRepository.save(comment);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_COMMENT, req);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_COMMENT, req.getRequestURI());
     }
 
     /**
@@ -52,7 +52,7 @@ public class CommentService {
     public CommentResponseDto searchComment(HttpServletRequest req, int scheduleId, int page, int size) {
         Page<Comment> comments = commentRepository
                 .findAllByScheduleIdOrderByUpdatedAtDesc(scheduleId, PageRequest.of(page, size));
-        return CommentResponseDto.createResponseDto(comments, ResponseCode.SUCCESS_SEARCH_COMMENT, req);
+        return CommentResponseDto.createResponseDto(comments, req.getRequestURI());
     }
 
     /**
@@ -69,7 +69,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(requestDto.getCommentId());
         validateAuth(user, comment);
         comment.update(requestDto);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_COMMENT, req);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_COMMENT, req.getRequestURI());
     }
 
     /**
@@ -85,7 +85,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId);
         validateAuth(user, comment);
         commentRepository.delete(comment);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_COMMENT, req);
+        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_COMMENT, req.getRequestURI());
     }
 
     /**

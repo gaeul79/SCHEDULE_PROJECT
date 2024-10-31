@@ -20,17 +20,17 @@ public class ResponseStatusDto {
     private String message;
     private String url;
 
-    public ResponseStatusDto(ResponseCode responseCode, HttpServletRequest req) {
+    public ResponseStatusDto(ResponseCode responseCode, String requestUrl) {
         date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         state = responseCode.getHttpStatus().value();
         message = responseCode.getMessage();
-        url = req.getRequestURL().toString();
+        url = requestUrl;
     }
 
-    public ResponseStatusDto(ResponseCode responseCode, HttpServletRequest req, String message) {
+    public ResponseStatusDto(ResponseCode responseCode, String requestUrl, String errorMsg) {
         date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         state = responseCode.getHttpStatus().value();
-        this.message = responseCode.getMessage() + ": " + message;
-        url = req.getRequestURL().toString();
+        message = responseCode.getMessage() + ": " + errorMsg;
+        url = requestUrl;
     }
 }
