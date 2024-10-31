@@ -7,6 +7,7 @@ import com.sparta.schedule_project.dto.response.ScheduleResponseDto;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.service.ScheduleService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class ScheduleController {
     @PostMapping("/schedules")
     public ResponseEntity<ResponseStatusDto> createSchedule(
             HttpServletRequest req,
-            @RequestBody CreateScheduleRequestDto requestDto) {
+            @RequestBody @Valid CreateScheduleRequestDto requestDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(scheduleService.createSchedule(req, requestDto));
@@ -71,7 +72,7 @@ public class ScheduleController {
     @PutMapping("/schedules/{scheduleId}")
     public ResponseEntity<ResponseStatusDto> updateSchedule(
             HttpServletRequest req,
-            @RequestBody ModifyScheduleRequestDto requestDto) throws ResponseException {
+            @RequestBody @Valid ModifyScheduleRequestDto requestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(scheduleService.updateSchedule(req, requestDto));

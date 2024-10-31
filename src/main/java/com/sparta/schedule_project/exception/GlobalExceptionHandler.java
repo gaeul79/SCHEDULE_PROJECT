@@ -4,7 +4,6 @@ import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.emums.ResponseCode;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,7 +32,7 @@ public class GlobalExceptionHandler {
                 .get(0)
                 .getDefaultMessage();
 
-        return baseException(req, ResponseCode.BAD_INPUT, errorMsg);
+        return validException(req, errorMsg);
     }
 
     /**
@@ -68,6 +67,14 @@ public class GlobalExceptionHandler {
         return baseException(req, ResponseCode.UNKNOWN_ERROR);
     }
 
+    /**
+     * 기본적인 예외 처리를 위한 메서드입니다.
+     *
+     * @param req          HTTP 요청 객체
+     * @param responseCode 응답 코드
+     * @return ResponseEntity 객체
+     * @since 2024-10-24
+     */
     private ResponseEntity<ResponseStatusDto> baseException(HttpServletRequest req, ResponseCode responseCode) {
         String url = req.getRequestURL().toString();
         return ResponseEntity
@@ -75,10 +82,18 @@ public class GlobalExceptionHandler {
                 .body(new ResponseStatusDto(responseCode, url));
     }
 
-    private ResponseEntity<ResponseStatusDto> baseException(HttpServletRequest req, ResponseCode responseCode, String errorMsg) {
+    /**
+     * 유효성 검사 실패 시 발생하는 예외 처리를 위한 메서드입니다.
+     *
+     * @param req      HTTP 요청 객체
+     * @param errorMsg 에러 메시지
+     * @return ResponseEntity 객체
+     * @since 2024-10-24
+     */
+    private ResponseEntity<ResponseStatusDto> validException(HttpServletRequest req, String errorMsg) {
         String url = req.getRequestURL().toString();
         return ResponseEntity
-                .status(responseCode.getHttpStatus())
-                .body(new ResponseStatusDto(responseCode, url, errorMsg));
+                .status(ResponseCode.BAD_INPUT.getHttpStatus())
+                .body(new ResponseStatusDto(ResponseCode.BAD_INPUT, url, errorMsg));
     }
 }

@@ -7,6 +7,7 @@ import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.service.CommentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class CommentController {
     @PostMapping("/comments")
     public ResponseEntity<ResponseStatusDto> createComment(
             HttpServletRequest req,
-            @RequestBody CreateCommentRequestDto requestDto) {
+            @RequestBody @Valid CreateCommentRequestDto requestDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(commentService.createComment(req, requestDto));
@@ -72,7 +73,7 @@ public class CommentController {
     @PutMapping("/comments/{commentId}")
     public ResponseEntity<ResponseStatusDto> updateComment(
             HttpServletRequest req,
-            @RequestBody ModifyCommentRequestDto requestDto) throws ResponseException {
+            @RequestBody @Valid ModifyCommentRequestDto requestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(commentService.updateComment(req, requestDto));

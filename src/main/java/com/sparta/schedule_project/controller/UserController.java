@@ -1,15 +1,13 @@
 package com.sparta.schedule_project.controller;
 
 import com.sparta.schedule_project.dto.request.CreateUserRequestDto;
-import com.sparta.schedule_project.dto.request.LoginRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyUserRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.dto.response.UserResponseDto;
 import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.service.LoginService;
 import com.sparta.schedule_project.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +35,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<ResponseStatusDto> createUser(
             HttpServletRequest req,
-            @RequestBody CreateUserRequestDto createUserRequestDto) throws ResponseException {
+            @RequestBody @Valid CreateUserRequestDto createUserRequestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(userService.createUser(req, createUserRequestDto));
@@ -71,7 +69,7 @@ public class UserController {
     @PutMapping("/users/{userId}")
     public ResponseEntity<ResponseStatusDto> updateUser(
             HttpServletRequest req,
-            @RequestBody ModifyUserRequestDto requestDto) throws ResponseException {
+            @RequestBody @Valid ModifyUserRequestDto requestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.updateUser(req, requestDto));

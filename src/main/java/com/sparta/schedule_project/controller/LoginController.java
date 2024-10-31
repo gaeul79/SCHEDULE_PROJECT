@@ -2,17 +2,17 @@ package com.sparta.schedule_project.controller;
 
 import com.sparta.schedule_project.dto.request.LoginRequestDto;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
+import com.sparta.schedule_project.emums.LoginType;
 import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.service.LoginService;
+import com.sparta.schedule_project.service.login.DefaultLoginService;
+import com.sparta.schedule_project.service.login.SocialLoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 로그인 컨트롤러
@@ -23,7 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class LoginController {
-    private final LoginService loginService;
+    private final DefaultLoginService defaultLoginService;
+    private final SocialLoginService socialLoginService;
 
     /**
      * 로그인 API
@@ -38,9 +39,19 @@ public class LoginController {
     public ResponseEntity<ResponseStatusDto> login(
             HttpServletRequest req,
             HttpServletResponse res,
-            @RequestBody LoginRequestDto requestDto) throws ResponseException {
+            @RequestBody @Valid LoginRequestDto requestDto) throws ResponseException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(loginService.login(req, res, requestDto));
+                .body(defaultLoginService.login(req, res, requestDto));
+    }
+
+    @GetMapping("/{socialType}/login/callback")
+    public ResponseEntity<ResponseStatusDto> socialLogin(
+            HttpServletResponse res,
+            @RequestParam String code,
+            @PathVariable LoginType socialType) throws ResponseException {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(socialLoginService.get(socialType).login(res, code));
     }
 }

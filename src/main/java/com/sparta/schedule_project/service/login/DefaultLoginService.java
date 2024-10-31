@@ -1,4 +1,4 @@
-package com.sparta.schedule_project.service;
+package com.sparta.schedule_project.service.login;
 
 import com.sparta.schedule_project.config.PasswordEncoder;
 import com.sparta.schedule_project.dto.request.LoginRequestDto;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class LoginService {
+public class DefaultLoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
