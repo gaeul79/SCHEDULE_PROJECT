@@ -1,7 +1,7 @@
 package com.sparta.schedule_project.emums;
 
 /**
- * 로그인 방식을 나타내는 enum 타입입니다.
+ * 소셜 로그인 종류를 나타내는 enum
  *
  * @since 2024-10-31
  */

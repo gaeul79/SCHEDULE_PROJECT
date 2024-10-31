@@ -1,4 +1,4 @@
-package com.sparta.schedule_project.token;
+package com.sparta.schedule_project.util.token;
 
 import com.sparta.schedule_project.emums.AuthType;
 import com.sparta.schedule_project.emums.ResponseCode;

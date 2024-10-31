@@ -3,7 +3,7 @@ package com.sparta.schedule_project.filter;
 
 import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.repository.UserRepository;
-import com.sparta.schedule_project.token.TokenProvider;
+import com.sparta.schedule_project.util.token.TokenProvider;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

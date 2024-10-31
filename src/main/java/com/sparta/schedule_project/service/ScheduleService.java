@@ -11,7 +11,7 @@ import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.util.WeatherApi;
 import com.sparta.schedule_project.repository.ScheduleRepository;
-import com.sparta.schedule_project.token.TokenProvider;
+import com.sparta.schedule_project.util.token.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

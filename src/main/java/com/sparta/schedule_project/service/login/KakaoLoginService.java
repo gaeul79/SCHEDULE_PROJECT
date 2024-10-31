@@ -8,7 +8,7 @@ import com.sparta.schedule_project.emums.ResponseCode;
 import com.sparta.schedule_project.emums.SocialType;
 import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.repository.UserRepository;
-import com.sparta.schedule_project.token.TokenProvider;
+import com.sparta.schedule_project.util.token.TokenProvider;
 import com.sparta.schedule_project.util.PasswordEncoder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,13 +25,19 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.UUID;
 
+
+/**
+ * Kakao Social Login 기능을 제공하는 서비스
+ *
+ * @since 2024-10-31
+ */
 @Service
 @RequiredArgsConstructor
 public class KakaoLoginService implements SocialLogin {
-    private final TokenProvider tokenProvider;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RestTemplate restTemplate;
-    private final UserRepository userRepository;
+    private final TokenProvider tokenProvider;
 
     @Override
     public ResponseStatusDto login(HttpServletRequest req, HttpServletResponse res, String accessCode) throws JsonProcessingException {
@@ -117,11 +123,8 @@ public class KakaoLoginService implements SocialLogin {
         );
 
         JsonNode jsonNode = new ObjectMapper().readTree(response.getBody());
-        Long id = jsonNode.get("id").asLong();
-        String nickname = jsonNode.get("properties")
-                .get("nickname").asText();
-        String email = jsonNode.get("kakao_account")
-                .get("email").asText();
+        String nickname = jsonNode.get("properties").get("nickname").asText();
+        String email = jsonNode.get("kakao_account").get("email").asText();
 
         return User.builder()
                 .email(email)

@@ -9,7 +9,7 @@ import com.sparta.schedule_project.emums.ResponseCode;
 import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
-import com.sparta.schedule_project.token.TokenProvider;
+import com.sparta.schedule_project.util.token.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

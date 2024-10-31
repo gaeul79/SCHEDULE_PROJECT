@@ -46,6 +46,18 @@ public class LoginController {
                 .body(defaultLoginService.login(req, res, requestDto));
     }
 
+    /**
+     * 소셜 로그인 콜백 처리 메서드
+     *
+     * @param req        HTTP 요청 객체
+     * @param res        HTTP 응답 객체
+     * @param code       인증 코드
+     * @param socialType 소셜 로그인 종류 (GOOGLE, NAVER, KAKAO 등)
+     * @return 로그인 결과를 담은 ResponseEntity
+     * @throws ResponseException       응답 처리 중 발생한 예외
+     * @throws JsonProcessingException JSON 처리 중 발생한 예외
+     * @since 2023-10-03
+     */
     @GetMapping("/{socialType}/login/callback")
     public ResponseEntity<ResponseStatusDto> socialLogin(
             HttpServletRequest req,

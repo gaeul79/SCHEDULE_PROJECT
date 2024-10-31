@@ -6,7 +6,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
-
+/**
+ * RestTemplate 설정 클래스
+ * @since 2024-10-31
+ */
 @Configuration
 public class RestTemplateConfig  {
     @Bean

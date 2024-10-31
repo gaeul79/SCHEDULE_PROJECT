@@ -1,5 +1,6 @@
 package com.sparta.schedule_project.exception;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.schedule_project.dto.response.ResponseStatusDto;
 import com.sparta.schedule_project.emums.ResponseCode;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,6 +34,16 @@ public class GlobalExceptionHandler {
                 .getDefaultMessage();
 
         return validException(req, errorMsg);
+    }
+
+    /**
+     * JSON 관련 예외 처리
+     *
+     * @since 2024-10-31
+     */
+    @ExceptionHandler(JsonProcessingException.class)
+    public ResponseEntity<ResponseStatusDto> BaseException(JsonProcessingException ex, HttpServletRequest req) {
+        return baseException(req, ResponseCode.JSON_INVALID);
     }
 
     /**
