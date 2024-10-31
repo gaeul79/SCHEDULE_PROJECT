@@ -7,7 +7,7 @@ import com.sparta.schedule_project.emums.ResponseCode;
 import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.repository.UserRepository;
-import com.sparta.schedule_project.token.TokenProviderManager;
+import com.sparta.schedule_project.token.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenProviderManager tokenManager;
+    private final TokenProvider tokenProvider;
 
     /**
      * 로그인을 처리합니다.
@@ -32,7 +32,7 @@ public class LoginService {
     public ResponseStatusDto login(HttpServletRequest req, HttpServletResponse res, LoginRequestDto requestDto) throws ResponseException {
         User user = userRepository.findByEmail(requestDto.getEmail());
         validateLoginInfo(requestDto, user);
-        tokenManager.getTokenProvider().setToken(res, user);
+        tokenProvider.setToken(res, user);
         return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN, req.getRequestURI());
     }
 

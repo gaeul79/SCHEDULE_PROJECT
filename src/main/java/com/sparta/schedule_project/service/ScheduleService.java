@@ -11,7 +11,7 @@ import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.exception.ResponseException;
 import com.sparta.schedule_project.infra.WeatherApi;
 import com.sparta.schedule_project.repository.ScheduleRepository;
-import com.sparta.schedule_project.token.TokenProviderManager;
+import com.sparta.schedule_project.token.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ScheduleService {
     private final WeatherApi weatherApi;
-    private final TokenProviderManager tokenManager;
+    private final TokenProvider tokenProvider;
     private final ScheduleRepository scheduleRepository;
 
     /**
@@ -42,7 +42,7 @@ public class ScheduleService {
      */
     public ResponseStatusDto createSchedule(HttpServletRequest req, CreateScheduleRequestDto requestDto) {
         String weather = weatherApi.getTodayWeather();
-        User user = tokenManager.getTokenProvider().getUser(req);
+        User user = tokenProvider.getUser(req);
         Schedule schedule = requestDto.convertDtoToEntity(user.getId(), weather);
         scheduleRepository.save(schedule);
         return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE, req.getRequestURI());
@@ -73,7 +73,7 @@ public class ScheduleService {
     @Transactional
     public ResponseStatusDto updateSchedule(HttpServletRequest req, ModifyScheduleRequestDto requestDto) throws ResponseException {
         String weather = weatherApi.getTodayWeather();
-        User user = tokenManager.getTokenProvider().getUser(req);
+        User user = tokenProvider.getUser(req);
         Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId());
         validateAuth(user, schedule);
         schedule.update(requestDto, weather);
@@ -89,7 +89,7 @@ public class ScheduleService {
      * @since 2024-10-03
      */
     public ResponseStatusDto deleteSchedule(HttpServletRequest req, int scheduleId) throws ResponseException {
-        User user = tokenManager.getTokenProvider().getUser(req);
+        User user = tokenProvider.getUser(req);
         Schedule schedule = scheduleRepository.findById(scheduleId);
         validateAuth(user, schedule);
         scheduleRepository.delete(schedule);

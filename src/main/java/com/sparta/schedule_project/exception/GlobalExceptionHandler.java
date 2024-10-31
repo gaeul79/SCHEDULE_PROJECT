@@ -33,12 +33,7 @@ public class GlobalExceptionHandler {
                 .get(0)
                 .getDefaultMessage();
 
-        // url 추출
-        String url = req.getRequestURL().toString();
-
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new ResponseStatusDto(ResponseCode.BAD_INPUT, url, errorMsg));
+        return baseException(req, ResponseCode.BAD_INPUT, errorMsg);
     }
 
     /**
@@ -48,12 +43,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ResponseException.class)
     public ResponseEntity<ResponseStatusDto> BaseException(ResponseException ex, HttpServletRequest req) {
-        // url 추출
-        String url = req.getRequestURL().toString();
-
-        return ResponseEntity
-                .status(ex.getResponseCode().getHttpStatus())
-                .body(new ResponseStatusDto(ex.getResponseCode(), url));
+        return baseException(req, ex.getResponseCode());
     }
 
     /**
@@ -64,10 +54,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnsupportedEncodingException.class)
     public ResponseEntity<ResponseStatusDto> BaseException(UnsupportedEncodingException ex, HttpServletRequest req) {
         log.error(ex.getMessage());
-        String url = req.getRequestURL().toString();
-        return ResponseEntity
-                .status(ResponseCode.TOKEN_FAIL_ENCODING.getHttpStatus())
-                .body(new ResponseStatusDto(ResponseCode.TOKEN_FAIL_ENCODING, url));
+        return baseException(req, ResponseCode.TOKEN_FAIL_ENCODING);
     }
 
     /**
@@ -78,9 +65,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseStatusDto> BaseException(Exception ex, HttpServletRequest req) {
         log.error(ex.getMessage());
+        return baseException(req, ResponseCode.UNKNOWN_ERROR);
+    }
+
+    private ResponseEntity<ResponseStatusDto> baseException(HttpServletRequest req, ResponseCode responseCode) {
         String url = req.getRequestURL().toString();
         return ResponseEntity
-                .status(ResponseCode.UNKNOWN_ERROR.getHttpStatus())
-                .body(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, url));
+                .status(responseCode.getHttpStatus())
+                .body(new ResponseStatusDto(responseCode, url));
+    }
+
+    private ResponseEntity<ResponseStatusDto> baseException(HttpServletRequest req, ResponseCode responseCode, String errorMsg) {
+        String url = req.getRequestURL().toString();
+        return ResponseEntity
+                .status(responseCode.getHttpStatus())
+                .body(new ResponseStatusDto(responseCode, url, errorMsg));
     }
 }

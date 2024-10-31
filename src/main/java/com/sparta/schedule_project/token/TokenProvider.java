@@ -4,6 +4,7 @@ import com.sparta.schedule_project.entity.User;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
 
 /**
  * TokenProvider 인터페이스

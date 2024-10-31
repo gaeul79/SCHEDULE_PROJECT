@@ -4,7 +4,6 @@ package com.sparta.schedule_project.filter;
 import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.repository.UserRepository;
 import com.sparta.schedule_project.token.TokenProvider;
-import com.sparta.schedule_project.token.TokenProviderManager;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +26,7 @@ import java.io.IOException;
 @Component
 public class AuthFilter implements Filter {
     private final UserRepository userRepository;
-    private final TokenProviderManager tokenManager;
+    private final TokenProvider tokenProvider;
 
     /**
      * 요청 URI에 따라 인증 처리 여부를 판단하고,
@@ -75,8 +74,7 @@ public class AuthFilter implements Filter {
      * @since 2024-10-31
      */
     private void setAttribute(HttpServletRequest req) {
-        TokenProvider provider = tokenManager.getTokenProvider();
-        Claims claims = provider.getClaims(req);
+        Claims claims = tokenProvider.getClaims(req);
         String email = claims.getSubject();
         User user = userRepository.findByEmail(email);
         req.setAttribute("user", user);
