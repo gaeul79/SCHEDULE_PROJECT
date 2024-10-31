@@ -63,6 +63,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(UnsupportedEncodingException.class)
     public ResponseEntity<ResponseStatusDto> BaseException(UnsupportedEncodingException ex, HttpServletRequest req) {
+        log.error(ex.getMessage());
         String url = req.getRequestURL().toString();
         return ResponseEntity
                 .status(ResponseCode.TOKEN_FAIL_ENCODING.getHttpStatus())

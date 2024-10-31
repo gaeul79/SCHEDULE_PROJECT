@@ -1,7 +1,6 @@
 package com.sparta.schedule_project.dto.response;
 
 import com.sparta.schedule_project.emums.ResponseCode;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 
 import java.time.LocalDateTime;

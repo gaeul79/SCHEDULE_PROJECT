@@ -2,7 +2,6 @@ package com.sparta.schedule_project.dto.response;
 
 import com.sparta.schedule_project.emums.ResponseCode;
 import com.sparta.schedule_project.entity.Schedule;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
