@@ -1,9 +1,9 @@
 package com.sparta.schedule_project.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.emums.ResponseCode;
-import com.sparta.schedule_project.exception.ResponseException;
+import com.sparta.schedule_project.dto.response.ErrorResponseDto;
+import com.sparta.schedule_project.emums.ErrorCode;
+import com.sparta.schedule_project.exception.BusinessException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -47,32 +47,32 @@ public class ExceptionFilter extends OncePerRequestFilter {
         } catch (SecurityException | MalformedJwtException | IllegalArgumentException ex) {
             res.setContentType("application/json");
             res.setCharacterEncoding("UTF-8");
-            res.setStatus(ResponseCode.TOKEN_UNSIGNED.getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSIGNED, req.getRequestURI()));
+            res.setStatus(ErrorCode.TOKEN_UNSIGNED.getHttpStatus().value());
+            String json = objectMapper.writeValueAsString(new ErrorResponseDto(ErrorCode.TOKEN_UNSIGNED, req.getRequestURI()));
             res.getWriter().write(json);
         } catch (ExpiredJwtException e) {
             res.setContentType("application/json");
             res.setCharacterEncoding("UTF-8");
-            res.setStatus(ResponseCode.TOKEN_TIMEOUT.getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_TIMEOUT, req.getRequestURI()));
+            res.setStatus(ErrorCode.TOKEN_TIMEOUT.getHttpStatus().value());
+            String json = objectMapper.writeValueAsString(new ErrorResponseDto(ErrorCode.TOKEN_TIMEOUT, req.getRequestURI()));
             res.getWriter().write(json);
         } catch (UnsupportedJwtException e) {
             res.setContentType("application/json");
             res.setCharacterEncoding("UTF-8");
-            res.setStatus(ResponseCode.TOKEN_UNSUPPORTED.getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.TOKEN_UNSUPPORTED, req.getRequestURI()));
+            res.setStatus(ErrorCode.TOKEN_UNSUPPORTED.getHttpStatus().value());
+            String json = objectMapper.writeValueAsString(new ErrorResponseDto(ErrorCode.TOKEN_UNSUPPORTED, req.getRequestURI()));
             res.getWriter().write(json);
-        } catch (ResponseException ex) {
+        } catch (BusinessException ex) {
             res.setContentType("application/json");
             res.setCharacterEncoding("UTF-8");
-            res.setStatus(ex.getResponseCode().getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ex.getResponseCode(), req.getRequestURI()));
+            res.setStatus(ex.getErrorCode().getHttpStatus().value());
+            String json = objectMapper.writeValueAsString(new ErrorResponseDto(ex.getErrorCode(), req.getRequestURI()));
             res.getWriter().write(json);
         } catch (Exception ex) {
             res.setContentType("application/json");
             res.setCharacterEncoding("UTF-8");
-            res.setStatus(ResponseCode.UNKNOWN_ERROR.getHttpStatus().value());
-            String json = objectMapper.writeValueAsString(new ResponseStatusDto(ResponseCode.UNKNOWN_ERROR, req.getRequestURI()));
+            res.setStatus(ErrorCode.UNKNOWN_ERROR.getHttpStatus().value());
+            String json = objectMapper.writeValueAsString(new ErrorResponseDto(ErrorCode.UNKNOWN_ERROR, req.getRequestURI()));
             res.getWriter().write(json);
         }
     }

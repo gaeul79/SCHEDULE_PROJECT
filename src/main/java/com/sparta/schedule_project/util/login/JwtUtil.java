@@ -1,8 +1,8 @@
-package com.sparta.schedule_project.util.token;
+package com.sparta.schedule_project.util.login;
 
 import com.sparta.schedule_project.emums.AuthType;
-import com.sparta.schedule_project.emums.ResponseCode;
-import com.sparta.schedule_project.exception.ResponseException;
+import com.sparta.schedule_project.emums.ErrorCode;
+import com.sparta.schedule_project.exception.BusinessException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -74,11 +74,11 @@ public class JwtUtil {
      * @return 토큰 자체 값 (String)
      * @throws NullPointerException 토큰 값이 유효하지 않거나 없는 경우 발생
      */
-    public String substringToken(String tokenValue) throws ResponseException {
+    public String substringToken(String tokenValue) throws BusinessException {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(7);
         }
-        throw new ResponseException(ResponseCode.TOKEN_INVALID);
+        throw new BusinessException(ErrorCode.TOKEN_INVALID);
     }
 
     /**
@@ -97,12 +97,12 @@ public class JwtUtil {
      *
      * @param token JWT 토큰 문자열
      * @return 토큰의 클레임 정보
-     * @throws ResponseException 토큰이 유효하지 않은 경우 예외 발생
+     * @throws BusinessException 토큰이 유효하지 않은 경우 예외 발생
      * @since 2024-10-31
      */
     public Claims getClaims(String token) {
         if (!StringUtils.hasText(token)) // 토큰 확인
-            throw new ResponseException(ResponseCode.TOKEN_NOT_FOUND);
+            throw new BusinessException(ErrorCode.TOKEN_NOT_FOUND);
 
         token = substringToken(token); // JWT 토큰 substring
         Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);

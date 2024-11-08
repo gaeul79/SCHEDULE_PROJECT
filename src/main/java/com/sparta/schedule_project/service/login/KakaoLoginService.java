@@ -3,12 +3,16 @@ package com.sparta.schedule_project.service.login;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.emums.ResponseCode;
+import com.sparta.schedule_project.dto.response.ErrorResponseDto;
+import com.sparta.schedule_project.dto.response.ResponseDto;
+import com.sparta.schedule_project.dto.response.UserDto;
+import com.sparta.schedule_project.emums.AuthType;
+import com.sparta.schedule_project.emums.ErrorCode;
 import com.sparta.schedule_project.emums.SocialType;
 import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.repository.UserRepository;
-import com.sparta.schedule_project.util.token.TokenProvider;
+import com.sparta.schedule_project.util.login.SocialLogin;
+import com.sparta.schedule_project.util.login.TokenProvider;
 import com.sparta.schedule_project.util.PasswordEncoder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,7 +44,7 @@ public class KakaoLoginService implements SocialLogin {
     private final TokenProvider tokenProvider;
 
     @Override
-    public ResponseStatusDto login(HttpServletRequest req, HttpServletResponse res, String accessCode) throws JsonProcessingException {
+    public ResponseDto<UserDto> login(HttpServletRequest req, HttpServletResponse res, String accessCode) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getToken(accessCode);
 
@@ -54,7 +58,7 @@ public class KakaoLoginService implements SocialLogin {
         tokenProvider.setToken(res, user);
 
         // 5. 반환
-        return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN, req.getRequestURI());
+        return ResponseDto.of(UserDto.from(user));
     }
 
     @Override
@@ -75,8 +79,8 @@ public class KakaoLoginService implements SocialLogin {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "fec5298e3f8dd5a3c3ecd134fde3dc80");
-        body.add("redirect_uri", "http://localhost:8080/api/user/kakao/callback");
+        body.add("client_id", "82cb39b1e8d05d2daf6449dd3413aae7");
+        body.add("redirect_uri", "http://localhost:8080/api/login/kakao/callback");
         body.add("code", accessCode);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
@@ -129,6 +133,8 @@ public class KakaoLoginService implements SocialLogin {
         return User.builder()
                 .email(email)
                 .name(nickname)
+                .auth(AuthType.USER)
+                .socialType(SocialType.KAKAO)
                 .build();
     }
 
@@ -137,15 +143,17 @@ public class KakaoLoginService implements SocialLogin {
         User findUser = userRepository.findByEmail(user.getEmail());
         if (findUser != null) {
             // 기존 회원정보에 카카오 Id 추가
-            user.updateSocialType(SocialType.KAKAO);
+            if(findUser.getSocialType() != SocialType.KAKAO)
+                findUser.updateSocialType(SocialType.KAKAO);
         } else {
             // 신규 회원가입
             // password: random UUID - 기존 로그인으로 로그인되지 않도록
+            findUser = user;
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
             user.updatePassword(encodedPassword);
         }
 
-        userRepository.save(user);
+        userRepository.save(findUser);
     }
 }

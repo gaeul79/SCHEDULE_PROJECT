@@ -12,27 +12,7 @@ import org.springframework.http.HttpStatus;
  */
 @Getter
 @AllArgsConstructor
-public enum ResponseCode {
-    // 200
-    SUCCESS_LOGIN(HttpStatus.OK, "로그인 성공"),
-    SUCCESS_LOGOUT(HttpStatus.OK, "로그 아웃 성공"),
-    SUCCESS_SEARCH_USER(HttpStatus.OK, "유저 조회 성공"),
-    SUCCESS_SEARCH_SCHEDULE(HttpStatus.OK, "일정 조회 성공"),
-    SUCCESS_SEARCH_COMMENT(HttpStatus.OK, "댓글 조회 성공"),
-    SUCCESS_UPDATE_USER(HttpStatus.OK, "유저 수정 성공"),
-    SUCCESS_UPDATE_SCHEDULE(HttpStatus.OK, "일정 수정 성공"),
-    SUCCESS_UPDATE_COMMENT(HttpStatus.OK, "댓글 수정 성공"),
-
-    // 201
-    SUCCESS_CREATE_USER(HttpStatus.CREATED, "회원 가입 성공"),
-    SUCCESS_CREATE_SCHEDULE(HttpStatus.CREATED, "일정 등록 성공"),
-    SUCCESS_CREATE_COMMENT(HttpStatus.CREATED, "댓글 등록 성공"),
-
-    // 204
-    SUCCESS_DELETE_USER(HttpStatus.NO_CONTENT, "유저 삭제 성공"),
-    SUCCESS_DELETE_SCHEDULE(HttpStatus.NO_CONTENT, "일정 삭제 성공"),
-    SUCCESS_DELETE_COMMENT(HttpStatus.NO_CONTENT, "댓글 삭제 성공"),
-
+public enum ErrorCode {
     // 400
     BAD_INPUT(HttpStatus.BAD_REQUEST, "잘못된 값 입력"),
     TOKEN_UNSIGNED(HttpStatus.BAD_REQUEST, "유효하지 않는 JWT 서명 입니다."),

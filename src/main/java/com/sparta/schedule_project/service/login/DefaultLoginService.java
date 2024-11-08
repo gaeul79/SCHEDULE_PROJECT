@@ -1,13 +1,14 @@
 package com.sparta.schedule_project.service.login;
 
-import com.sparta.schedule_project.util.PasswordEncoder;
 import com.sparta.schedule_project.dto.request.LoginRequestDto;
-import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.emums.ResponseCode;
+import com.sparta.schedule_project.dto.response.ResponseDto;
+import com.sparta.schedule_project.dto.response.UserDto;
+import com.sparta.schedule_project.emums.ErrorCode;
 import com.sparta.schedule_project.entity.User;
-import com.sparta.schedule_project.exception.ResponseException;
+import com.sparta.schedule_project.exception.BusinessException;
 import com.sparta.schedule_project.repository.UserRepository;
-import com.sparta.schedule_project.util.token.TokenProvider;
+import com.sparta.schedule_project.util.PasswordEncoder;
+import com.sparta.schedule_project.util.login.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +32,14 @@ public class DefaultLoginService {
      * @param req        HttpServletRequest 객체
      * @param res        HttpServletResponse 객체
      * @param requestDto 로그인 요청 정보
-     * @return 로그인 결과 (ResponseStatusDto)
+     * @return 로그인 결과
      * @since 2024-10-03
      */
-    public ResponseStatusDto login(HttpServletRequest req, HttpServletResponse res, LoginRequestDto requestDto) throws ResponseException {
+    public ResponseDto<UserDto> login(HttpServletRequest req, HttpServletResponse res, LoginRequestDto requestDto) throws BusinessException {
         User user = userRepository.findByEmail(requestDto.getEmail());
         validateLoginInfo(requestDto, user);
         tokenProvider.setToken(res, user);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_LOGIN, req.getRequestURI());
+        return ResponseDto.of(UserDto.from(user));
     }
 
     /**
@@ -46,13 +47,13 @@ public class DefaultLoginService {
      *
      * @param requestDto 입력된 유저 정보
      * @param findUser   조회된 유저 정보
-     * @throws ResponseException 유저 정보가 올바르지 않은 경우 예외를 발생시킵니다.
+     * @throws BusinessException 유저 정보가 올바르지 않은 경우 예외를 발생시킵니다.
      * @since 2024-10-03
      */
-    public void validateLoginInfo(LoginRequestDto requestDto, User findUser) throws ResponseException {
+    public void validateLoginInfo(LoginRequestDto requestDto, User findUser) throws BusinessException {
         if (findUser == null)
-            throw new ResponseException(ResponseCode.USER_NOT_FOUND);
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         else if (!passwordEncoder.matches(requestDto.getPassword(), findUser.getPassword()))
-            throw new ResponseException(ResponseCode.USER_PASSWORD_NOT_MATCH);
+            throw new BusinessException(ErrorCode.USER_PASSWORD_NOT_MATCH);
     }
 }

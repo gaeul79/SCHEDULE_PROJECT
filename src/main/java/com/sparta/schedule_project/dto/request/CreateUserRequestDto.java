@@ -2,10 +2,7 @@ package com.sparta.schedule_project.dto.request;
 
 import com.sparta.schedule_project.entity.User;
 import com.sparta.schedule_project.emums.AuthType;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,10 +24,10 @@ public class CreateUserRequestDto {
     private String password;
 
     @NotBlank(message = "닉네임을 입력해주세요.")
-    @Max(value = 20, message = "닉네임은 20자까지 입력할 수 있습니다.")
+    @Size(max = 20, message = "닉네임은 20자까지 입력할 수 있습니다.")
     private String name;
 
-    @NotBlank(message = "권한은 공백일 수 없습니다.")
+    @NotNull(message = "권한은 공백일 수 없습니다.")
     private AuthType auth;
 
     /**

@@ -23,6 +23,6 @@ public class ModifyUserRequestDto {
     private String password;
 
     @NotBlank(message = "닉네임을 입력해주세요.")
-    @Max(value = 20, message = "닉네임은 20자까지 입력할 수 있습니다.")
+    @Size(max = 20, message = "닉네임은 20자까지 입력할 수 있습니다.")
     private String name;
 }

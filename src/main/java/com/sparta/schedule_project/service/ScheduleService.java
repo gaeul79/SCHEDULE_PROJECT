@@ -2,17 +2,16 @@ package com.sparta.schedule_project.service;
 
 import com.sparta.schedule_project.dto.request.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyScheduleRequestDto;
-import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.dto.response.ScheduleResponseDto;
+import com.sparta.schedule_project.dto.response.PageResponseDto;
+import com.sparta.schedule_project.dto.response.ResponseDto;
+import com.sparta.schedule_project.dto.response.ScheduleDto;
 import com.sparta.schedule_project.emums.AuthType;
-import com.sparta.schedule_project.emums.ResponseCode;
+import com.sparta.schedule_project.emums.ErrorCode;
 import com.sparta.schedule_project.entity.Schedule;
 import com.sparta.schedule_project.entity.User;
-import com.sparta.schedule_project.exception.ResponseException;
-import com.sparta.schedule_project.util.WeatherApi;
+import com.sparta.schedule_project.exception.BusinessException;
 import com.sparta.schedule_project.repository.ScheduleRepository;
-import com.sparta.schedule_project.util.token.TokenProvider;
-import jakarta.servlet.http.HttpServletRequest;
+import com.sparta.schedule_project.util.WeatherApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,71 +28,69 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ScheduleService {
     private final WeatherApi weatherApi;
-    private final TokenProvider tokenProvider;
     private final ScheduleRepository scheduleRepository;
 
     /**
      * 일정 생성
      *
-     * @param req        HttpServletRequest 객체
+     * @param user       로그인 유저
      * @param requestDto 일정 등록 요청 정보
-     * @return 생성 결과 (ResponseStatusDto)
+     * @return 생성 결과
      * @since 2024-10-03
      */
-    public ResponseStatusDto createSchedule(HttpServletRequest req, CreateScheduleRequestDto requestDto) {
+    public ResponseDto<ScheduleDto> createSchedule(User user, CreateScheduleRequestDto requestDto) {
         String weather = weatherApi.getTodayWeather();
-        User user = tokenProvider.getUser(req);
         Schedule schedule = requestDto.convertDtoToEntity(user.getId(), weather);
         scheduleRepository.save(schedule);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_CREATE_SCHEDULE, req.getRequestURI());
+        return ResponseDto.of(ScheduleDto.from(schedule));
     }
 
     /**
      * 일정을 조회
      *
-     * @param req  HttpServletRequest 객체
-     * @param page 페이지 번호 (기본값: 1)
-     * @param size 페이지당 항목 수 (기본값: 10)
-     * @return 조회 결과 (ScheduleResponseDto)
+     * @param page 페이지 번호
+     * @param size 페이지당 항목 수
+     * @return 조회 결과
      * @since 2024-10-03
      */
-    public ScheduleResponseDto searchSchedule(HttpServletRequest req, int page, int size) {
+    public PageResponseDto<ScheduleDto> searchSchedule(int page, int size) {
         Page<Schedule> schedules = scheduleRepository.findAllByOrderByUpdatedAtDesc(PageRequest.of(page, size));
-        return ScheduleResponseDto.createResponseDto(req.getRequestURI(), schedules);
+        return PageResponseDto.of(
+                schedules.map(ScheduleDto::from).toList(),
+                schedules.getPageable(),
+                schedules.getTotalPages());
     }
 
     /**
      * 일정 수정
      *
-     * @param req        HttpServletRequest 객체
+     * @param user       로그인 유저
      * @param requestDto 수정할 일정 내용
      * @return 수정 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
     @Transactional
-    public ResponseStatusDto updateSchedule(HttpServletRequest req, ModifyScheduleRequestDto requestDto) throws ResponseException {
+    public ResponseDto<ScheduleDto> updateSchedule(User user, ModifyScheduleRequestDto requestDto) throws BusinessException {
         String weather = weatherApi.getTodayWeather();
-        User user = tokenProvider.getUser(req);
         Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId());
         validateAuth(user, schedule);
         schedule.update(requestDto, weather);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_UPDATE_SCHEDULE, req.getRequestURI());
+        return ResponseDto.of(ScheduleDto.from(schedule));
     }
 
     /**
      * 일정 삭제
      *
-     * @param req        HttpServletRequest 객체
+     * @param user       로그인 유저
      * @param scheduleId 삭제할 일정 id
      * @return 삭제 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
-    public ResponseStatusDto deleteSchedule(HttpServletRequest req, int scheduleId) throws ResponseException {
-        User user = tokenProvider.getUser(req);
+    public ResponseDto<ScheduleDto> deleteSchedule(User user, int scheduleId) throws BusinessException {
         Schedule schedule = scheduleRepository.findById(scheduleId);
         validateAuth(user, schedule);
         scheduleRepository.delete(schedule);
-        return new ResponseStatusDto(ResponseCode.SUCCESS_DELETE_SCHEDULE, req.getRequestURI());
+        return ResponseDto.of(ScheduleDto.from(schedule));
     }
 
     /**
@@ -101,13 +98,13 @@ public class ScheduleService {
      *
      * @param loginUser 로그인한 사용자 정보
      * @param schedule  [수정/삭제] 요청이 들어온 일정 정보
-     * @throws ResponseException 권한이 없는 경우 예외를 발생시킵니다.
+     * @throws BusinessException 권한이 없는 경우 예외를 발생시킵니다.
      * @since 2024-10-15
      */
-    private void validateAuth(User loginUser, Schedule schedule) throws ResponseException {
+    private void validateAuth(User loginUser, Schedule schedule) throws BusinessException {
         if (schedule == null)
-            throw new ResponseException(ResponseCode.SCHEDULE_NOT_FOUND);
+            throw new BusinessException(ErrorCode.SCHEDULE_NOT_FOUND);
         if (loginUser.getAuth() != AuthType.ADMIN && loginUser.getId() != schedule.getUser().getId())
-            throw new ResponseException(ResponseCode.INVALID_PERMISSION);
+            throw new BusinessException(ErrorCode.INVALID_PERMISSION);
     }
 }

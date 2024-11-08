@@ -1,6 +1,7 @@
 package com.sparta.schedule_project.service.login;
 
 import com.sparta.schedule_project.emums.SocialType;
+import com.sparta.schedule_project.util.login.SocialLogin;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

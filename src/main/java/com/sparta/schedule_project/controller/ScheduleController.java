@@ -2,11 +2,13 @@ package com.sparta.schedule_project.controller;
 
 import com.sparta.schedule_project.dto.request.CreateScheduleRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyScheduleRequestDto;
-import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.dto.response.ScheduleResponseDto;
-import com.sparta.schedule_project.exception.ResponseException;
+import com.sparta.schedule_project.dto.response.PageResponseDto;
+import com.sparta.schedule_project.dto.response.ResponseDto;
+import com.sparta.schedule_project.dto.response.ScheduleDto;
+import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.exception.BusinessException;
 import com.sparta.schedule_project.service.ScheduleService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.sparta.schedule_project.util.login.LoginUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,70 +30,67 @@ public class ScheduleController {
     /**
      * 일정 등록 API
      *
-     * @param req        HttpServletRequest 객체
+     * @param user       로그인 유저
      * @param requestDto 일정 등록 정보 (JSON 형태)
      * @return 등록 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
     @PostMapping("/schedules")
-    public ResponseEntity<ResponseStatusDto> createSchedule(
-            HttpServletRequest req,
+    public ResponseEntity<ResponseDto<ScheduleDto>> createSchedule(
+            @LoginUser User user,
             @RequestBody @Valid CreateScheduleRequestDto requestDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(scheduleService.createSchedule(req, requestDto));
+                .body(scheduleService.createSchedule(user, requestDto));
     }
 
     /**
      * 일정 검색 API
      *
-     * @param req  HttpServletRequest 객체
      * @param page 페이지 번호 (기본값: 1)
      * @param size 페이지당 항목 수 (기본값: 10)
      * @return 일정 목록을 포함하는 ResponseEntity
      * @since 2024-10-29
      */
     @GetMapping("/schedules")
-    public ResponseEntity<ScheduleResponseDto> searchSchedule(
-            HttpServletRequest req,
+    public ResponseEntity<PageResponseDto<ScheduleDto>> searchSchedule(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(scheduleService.searchSchedule(req, page - 1, size));
+                .body(scheduleService.searchSchedule(page - 1, size));
     }
 
     /**
      * 일정 수정 API
      *
-     * @param req        HttpServletRequest 객체
+     * @param user       로그인 유저
      * @param requestDto 일정 수정 정보 (JSON 형태)
-     * @return 수정 결과 (ResponseStatusDto)
+     * @return 수정 결과
      * @since 2024-10-03
      */
     @PutMapping("/schedules/{scheduleId}")
-    public ResponseEntity<ResponseStatusDto> updateSchedule(
-            HttpServletRequest req,
-            @RequestBody @Valid ModifyScheduleRequestDto requestDto) throws ResponseException {
+    public ResponseEntity<ResponseDto<ScheduleDto>> updateSchedule(
+            @LoginUser User user,
+            @RequestBody @Valid ModifyScheduleRequestDto requestDto) throws BusinessException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(scheduleService.updateSchedule(req, requestDto));
+                .body(scheduleService.updateSchedule(user, requestDto));
     }
 
     /**
      * 일정 삭제 API
      *
-     * @param req        HttpServletRequest 객체
+     * @param user       로그인 유저
      * @param scheduleId 삭제할 일정 id
      * @return 삭제 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
     @DeleteMapping("/schedules/{scheduleId}")
-    public ResponseEntity<ResponseStatusDto> deleteSchedule(
-            HttpServletRequest req,
-            @PathVariable int scheduleId) throws ResponseException {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(scheduleService.deleteSchedule(req, scheduleId));
+    public ResponseEntity<Void> deleteSchedule(
+            @LoginUser User user,
+            @PathVariable int scheduleId) throws BusinessException {
+        scheduleService.deleteSchedule(user, scheduleId);
+        return ResponseEntity.noContent().build();
     }
 }

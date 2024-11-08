@@ -2,10 +2,11 @@ package com.sparta.schedule_project.controller;
 
 import com.sparta.schedule_project.dto.request.CreateUserRequestDto;
 import com.sparta.schedule_project.dto.request.ModifyUserRequestDto;
-import com.sparta.schedule_project.dto.response.ResponseStatusDto;
-import com.sparta.schedule_project.dto.response.UserResponseDto;
-import com.sparta.schedule_project.exception.ResponseException;
+import com.sparta.schedule_project.dto.response.*;
+import com.sparta.schedule_project.entity.User;
+import com.sparta.schedule_project.exception.BusinessException;
 import com.sparta.schedule_project.service.UserService;
+import com.sparta.schedule_project.util.login.LoginUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +34,9 @@ public class UserController {
      * @since 2023-10-03
      */
     @PostMapping("/signup")
-    public ResponseEntity<ResponseStatusDto> createUser(
+    public ResponseEntity<ResponseDto<UserDto>> createUser(
             HttpServletRequest req,
-            @RequestBody @Valid CreateUserRequestDto createUserRequestDto) throws ResponseException {
+            @RequestBody @Valid CreateUserRequestDto createUserRequestDto) throws BusinessException {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(userService.createUser(req, createUserRequestDto));
@@ -44,51 +45,47 @@ public class UserController {
     /**
      * 회원 정보 조회 API
      *
-     * @param req    HttpServletRequest 객체
      * @param userId 조회할 회원 번호
      * @return 회원 정보 조회 결과
      * @since 2023-10-03
      */
     @GetMapping("/users/{userId}")
-    public ResponseEntity<UserResponseDto> getUserInfo(
-            HttpServletRequest req,
-            @PathVariable int userId) throws ResponseException {
+    public ResponseEntity<ResponseDto<UserDto>> getUserInfo(
+            @PathVariable int userId) throws BusinessException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.searchUser(req, userId));
+                .body(userService.searchUser(userId));
     }
 
     /**
      * 회원 정보 수정 API
      *
-     * @param req        HttpServletRequest 객체
+     * @param user       로그인 유저
      * @param requestDto 회원 정보 수정 정보 (JSON 형태)
      * @return 회원 정보 수정 결과
      * @since 2023-10-03
      */
     @PutMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> updateUser(
-            HttpServletRequest req,
-            @RequestBody @Valid ModifyUserRequestDto requestDto) throws ResponseException {
+    public ResponseEntity<ResponseDto<UserDto>> updateUser(
+            @LoginUser User user,
+            @RequestBody @Valid ModifyUserRequestDto requestDto) throws BusinessException {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.updateUser(req, requestDto));
+                .body(userService.updateUser(user, requestDto));
     }
 
     /**
      * 회원 정보 삭제 API
      *
-     * @param req    HttpServletRequest 객체
+     * @param user       로그인 유저
      * @param userId 삭제할 회원 번호
-     * @return 회원 정보 삭제 결과
      * @since 2023-10-03
      */
     @DeleteMapping("/users/{userId}")
-    public ResponseEntity<ResponseStatusDto> deleteUser(
-            HttpServletRequest req,
-            @PathVariable int userId) throws ResponseException {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(userService.deleteUser(req, userId));
+    public ResponseEntity<Void> deleteUser(
+            @LoginUser User user,
+            @PathVariable int userId) throws BusinessException {
+        userService.deleteUser(user, userId);
+        return ResponseEntity.noContent().build();
     }
 }

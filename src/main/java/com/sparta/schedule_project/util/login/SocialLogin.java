@@ -1,7 +1,8 @@
-package com.sparta.schedule_project.service.login;
+package com.sparta.schedule_project.util.login;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sparta.schedule_project.dto.response.ResponseStatusDto;
+import com.sparta.schedule_project.dto.response.ResponseDto;
+import com.sparta.schedule_project.dto.response.UserDto;
 import com.sparta.schedule_project.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,7 +23,7 @@ public interface SocialLogin {
      * @throws JsonProcessingException JSON 처리 중 발생하는 예외
      * @since 2024-10-31
      */
-    ResponseStatusDto login(HttpServletRequest req, HttpServletResponse res, String accessCode) throws JsonProcessingException;
+    ResponseDto<UserDto> login(HttpServletRequest req, HttpServletResponse res, String accessCode) throws JsonProcessingException;
 
     /**
      * 소셜 로그인 서비스에서 액세스 토큰을 발급받는 메서드입니다.

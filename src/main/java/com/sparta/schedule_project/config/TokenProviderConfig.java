@@ -1,9 +1,9 @@
 package com.sparta.schedule_project.config;
 
 import com.sparta.schedule_project.emums.TokenType;
-import com.sparta.schedule_project.util.token.JwtCookieTokenProvider;
-import com.sparta.schedule_project.util.token.JwtHeaderTokenProvider;
-import com.sparta.schedule_project.util.token.TokenProvider;
+import com.sparta.schedule_project.util.login.JwtCookieTokenProvider;
+import com.sparta.schedule_project.util.login.JwtHeaderTokenProvider;
+import com.sparta.schedule_project.util.login.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
