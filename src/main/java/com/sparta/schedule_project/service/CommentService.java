@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final TokenProvider tokenProvider;
 
     /**
      * 댓글 생성
@@ -78,14 +77,12 @@ public class CommentService {
      *
      * @param user      로그인 유저
      * @param commentId 삭제할 댓글 id
-     * @return 삭제 결과
      * @since 2024-10-15
      */
-    public ResponseDto<CommentDto> deleteComment(User user, int commentId) throws BusinessException {
+    public void deleteComment(User user, int commentId) throws BusinessException {
         Comment comment = commentRepository.findById(commentId);
         validateAuth(user, comment);
         commentRepository.delete(comment);
-        return ResponseDto.of(CommentDto.from(comment));
     }
 
     /**

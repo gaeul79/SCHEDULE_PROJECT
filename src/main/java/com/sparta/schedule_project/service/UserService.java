@@ -29,12 +29,11 @@ public class UserService {
     /**
      * 회원가입을 처리합니다.
      *
-     * @param req        HttpServletRequest 객체
      * @param requestDto 회원가입 요청 정보
      * @return 회원가입 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
-    public ResponseDto<UserDto> createUser(HttpServletRequest req, CreateUserRequestDto requestDto) throws BusinessException {
+    public ResponseDto<UserDto> createUser(CreateUserRequestDto requestDto) throws BusinessException {
         validateCreateUserInfo(requestDto);
         User user = requestDto.convertDtoToEntity(passwordEncoder.encode(requestDto.getPassword()));
         userRepository.save(user);

@@ -83,14 +83,12 @@ public class ScheduleService {
      *
      * @param user       로그인 유저
      * @param scheduleId 삭제할 일정 id
-     * @return 삭제 결과 (ResponseStatusDto)
      * @since 2024-10-03
      */
-    public ResponseDto<ScheduleDto> deleteSchedule(User user, int scheduleId) throws BusinessException {
+    public void deleteSchedule(User user, int scheduleId) throws BusinessException {
         Schedule schedule = scheduleRepository.findById(scheduleId);
         validateAuth(user, schedule);
         scheduleRepository.delete(schedule);
-        return ResponseDto.of(ScheduleDto.from(schedule));
     }
 
     /**
